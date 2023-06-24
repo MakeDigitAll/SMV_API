@@ -146,14 +146,14 @@ const deleteOrcFoliosSur = async (req, res, next) =>{
     }
 };
 
-//actualizar un estatus
+//actualizar un folio para la nueva orden de compra
 const updateOrcFoliosSur = async (req, res, next) =>{
     const { id } = req.params;
-    const { nombre, correo } = req.body;
+    const { fecha, almacen, producto, cantidad } = req.body;
 
     const result = await pool.query(
-        "UPDATE users SET nombre = $1, correo = $2, WHERE id = $3 RETURNING *",
-        [nombre, correo, id]
+        "UPDATE nueva_orden_de_compra_folios_de_surtido SET fecha = $1, almacen = $2, producto = $3, cantidad = $4 WHERE id = $5 RETURNING *",
+        [fecha, almacen, producto, cantidad, id]
     );
 
     if (result.rows.length === 0)
