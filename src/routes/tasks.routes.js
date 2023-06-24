@@ -1,27 +1,49 @@
 const { Router } = require("express")
 const pool = require('../database')
 
-const { getAllTask, getTask, createTask, deleteTask, updateTask } = require('../controllers/task.controller');
+const { getAllStatus, getStatus, createStatus, deleteStatus, updateStatus, 
+    getAllOrcFoliosSur,getOrcFoliosSur, createOrcFoliosSur, deleteOrcFoliosSur, updateOrcFoliosSur} = require('../controllers/task.controller');
 
 const router =  Router();
 
-const { getUsers }= require("../controllers/index.controller");
+/*const { getUsers }= require("../controllers/index.controller");
 
-router.get('/users', getUsers);
+router.get('/users', getUsers); */
 
-//ver tareas
-router.get('/task', getAllTask)
 
-//ver una tarea
-router.get('/task/:id', getTask)
+/////////////////////////////////////// RUTAS PARA TABLA DE ESTATUS ////////////////////////////////////////
 
-//crear tarea
-router.post('/task', createTask)
+//ver estatus
+router.get('/status', getAllStatus)
 
-//eliminar tarea
-router.delete('/task/:id', deleteTask)
+//ver un estatus
+router.get('/status/:id', getStatus)
 
-//actualizar tarea
-router.put('/task/:id', updateTask)
+//crear estatus
+router.post('/status', createStatus)
+
+//eliminar estatus
+router.delete('/status/:id', deleteStatus)
+
+//actualizar estatus
+router.put('/status/:id', updateStatus)
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE NUEVA ORDEN DE COMPRA - FOLIOS DE SURTIDO ////////////////////////////////////////
+//ver estatus
+router.get('/NuevaOrdenCompra/Folios', getAllOrcFoliosSur)
+
+//ver un estatus
+router.get('/NuevaOrdenCompra/Folios/:id', getOrcFoliosSur)
+
+//crear estatus
+router.post('/NuevaOrdenCompra/Folios', createOrcFoliosSur)
+
+//eliminar estatus
+router.delete('/NuevaOrdenCompra/Folios/:id', deleteOrcFoliosSur)
+
+//actualizar estatus
+router.put('/NuevaOrdenCompra/Folios/:id', updateOrcFoliosSur)
 
 module.exports  =  router;
