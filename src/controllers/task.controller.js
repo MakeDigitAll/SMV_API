@@ -7,7 +7,7 @@ const pool = require('../database')
 //Mostrar los estatus
 const getAllStatus = async (req, res, next)=> {
     try{
-    const allTasks = await pool.query('SELECT * FROM public."estatus";');
+    const allTasks = await pool.query('SELECT * FROM  "estatus"');
     res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
@@ -18,7 +18,7 @@ const getAllStatus = async (req, res, next)=> {
 const getStatus = async (req, res, next) =>{
     try {
         const { id } = req.params;
-        const result = await pool.query('SELECT * FROM estatus WHERE id = $1', [id]);
+        const result = await pool.query('SELECT * FROM "estatus" WHERE id = $1', [id]);
 
         if (result.rows.length === 0 )
         return res.status(404).json({
@@ -37,7 +37,7 @@ const createStatus = async (req, res, next) =>{
 
     try {
     const result = await pool.query(
-        'INSERT INTO estatus (id, estatus) VALUES ($1, $2) RETURNING *',
+        'INSERT INTO "estatus" (id, estatus) VALUES ($1, $2) RETURNING *',
         [id, estatus]
     );
 
@@ -53,7 +53,7 @@ const deleteStatus = async (req, res, next) =>{
     
     try {
 
-    const result = await pool.query("DELETE FROM estatus WHERE id = $1", [id]);
+    const result = await pool.query('DELETE FROM "estatus" WHERE id = $1', [id]);
 
     if (result.rowCount === 0)
     return res.status(404).json({
@@ -72,7 +72,7 @@ const updateStatus = async (req, res, next) =>{
     const { estatus } = req.body;
 
     const result = await pool.query(
-        "UPDATE estatus SET estatus = $1 WHERE id = $2 RETURNING *",
+        'UPDATE estatus SET "estatus" = $1 WHERE id = $2 RETURNING *',
         [estatus, id]
     );
 
