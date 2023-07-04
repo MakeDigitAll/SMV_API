@@ -8,7 +8,8 @@ const { getAllStatus, getStatus, createStatus, deleteStatus, updateStatus,
     getAllOrdenFoliosSurtidos, getOrdenFoliosSurtidos, createOrdenFoliosSurtidos, deleteOrdenFoliosSurtidos, updateOrdenFoliosSurtidos, 
     getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, deleteOrdenListadoEntrada, updateOrdenListadoEntrada, 
     getAllProductos, getProducto, createProducto, deleteProducto, updateProducto, 
-    getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra,} = require('../controllers/task.controller');
+    getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra, 
+    getAllListadoProduct, getListadoProduct, createListadoProduct, deleteListadoProduct, updateListadoProduct} = require('../controllers/task.controller');
 
 const router =  Router();
 
@@ -119,6 +120,24 @@ router.delete('/OrdenCompra/ListadoEntradas/:id', deleteOrdenListadoEntrada)
 
 //actualizar estatus
 router.put('/OrdenCompra/ListadoEntradas/:id', updateOrdenListadoEntrada)
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE LISTADO PRODUCTOS  ////////////////////////////////////////
+router.get('/ListadoProductos', getAllListadoProduct)
+
+//ver un estatus
+router.get('/ListadoProductos/:id', getListadoProduct)
+
+//crear estatus
+router.post('/ListadoProductos', createListadoProduct)
+
+//eliminar estatus
+router.delete('/ListadoProductos/:id', deleteListadoProduct)
+
+//actualizar estatus
+router.put('/ListadoProductos/:id', updateListadoProduct)
+
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS  ////////////////////////////////////////

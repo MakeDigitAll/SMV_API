@@ -241,7 +241,7 @@ const updateOrcArchvivosAdj = async (req, res, next) =>{
     const result = await pool.query(
         'UPDATE "nuevasOrdenesCompraArchivosAdjuntos" SET numero = $1, archivo = $2 WHERE id = $3 RETURNING *',
         [numero, archivo, id]
-    );sur
+    );
 
     if (result.rows.length === 0)
     return res.status(404).json({
@@ -325,7 +325,7 @@ const updateOrdenArchivosAdjuntos = async (req, res, next) =>{
     const result = await pool.query(
         'UPDATE "ordenCompraArchivosAdjuntos" SET numero = $1, archivo = $2 WHERE id = $3 RETURNING *',
         [numero, archivo, id]
-    );sur
+    );
 
     if (result.rows.length === 0)
     return res.status(404).json({
@@ -502,6 +502,94 @@ const updateOrdenListadoEntrada = async (req, res, next) =>{
     return res.json(result.rows[0]);
 };
 
+
+
+
+/////////////////////////////////////// CONTROLADORES PARA TABLA DE LISTADO DE PRODUCTOS ////////////////////////////////////////
+//Mostrar los productos
+const getAllListadoProduct = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "listadoProductos"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un estatus
+const getListadoProduct = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "listadoProductos" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear un estatus 
+const createListadoProduct = async (req, res, next) =>{
+    const { imagen , id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "listadoProductos" (imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *',
+        [imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//eliminar un estatus
+const deleteListadoProduct = async (req, res, next) =>{
+    const { id } = req.params;
+    
+    try {
+
+    const result = await pool.query('DELETE FROM "listadoProductos" WHERE id = $1', [id]);
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo eliminar not found"
+    });
+
+    return res.sendStatus(204);
+    } catch (error){
+        next(error);
+    }
+};
+
+//actualizar un folio para la nueva orden de compra
+const updateListadoProduct = async (req, res, next) =>{
+    const { id } = req.params;
+    const { imagen, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "listadoProductos" SET imagen = $1, codigoFabricante = $2, codigoEmpresa = $3, nombre = $4, marca = $5, categoria = $6, codigoSat= $7, actualizado = $8, activo = $9, web = $10, pos = $11, venta = $12 precio = $13 WHERE id = $14 RETURNING *',
+        [imagen, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+
+
+
+
 /////////////////////////////////////// CONTROLADORES PARA TABLA DE PRODUCTOS ////////////////////////////////////////
 //Mostrar los productos
 const getAllProductos = async (req, res, next)=> {
@@ -574,7 +662,7 @@ const updateProducto = async (req, res, next) =>{
     const result = await pool.query(
         'UPDATE "productos" SET imagen = $1, codigoEmpresa = $2, codigoFabricante = $3, nombre = $4, marca = $5, categoria = $6, existencia= $7, backOrder = $8, cantidad = $9, precio = $10, descuento = $11, total = $12 WHERE id = $13 RETURNING *',
         [imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total, id]
-    );sur
+    );
 
     if (result.rows.length === 0)
     return res.status(404).json({
@@ -659,7 +747,7 @@ const updateProductosOrdenCompra = async (req, res, next) =>{
     const result = await pool.query(
         'UPDATE "productosLaOrdenCompra" SET imagen = $1, codigo = $2, producto = $3, cantidad = $4, costo = $5, descuento = $6, total = $7, subtotal = $8, impuestos = $9 WHERE id = $10 RETURNING *',
         [imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos, id]
-    );sur
+    );
 
     if (result.rows.length === 0)
     return res.status(404).json({
@@ -678,6 +766,7 @@ module.exports = {
     getAllOrdenArchivosAdjuntos,getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, deleteOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
     getAllOrdenFoliosSurtidos,getOrdenFoliosSurtidos,createOrdenFoliosSurtidos, deleteOrdenFoliosSurtidos, updateOrdenFoliosSurtidos,
     getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, deleteOrdenListadoEntrada, updateOrdenListadoEntrada,
+    getAllListadoProduct,getListadoProduct,createListadoProduct,deleteListadoProduct,updateListadoProduct,
     getAllProductos,getProducto,createProducto,deleteProducto,updateProducto,
     getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra,
 }
