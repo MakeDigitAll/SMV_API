@@ -11,11 +11,17 @@ const {
     getAllProductos, getProducto, createProducto, deleteProducto, updateProducto, 
     getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra, 
     getAllListadoProduct, getListadoProduct, createListadoProduct, deleteListadoProduct, updateListadoProduct,
+    getAllListadoProductDesc, getListadoProductDesc, createListadoProductDesc, deleteListadoProductDesc, updateListadoProductDesc, 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
 
     ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
-
+    getAllCotizaciones, getCotizaciones, createCotizaciones, deleteCotizaciones, updateCotizaciones,
+    getAllPedido, getPedido, createPedido, deletePedido, updatePedido,
+    getAllPedidos, getPedidos, createPedidos, deletePedidos, updatePedidos,
+    getAllDetallePedido, getDetallePedido, createDetallePedido, deleteDetallePedido, updateDetallePedido,
+    getAllVerPedido, getVerPedido, createVerPedido, deleteVerPedido, updateVerPedido,
+    getAllFormasPagoPedido, getFormasPagoPedido, createFormasPagoPedido, deleteFormasPagoPedido, updateFormasPagoPedido,
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 
@@ -36,7 +42,7 @@ const {
 
 
     ///////////////////////////////////////////// RUTAS SIN UBICAR  ////////////////////////////////////////////
-    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus, 
+    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus,       
 
 
     } = require('../controllers/task.controller');
@@ -189,6 +195,23 @@ router.put('/Productos/:id', updateProducto)
 /////////// FIN DE PRODUCTOS
 
 
+/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS  
+router.get('/ListadoProductosDescuento', getAllListadoProductDesc)
+
+//ver un estatus
+router.get('/ListadoProductosDescuento/:id', getListadoProductDesc )
+
+//crear estatus
+router.post('/ListadoProductosDescuento', createListadoProductDesc)
+
+//eliminar estatus
+router.delete('/ListadoProductosDescuento/:id', deleteListadoProductDesc )
+
+//actualizar estatus
+router.put('/ListadoProductosDescuento/:id', updateListadoProductDesc)
+/////////// FIN DE PRODUCTOS
+
+
 
 
 
@@ -200,6 +223,106 @@ router.put('/Productos/:id', updateProducto)
 
 ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
+/////////////////////////////////////// RUTAS PARA TABLA DE COTIZACIONES  
+router.get('/Cotizaciones', getAllCotizaciones)
+
+//ver un estatus
+router.get('/Cotizaciones/:id',  getCotizaciones)
+
+//crear estatus
+router.post('/Cotizaciones', createCotizaciones)
+
+//eliminar estatus
+router.delete('/Cotizaciones/:id',  deleteCotizaciones)
+
+//actualizar estatus
+router.put('/Cotizaciones/:id', updateCotizaciones)
+/////////// FIN DE COTIZACIONES
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDO  
+router.get('/Pedido', getAllPedido)
+
+//ver un estatus
+router.get('/Pedido/:id',  getPedido)
+
+//crear estatus
+router.post('/Pedido', createPedido)
+
+//eliminar estatus
+router.delete('/Pedido/:id',  deletePedido)
+
+//actualizar estatus
+router.put('/Pedido/:id', updatePedido)
+/////////// FIN DE PEDIDO
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDOS
+router.get('/Pedidos', getAllPedidos)
+
+//ver un estatus
+router.get('/Pedidos/:id',  getPedidos)
+
+//crear estatus
+router.post('/Pedidos', createPedidos)
+
+//eliminar estatus
+router.delete('/Pedidos/:id',  deletePedidos)
+
+//actualizar estatus
+router.put('/Pedidos/:id', updatePedidos)
+/////////// FIN DE PEDIDOS
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE DETALLE DE PEDIDO  
+router.get('/DetallePedido', getAllDetallePedido)
+
+//ver un estatus
+router.get('/DetallePedido/:id',  getDetallePedido)
+
+//crear estatus
+router.post('/DetallePedido', createDetallePedido)
+
+//eliminar estatus
+router.delete('/DetallePedido/:id',  deleteDetallePedido)
+
+//actualizar estatus
+router.put('/DetallePedido/:id', updateDetallePedido)
+/////////// FIN DE DETALLE DE PEDIDO
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE VER PEDIDO  
+router.get('/VerPedido', getAllVerPedido)
+
+//ver un estatus
+router.get('/VerPedido/:id', getVerPedido)
+
+//crear estatus
+router.post('/VerPedido', createVerPedido)
+
+//eliminar estatus
+router.delete('/VerPedido/:id', deleteVerPedido)
+
+//actualizar estatus
+router.put('/VerPedido/:id', updateVerPedido)
+/////////// FIN DE VER PEDIDO
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE FORMAS DE PAGO DE PEDIDO
+router.get('/FormaPagoPedido', getAllFormasPagoPedido)
+
+//ver un estatus
+router.get('/FormaPagoPedido/:id',getFormasPagoPedido)
+
+//crear estatus
+router.post('/FormaPagoPedido', createFormasPagoPedido)
+
+//eliminar estatus
+router.delete('/FormaPagoPedido/:id', deleteFormasPagoPedido)
+
+//actualizar estatus
+router.put('/FormaPagoPedido/:id', updateFormasPagoPedido)
+/////////// FIN DE FORMAS DE PAGO DE PEDIDO
 
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
