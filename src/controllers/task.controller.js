@@ -3,13 +3,85 @@ const pool = require('../database')
 
 
 ///////////////////////////////////////////////  MICROSERVICIO DE COMPRAS  //////////////////////////////////////////////////////
+///////////////////////////////////////////////  Usuarios  //////////////////////////////////////////////////////
+//Mostrar los usuarios
+const getAllUsers = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM  "listadoUsuarios"');
+        res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+//Mostar un usuario
+const getUser = async (req, res, next) => {
+    try {
+        const { email } = req.params;
+        const result = await pool.query('SELECT * FROM "listadoUsuarios" WHERE email = $1', [email]);
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+//crear un usuario
+const createUser = async (req, res, next) => {
+    const { imagen, nombre, apellido, email, password, idPerfilSeguridad, idVendedor, dateCreated, dateUpdated } = req.body
+    try {
+        const result = await pool.query(
+            'INSERT INTO "listadoUsuarios" (imagen, nombre, apellido, email, password, idPerfilSeguridad, idVendedor, dateCreated, dateUpdated) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+            [imagen, nombre, apellido, email, password, idPerfilSeguridad, idVendedor, dateCreated, dateUpdated]
+        );
+
+        res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+//Actualizar user
+const updateUser = async (req, res, next) => {
+    const { id } = req.params;
+    const { imagen, nombre, apellido, email, password, idPerfilSeguridad, idVendedor, isUpdated, dateUpdated } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "listadoUsuarios" SET imagen = $1, nombre = $2, apellido = $3, email = $4, password = $5, idPerfilSeguridad = $6, idVendedor = $7, isUpdated = $8, dateUpdated = $9 WHERE id = $9 RETURNING *',
+        [imagen, nombre, apellido, email, password, idPerfilSeguridad, idVendedor, isUpdated, dateUpdated, id]
+    );
+
+    if (result.rows.length === 0)
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
+
+    return res.json(result.rows[0]);
+};
+//delete user
+const deleteUser = async (req, res, next) => {
+    const { id } = req.params;
+    const { isDeleted, isUpdated, dateUpdated } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "listadoUsuarios" SET isDeleted = $1, isUpdated = $2, dateUpdated = $3 WHERE id = $4 RETURNING *',
+        [isDeleted, isUpdated, dateUpdated, id]
+    );
+
+    if (result.rows.length === 0)
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
+
+    return res.json(result.rows[0]);
+};
 /////////////// CONTROLADORES PARA TABLA DE NUEVA ORDEN DE COMPRA FOLIOS DE SURTIDO 
 //Mostrar los folios
-const getAllOrcFoliosSur = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "nuevaOrdenCompraFoliosSurtido"');
-    res.json(allTasks.rows)
+const getAllOrcFoliosSur = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "nuevaOrdenCompraFoliosSurtido"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -17,15 +89,15 @@ const getAllOrcFoliosSur = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getOrcFoliosSur = async (req, res, next) =>{
+const getOrcFoliosSur = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "nuevaOrdenCompraFoliosSurtido" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -34,42 +106,42 @@ const getOrcFoliosSur = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createOrcFoliosSur = async (req, res, next) =>{
-    const { id , fecha, almacen, producto, cantidad } = req.body
+const createOrcFoliosSur = async (req, res, next) => {
+    const { id, fecha, almacen, producto, cantidad } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "nuevaOrdenCompraFoliosSurtido" (id, fecha, almacen, producto, cantidad) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [id, fecha, almacen, producto, cantidad]
-    );
+        const result = await pool.query(
+            'INSERT INTO "nuevaOrdenCompraFoliosSurtido" (id, fecha, almacen, producto, cantidad) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+            [id, fecha, almacen, producto, cantidad]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteOrcFoliosSur = async (req, res, next) =>{
+const deleteOrcFoliosSur = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "nuevaOrdenCompraFoliosSurtido" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "nuevaOrdenCompraFoliosSurtido" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la nueva orden de compra
-const updateOrcFoliosSur = async (req, res, next) =>{
+const updateOrcFoliosSur = async (req, res, next) => {
     const { id } = req.params;
     const { fecha, almacen, producto, cantidad } = req.body;
 
@@ -79,9 +151,9 @@ const updateOrcFoliosSur = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -90,10 +162,10 @@ const updateOrcFoliosSur = async (req, res, next) =>{
 
 ////////////////////////// CONTROLADORES PARA TABLA DE NUEVA ORDEN DE COMPRA - ARCHIVOS ADJUNTOS 
 //Mostrar los folios
-const getAllOrcArchvivosAdj = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "nuevasOrdenesCompraArchivosAdjuntos"');
-    res.json(allTasks.rows)
+const getAllOrcArchvivosAdj = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "nuevasOrdenesCompraArchivosAdjuntos"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -101,15 +173,15 @@ const getAllOrcArchvivosAdj = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getOrcArchvivosAdj = async (req, res, next) =>{
+const getOrcArchvivosAdj = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "nuevasOrdenesCompraArchivosAdjuntos" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -118,42 +190,42 @@ const getOrcArchvivosAdj = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createOrcArchvivosAdj = async (req, res, next) =>{
-    const { id , numero, archivo,} = req.body
+const createOrcArchvivosAdj = async (req, res, next) => {
+    const { id, numero, archivo, } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "nuevasOrdenesCompraArchivosAdjuntos" (id, numero, archivo) VALUES ($1, $2, $3) RETURNING *',
-        [id, numero, archivo]
-    );
+        const result = await pool.query(
+            'INSERT INTO "nuevasOrdenesCompraArchivosAdjuntos" (id, numero, archivo) VALUES ($1, $2, $3) RETURNING *',
+            [id, numero, archivo]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteOrcArchvivosAdj = async (req, res, next) =>{
+const deleteOrcArchvivosAdj = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "nuevasOrdenesCompraArchivosAdjuntos" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "nuevasOrdenesCompraArchivosAdjuntos" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la nueva orden de compra
-const updateOrcArchvivosAdj = async (req, res, next) =>{
+const updateOrcArchvivosAdj = async (req, res, next) => {
     const { id } = req.params;
     const { numero, archivo } = req.body;
 
@@ -163,9 +235,9 @@ const updateOrcArchvivosAdj = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -176,10 +248,10 @@ const updateOrcArchvivosAdj = async (req, res, next) =>{
 
 ///////////////////////////////////// CONTROLADORES PARA TABLA DE ORDEN DE COMPRA - ARCHIVOS ADJUNTOS 
 //Mostrar los folios
-const getAllOrdenArchivosAdjuntos = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "ordenCompraArchivosAdjuntos"');
-    res.json(allTasks.rows)
+const getAllOrdenArchivosAdjuntos = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "ordenCompraArchivosAdjuntos"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -187,15 +259,15 @@ const getAllOrdenArchivosAdjuntos = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getOrdenArchvivosAdj = async (req, res, next) =>{
+const getOrdenArchvivosAdj = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "ordenCompraArchivosAdjuntos" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -204,42 +276,42 @@ const getOrdenArchvivosAdj = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createOrdenArchivosAdjuntos = async (req, res, next) =>{
-    const { id , numero, archivo,} = req.body
+const createOrdenArchivosAdjuntos = async (req, res, next) => {
+    const { id, numero, archivo, } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "ordenCompraArchivosAdjuntos" (id, numero, archivo) VALUES ($1, $2, $3) RETURNING *',
-        [id, numero, archivo]
-    );
+        const result = await pool.query(
+            'INSERT INTO "ordenCompraArchivosAdjuntos" (id, numero, archivo) VALUES ($1, $2, $3) RETURNING *',
+            [id, numero, archivo]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteOrdenArchivosAdjuntos = async (req, res, next) =>{
+const deleteOrdenArchivosAdjuntos = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "ordenCompraArchivosAdjuntos" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "ordenCompraArchivosAdjuntos" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la nueva orden de compra
-const updateOrdenArchivosAdjuntos = async (req, res, next) =>{
+const updateOrdenArchivosAdjuntos = async (req, res, next) => {
     const { id } = req.params;
     const { numero, archivo } = req.body;
 
@@ -249,9 +321,9 @@ const updateOrdenArchivosAdjuntos = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -262,10 +334,10 @@ const updateOrdenArchivosAdjuntos = async (req, res, next) =>{
 
 ///////////////////////////// CONTROLADORES PARA TABLA DE ORDEN DE COMPRA - FOLIOS DE SURTIDO 
 //Mostrar los folios
-const getAllOrdenFoliosSurtidos = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "ordenCompraFoliosSurtido"');
-    res.json(allTasks.rows)
+const getAllOrdenFoliosSurtidos = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "ordenCompraFoliosSurtido"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -273,15 +345,15 @@ const getAllOrdenFoliosSurtidos = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getOrdenFoliosSurtidos = async (req, res, next) =>{
+const getOrdenFoliosSurtidos = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "ordenCompraFoliosSurtido" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -290,42 +362,42 @@ const getOrdenFoliosSurtidos = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createOrdenFoliosSurtidos = async (req, res, next) =>{
-    const { id , numero, fecha, almacen, producto, cantidad } = req.body
+const createOrdenFoliosSurtidos = async (req, res, next) => {
+    const { id, numero, fecha, almacen, producto, cantidad } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "ordenCompraFoliosSurtido" (id, numero, fecha, almacen, producto, cantidad) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-        [id, numero, fecha, almacen, producto, cantidad]
-    );
+        const result = await pool.query(
+            'INSERT INTO "ordenCompraFoliosSurtido" (id, numero, fecha, almacen, producto, cantidad) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+            [id, numero, fecha, almacen, producto, cantidad]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteOrdenFoliosSurtidos = async (req, res, next) =>{
+const deleteOrdenFoliosSurtidos = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "ordenCompraFoliosSurtido" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "ordenCompraFoliosSurtido" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la nueva orden de compra
-const updateOrdenFoliosSurtidos = async (req, res, next) =>{
+const updateOrdenFoliosSurtidos = async (req, res, next) => {
     const { id } = req.params;
     const { fecha, numero, almacen, producto, cantidad } = req.body;
 
@@ -335,9 +407,9 @@ const updateOrdenFoliosSurtidos = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -347,10 +419,10 @@ const updateOrdenFoliosSurtidos = async (req, res, next) =>{
 
 /////////////////////////// CONTROLADORES PARA TABLA DE ORDEN DE COMPRA - LISTADO DE ENTRADAS 
 //Mostrar los folios
-const getAllOrdenListadoEntrada = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "ordenesCompraListadoEntradas"');
-    res.json(allTasks.rows)
+const getAllOrdenListadoEntrada = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "ordenesCompraListadoEntradas"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -358,15 +430,15 @@ const getAllOrdenListadoEntrada = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getOrdenListadoEntrada = async (req, res, next) =>{
+const getOrdenListadoEntrada = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "ordenesCompraListadoEntradas" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -375,54 +447,54 @@ const getOrdenListadoEntrada = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createOrdenListadoEntrada = async (req, res, next) =>{
-    const { id , numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos} = req.body
+const createOrdenListadoEntrada = async (req, res, next) => {
+    const { id, numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "ordenesCompraListadoEntradas" (id, numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, refetencia, estatus, total) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
-        [id, numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos]
-    );
+        const result = await pool.query(
+            'INSERT INTO "ordenesCompraListadoEntradas" (id, numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, refetencia, estatus, total) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11) RETURNING *',
+            [id, numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteOrdenListadoEntrada = async (req, res, next) =>{
+const deleteOrdenListadoEntrada = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "ordenesCompraListadoEntradas" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "ordenesCompraListadoEntradas" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la nueva orden de compra
-const updateOrdenListadoEntrada = async (req, res, next) =>{
+const updateOrdenListadoEntrada = async (req, res, next) => {
     const { id } = req.params;
     const { numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos } = req.body;
 
     const result = await pool.query(
         'UPDATE "ordenesCompraListadoEntradas" SET numero = $1, fechaRegistrada = $2, fechaCompra = $3, fechaEntrega = $4, provedor = $5, vendedor = $6, referencia= $7, estatus = $8, total = $9, productos = $10 WHERE id = $11 RETURNING *',
         [numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos, id]
-    );sur
+    ); sur
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -434,10 +506,10 @@ const updateOrdenListadoEntrada = async (req, res, next) =>{
 
 //////////////// CONTROLADORES PARA TABLA DE ORDEN DE COMPRA - PRODUCTOS EN LA ORDEN DE COMPRA 
 //Mostrar los folios
-const getAllProductosOrdenCompra = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "productosLaOrdenCompra"');
-    res.json(allTasks.rows)
+const getAllProductosOrdenCompra = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "productosLaOrdenCompra"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -445,15 +517,15 @@ const getAllProductosOrdenCompra = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getProductosOrdenCompra = async (req, res, next) =>{
+const getProductosOrdenCompra = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "productosLaOrdenCompra" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -462,44 +534,44 @@ const getProductosOrdenCompra = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createProductosOrdenCompra = async (req, res, next) =>{
-    const { id , imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos} = req.body
+const createProductosOrdenCompra = async (req, res, next) => {
+    const { id, imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "productosLaOrdenCompra" (id, imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10) RETURNING *',
-        [id, imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos]
-    );
+        const result = await pool.query(
+            'INSERT INTO "productosLaOrdenCompra" (id, imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10) RETURNING *',
+            [id, imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteProductosOrdenCompra = async (req, res, next) =>{
+const deleteProductosOrdenCompra = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "productosLaOrdenCompra" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "productosLaOrdenCompra" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la nueva orden de compra
-const updateProductosOrdenCompra = async (req, res, next) =>{
+const updateProductosOrdenCompra = async (req, res, next) => {
     const { id } = req.params;
-    const {imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos } = req.body;
+    const { imagen, codigo, producto, cantidad, costo, descuento, total, subtotal, impuestos } = req.body;
 
     const result = await pool.query(
         'UPDATE "productosLaOrdenCompra" SET imagen = $1, codigo = $2, producto = $3, cantidad = $4, costo = $5, descuento = $6, total = $7, subtotal = $8, impuestos = $9 WHERE id = $10 RETURNING *',
@@ -507,9 +579,9 @@ const updateProductosOrdenCompra = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -519,10 +591,10 @@ const updateProductosOrdenCompra = async (req, res, next) =>{
 
 /////////////////////////////////////// CONTROLADORES PARA TABLA DE LISTADO DE PRODUCTOS 
 //Mostrar los productos
-const getAllListadoProduct = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "listadoProductos"');
-    res.json(allTasks.rows)
+const getAllListadoProduct = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "listadoProductos"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -530,15 +602,15 @@ const getAllListadoProduct = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getListadoProduct = async (req, res, next) =>{
+const getListadoProduct = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "listadoProductos" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -547,44 +619,44 @@ const getListadoProduct = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createListadoProduct = async (req, res, next) =>{
-    const { imagen , id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio} = req.body
+const createListadoProduct = async (req, res, next) => {
+    const { imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "listadoProductos" (imagen, id, "codigoFabricante", "codigoEmpresa", nombre, marca, categoria, "codigoSat", actualizado, activo, web, pos, venta, precio) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *',
-        [imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio]
-    );
+        const result = await pool.query(
+            'INSERT INTO "listadoProductos" (imagen, id, "codigoFabricante", "codigoEmpresa", nombre, marca, categoria, "codigoSat", actualizado, activo, web, pos, venta, precio) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *',
+            [imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteListadoProduct = async (req, res, next) =>{
+const deleteListadoProduct = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "listadoProductos" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "listadoProductos" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la orden de compra
-const updateListadoProduct = async (req, res, next) =>{
+const updateListadoProduct = async (req, res, next) => {
     const { id } = req.params;
-    const {codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, precio } = req.body;
+    const { codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, precio } = req.body;
 
     const result = await pool.query(
         'UPDATE "listadoProductos" SET "codigoFabricante" = $1, "codigoEmpresa" = $2, nombre = $3, marca = $4, categoria = $5, "codigoSat"= $6, actualizado = $7, precio = $8 WHERE id = $9 RETURNING *',
@@ -592,9 +664,9 @@ const updateListadoProduct = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -604,10 +676,10 @@ const updateListadoProduct = async (req, res, next) =>{
 
 /////////////////////////////////////// CONTROLADORES PARA TABLA DE PRODUCTOS 
 //Mostrar los productos
-const getAllProductos = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "productos"');
-    res.json(allTasks.rows)
+const getAllProductos = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM "productos"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
@@ -615,15 +687,15 @@ const getAllProductos = async (req, res, next)=> {
 
 
 //mostrar un estatus
-const getProducto = async (req, res, next) =>{
+const getProducto = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "productos" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -632,42 +704,42 @@ const getProducto = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createProducto = async (req, res, next) =>{
-    const { id , imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total} = req.body
+const createProducto = async (req, res, next) => {
+    const { id, imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "productos" (id, imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *',
-        [id, imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total]
-    );
+        const result = await pool.query(
+            'INSERT INTO "productos" (id, imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *',
+            [id, imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteProducto = async (req, res, next) =>{
+const deleteProducto = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "productos" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "productos" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un folio para la nueva orden de compra
-const updateProducto = async (req, res, next) =>{
+const updateProducto = async (req, res, next) => {
     const { id } = req.params;
     const { imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total } = req.body;
 
@@ -677,9 +749,9 @@ const updateProducto = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -734,25 +806,25 @@ const updateProducto = async (req, res, next) =>{
 
 ///////////// CONTROLADORES PARA TABLA DE ESTATUS 
 //Mostrar los estatus
-const getAllStatus = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM  "estatus"');
-    res.json(allTasks.rows)
+const getAllStatus = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query('SELECT * FROM  "estatus"');
+        res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
     }
 }
 
 //mostrar un estatus
-const getStatus = async (req, res, next) =>{
+const getStatus = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM "estatus" WHERE id = $1', [id]);
 
-        if (result.rows.length === 0 )
-        return res.status(404).json({
-            message: "La tarea no funciona :("
-        });
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no funciona :("
+            });
 
         res.json(result.rows[0]);
     } catch (error) {
@@ -761,42 +833,42 @@ const getStatus = async (req, res, next) =>{
 };
 
 //crear un estatus 
-const createStatus = async (req, res, next) =>{
-    const { id , estatus } = req.body
+const createStatus = async (req, res, next) => {
+    const { id, estatus } = req.body
 
     try {
-    const result = await pool.query(
-        'INSERT INTO "estatus" (id, estatus) VALUES ($1, $2) RETURNING *',
-        [id, estatus]
-    );
+        const result = await pool.query(
+            'INSERT INTO "estatus" (id, estatus) VALUES ($1, $2) RETURNING *',
+            [id, estatus]
+        );
 
-    res.json(result.json);
+        res.json(result.json);
     } catch (error) {
         next(error)
     }
 };
 
 //eliminar un estatus
-const deleteStatus = async (req, res, next) =>{
+const deleteStatus = async (req, res, next) => {
     const { id } = req.params;
-    
+
     try {
 
-    const result = await pool.query('DELETE FROM "estatus" WHERE id = $1', [id]);
+        const result = await pool.query('DELETE FROM "estatus" WHERE id = $1', [id]);
 
-    if (result.rowCount === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo eliminar not found"
-    });
+        if (result.rowCount === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo eliminar not found"
+            });
 
-    return res.sendStatus(204);
-    } catch (error){
+        return res.sendStatus(204);
+    } catch (error) {
         next(error);
     }
 };
 
 //actualizar un estatus
-const updateStatus = async (req, res, next) =>{
+const updateStatus = async (req, res, next) => {
     const { id } = req.params;
     const { estatus } = req.body;
 
@@ -806,9 +878,9 @@ const updateStatus = async (req, res, next) =>{
     );
 
     if (result.rows.length === 0)
-    return res.status(404).json({
-        message: "La tarea no se pudo actualizar"
-    });
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
 
     return res.json(result.rows[0]);
 };
@@ -828,15 +900,16 @@ LA BASE DE DATOS
 CADA RENGLON REPRESENTA A LOS CONTROLADORES DE 1 SOLA TABLA POR LO CUAL SE MANEJARA 1 RENGLON POR TABLA*/
 
 module.exports = {
-
+    ///////////////////////////////////////////// CONTROLADORES DE USUARIOS ////////////////////////////////////////////
+    getAllUsers, getUser, updateUser, deleteUser, createUser,
     ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
     getAllOrcFoliosSur, getOrcFoliosSur, createOrcFoliosSur, deleteOrcFoliosSur, updateOrcFoliosSur,
-    getAllOrcArchvivosAdj,getOrcArchvivosAdj, createOrcArchvivosAdj, deleteOrcArchvivosAdj,updateOrcArchvivosAdj,
-    getAllOrdenArchivosAdjuntos,getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, deleteOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
-    getAllOrdenFoliosSurtidos,getOrdenFoliosSurtidos,createOrdenFoliosSurtidos, deleteOrdenFoliosSurtidos, updateOrdenFoliosSurtidos,
+    getAllOrcArchvivosAdj, getOrcArchvivosAdj, createOrcArchvivosAdj, deleteOrcArchvivosAdj, updateOrcArchvivosAdj,
+    getAllOrdenArchivosAdjuntos, getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, deleteOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
+    getAllOrdenFoliosSurtidos, getOrdenFoliosSurtidos, createOrdenFoliosSurtidos, deleteOrdenFoliosSurtidos, updateOrdenFoliosSurtidos,
     getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, deleteOrdenListadoEntrada, updateOrdenListadoEntrada,
-    getAllListadoProduct,getListadoProduct,createListadoProduct,deleteListadoProduct,updateListadoProduct,
-    getAllProductos,getProducto,createProducto,deleteProducto,updateProducto,
+    getAllListadoProduct, getListadoProduct, createListadoProduct, deleteListadoProduct, updateListadoProduct,
+    getAllProductos, getProducto, createProducto, deleteProducto, updateProducto,
     getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra,
 
     ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
@@ -869,6 +942,6 @@ module.exports = {
 
 
     ///////////////////////////////////////////// CONTROLADORES SIN UBICAR  ////////////////////////////////////////////
-    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus, 
-    
+    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus,
+
 }

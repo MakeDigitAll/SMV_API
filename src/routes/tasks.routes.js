@@ -1,15 +1,17 @@
 const { Router } = require("express")
 const pool = require('../database')
 
-const { 
+const {
+    ///////////////////////////////////////////// RUTAS DE USUARIOS ////////////////////////////////////////////
+    getAllUsers, getUser, updateUser, deleteUser, createUser,
     ///////////////////////////////////////////// RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
-    getAllOrcFoliosSur,getOrcFoliosSur, createOrcFoliosSur, deleteOrcFoliosSur, updateOrcFoliosSur, 
-    getAllOrcArchvivosAdj,getOrcArchvivosAdj,createOrcArchvivosAdj,deleteOrcArchvivosAdj,updateOrcArchvivosAdj,
+    getAllOrcFoliosSur, getOrcFoliosSur, createOrcFoliosSur, deleteOrcFoliosSur, updateOrcFoliosSur,
+    getAllOrcArchvivosAdj, getOrcArchvivosAdj, createOrcArchvivosAdj, deleteOrcArchvivosAdj, updateOrcArchvivosAdj,
     getAllOrdenArchivosAdjuntos, getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, deleteOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
-    getAllOrdenFoliosSurtidos, getOrdenFoliosSurtidos, createOrdenFoliosSurtidos, deleteOrdenFoliosSurtidos, updateOrdenFoliosSurtidos, 
-    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, deleteOrdenListadoEntrada, updateOrdenListadoEntrada, 
-    getAllProductos, getProducto, createProducto, deleteProducto, updateProducto, 
-    getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra, 
+    getAllOrdenFoliosSurtidos, getOrdenFoliosSurtidos, createOrdenFoliosSurtidos, deleteOrdenFoliosSurtidos, updateOrdenFoliosSurtidos,
+    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, deleteOrdenListadoEntrada, updateOrdenListadoEntrada,
+    getAllProductos, getProducto, createProducto, deleteProducto, updateProducto,
+    getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra,
     getAllListadoProduct, getListadoProduct, createListadoProduct, deleteListadoProduct, updateListadoProduct,
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
@@ -36,13 +38,27 @@ const {
 
 
     ///////////////////////////////////////////// RUTAS SIN UBICAR  ////////////////////////////////////////////
-    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus, 
+    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus,
 
 
-    } = require('../controllers/task.controller');
+} = require('../controllers/task.controller');
 
-const router =  Router();
+const router = Router();
+///////////////////////////////////////////// SERVICIO DE USUARIOS    ////////////////////////////////////////////
+//ver usuario
+router.get('/listadoUsuarios', getAllUsers)
 
+//ver un usuario
+router.get('/listadoUsuarios/:id', getUser)
+
+//crear usuario
+router.post('/nuevoUsuario', createUser)
+
+//eliminar usuario
+router.put('/deleteUsuario/:id', deleteUser)
+
+//actualizar usuario
+router.put('/updateUsuario/:id', updateUser)
 
 ///////////////////////////////////////////// RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
@@ -255,4 +271,4 @@ router.put('/status/:id', updateStatus)
 
 
 
-module.exports  =  router;
+module.exports = router;
