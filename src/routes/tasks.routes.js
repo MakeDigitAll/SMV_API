@@ -355,7 +355,7 @@ router.get('/RecordProducto/:id', getRecordProducto)
 router.post('/RecordProducto', createRecordProducto)
 
 //disable
-router.put('/RecordProducto/:id', disableTransMasProdTrans)
+router.put('/RecordProducto/:id', disableRecordProducto)
 
 //actualizar 
 router.put('/RecordProducto/:id', updateRecordProducto)

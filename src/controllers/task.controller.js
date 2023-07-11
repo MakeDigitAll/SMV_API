@@ -16,7 +16,7 @@ const getAllOrcFoliosSur = async (req, res, next)=> {
 }
 
 
-//mostrar un estatus
+//mostrar los folios surtido
 const getOrcFoliosSur = async (req, res, next) =>{
     try {
         const { id } = req.params;
@@ -33,7 +33,7 @@ const getOrcFoliosSur = async (req, res, next) =>{
     }
 };
 
-//crear un estatus 
+//crear un folio surtido
 const createOrcFoliosSur = async (req, res, next) =>{
     const { id , fecha, almacen, producto, cantidad } = req.body
 
@@ -49,7 +49,7 @@ const createOrcFoliosSur = async (req, res, next) =>{
     }
 };
 
-//eliminar un estatus
+//eliminar folios surtido
 const deleteOrcFoliosSur = async (req, res, next) =>{
     const { id } = req.params;
     
