@@ -16,7 +16,7 @@ const getAllOrcFoliosSur = async (req, res, next)=> {
 }
 
 
-//mostrar los folios surtido
+//mostrar un estatus
 const getOrcFoliosSur = async (req, res, next) =>{
     try {
         const { id } = req.params;
@@ -33,7 +33,7 @@ const getOrcFoliosSur = async (req, res, next) =>{
     }
 };
 
-//crear un folio surtido
+//crear un estatus 
 const createOrcFoliosSur = async (req, res, next) =>{
     const { id , fecha, almacen, producto, cantidad } = req.body
 
