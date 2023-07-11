@@ -684,13 +684,767 @@ const updateProducto = async (req, res, next) =>{
     return res.json(result.rows[0]);
 };
 //////////////////// FIN DE CONTROLADORES PARA TABLA DE PRODUCTOS
-
-
-
-
 ///////////////////////////////////////////// FIN DE MICROSERVICIO DE COMPRAS  ////////////////////////////////////////////////////
 
+///////////////////////////////////////////// MICROSERVICIO PRODUCTOS ////////////////////////////////////////////////////
 
+////////////////////////// CONTROLADORES PARA TABLA DE Listado transferencia masiva productos transferencia 
+//Mostrar Listado transferencia masiva productos transferencia 
+const getAllTransMasProdTrans = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "listadoTransferenciasMasivasProductosTransferencia"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Listado transferencia masiva productos transferencia 
+const getTransMasProdTrans = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "listadoTransferenciasMasivasProductosTransferencia" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear un Listado transferencia masiva productos transferencia 
+const createTransMasProdTrans = async (req, res, next) =>{
+    const { id , codigo, imagen, nombre, cantidad,isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "listadoTransferenciasMasivasProductosTransferencia" (id, codigo, imagen, nombre, cantidad, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+        [id, codigo, imagen, nombre, cantidad, isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un TransMasProdTrans
+const disableTransMasProdTrans = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "listadoTransferenciasMasivasProductosTransferencia" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar un Listado transferencia masiva productos transferencia 
+const updateTransMasProdTrans= async (req, res, next) =>{
+    const { id } = req.params;
+    const { codigo, imagen, nombre, cantidad,isUpdate, isDelete, creationDate, creationUpdate } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "listadoTransferenciasMasivasProductosTransferencia" SET codigo = $1, imagen = $2, nombre= $3, cantidad= $4, isUpdate= $5, isDelete= $6, creationDate= $7, creationUpdate= $8 WHERE id = $9 RETURNING *',
+        [codigo, imagen, nombre, cantidad, isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Listado transferencia masiva productos transferencia 
+
+////////////////////////// CONTROLADORES PARA TABLA DE Marcas producto 
+//Mostrar Listado transferencia masiva productos transferencia 
+const getAllMarcasproducto = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "marcasProducto"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Marcas producto 
+const getMarcasproducto = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "marcasProducto" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear una Marca producto
+const createMarcasproducto = async (req, res, next) =>{
+    const { id , imagen, marca, catalogo, productos,isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "marcasProducto" (id, imagen, marca, catalogo, productos,"isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [id, imagen, marca, catalogo, productos,isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un Marcasproducto
+const disableMarcasproducto = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "marcasProducto" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar una Marca producto
+const updateMarcasproducto= async (req, res, next) =>{
+    const { id } = req.params;
+    const { imagen, marca, catalogo, productos,isUpdate, isDelete, creationDate, creationUpdate } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "marcasProducto" SET imagen = $1, marca = $2, catalogo= $3, productos= $4, isUpdate= $5, isDelete= $6, creationDate= $7, creationUpdate= $8 WHERE id = $9 RETURNING *',
+        [imagen, marca, catalogo, productos, isUpdate, isDelete, creationDate, creationUpdate , id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Marcas producto 
+
+////////////////////////// CONTROLADORES PARA TABLA DE Productos cotizados
+//Mostrar Productos cotizados
+const getAllProductoscotizados = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "productosCotizados"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Productoscotizados
+const getProductoscotizados = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "productosCotizados" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear una Productoscotizados
+const createProductoscotizados = async (req, res, next) =>{
+    const { id , imagen, codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total,isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "productosCotizados" (id, imagen, codigo, nombre, marca, cantidad, inventario, "precioUnitario", descuento, total, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *',
+        [id, imagen, codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total,isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un Productoscotizados
+const disableProductoscotizados = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "productosCotizados" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar una Productoscotizados
+const updateProductoscotizados= async (req, res, next) =>{
+    const { id } = req.params;
+    const { imagen, codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total,isUpdate, isDelete, creationDate, creationUpdate } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "productosCotizados" SET imagen = $1, codigo = $2, nombre= $3, marca= $4, cantidad= $5,inventario= $6, "precioUnitario"= $7, descuento= $8, total= $9, "isUpdate"= $10, "isDelete"= $11, "creationDate"= $12, "creationUpdate"= $13  WHERE id = $14 RETURNING *',
+        [imagen, codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total, isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Productoscotizados
+
+////////////////////////// CONTROLADORES PARA TABLA DE Productos pedido
+//Mostrar Productos pedido
+const getAllProductosPedido = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "productosPedido"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Productos pedido
+const getProductosPedido = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "productosPedido" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear una Productos pedido
+const createProductosPedido = async (req, res, next) =>{
+    const { id, imagen, codigo, nombre, cantidad, unitarioMN, descuentoMN, total, devolucion,isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "productosPedido" (id, imagen, codigo, nombre, cantidad, "unitarioMN", "descuentoMN", total, devolucion,"isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *',
+        [id, imagen, codigo, nombre, cantidad, unitarioMN, descuentoMN, total, devolucion,isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un productosPedido
+const disableProductosPedido = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "productosPedido" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar una Productos pedido
+const updateProductosPedido= async (req, res, next) =>{
+    const { id } = req.params;
+    const { imagen, codigo, nombre, cantidad, unitarioMN, descuentoMN, total, devolucion,isUpdate, isDelete, creationDate, creationUpdate} = req.body;
+
+    const result = await pool.query(
+        'UPDATE "productosPedido" SET imagen = $1, codigo = $2, nombre= $3, cantidad= $4, "unitarioMN"= $5, "descuentoMN"= $6, total= $7, devolucion= $8,"isUpdate"= $9, "isDelete"= $10, "creationDate"= $11, "creationUpdate"= $12 WHERE id = $13 RETURNING *',
+        [imagen, codigo, nombre, cantidad, unitarioMN, descuentoMN, total, devolucion, isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Productos pedido
+
+////////////////////////// CONTROLADORES PARA TABLA DE Productos relacionados
+//Mostrar Productos relacionados
+const getAllProductosRelacionados = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "productosRelacionados"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Productos relacionados
+const getProductosRelacionados = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "productosRelacionados" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear una Productos relacionados
+const createProductosRelacionados = async (req, res, next) =>{
+    const { id, imagen, codigo, nombre,isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "productosRelacionados" (id, imagen, codigo, nombre, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+        [id, imagen, codigo, nombre,isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un Productos relacionados
+const disableProductosRelacionados = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "productosRelacionados" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar una Productos relacionados
+const updateProductosRelacionados= async (req, res, next) =>{
+    const { id } = req.params;
+    const { imagen, codigo, nombre,isUpdate, isDelete, creationDate, creationUpdate } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "productosRelacionados" SET imagen = $1, codigo = $2, nombre= $3, "isUpdate"= $4, "isDelete"= $5, "creationDate"= $6, "creationUpdate"= $7  WHERE id = $8 RETURNING *',
+        [imagen, codigo, nombre,isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Productos relacionados
+
+////////////////////////// CONTROLADORES PARA TABLA DE Productos surtidos pedido 
+//Mostrar Productos surtidos pedido 
+const getAllProductosSurtidosPedido = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "productosSurtidosPedido"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Productos surtidos pedido
+const getProductosSurtidosPedido = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "productosSurtidosPedido" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear una Productos surtidos pedido 
+const createProductosSurtidosPedido = async (req, res, next) =>{
+    const { id, imagen, codigo, nombre, cantidad, fecha, almacen,isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "productosSurtidosPedido" (id, imagen, codigo, nombre, cantidad, fecha, almacen, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7. $8, $9, $10, $11) RETURNING *',
+        [id, imagen, codigo, nombre, cantidad, fecha, almacen,isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un ProductosSurtidosPedido
+const disableProductosSurtidosPedido = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "productosSurtidosPedido" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+//actualizar una Productos surtidos pedido 
+const updateProductosSurtidosPedido= async (req, res, next) =>{
+    const { id } = req.params;
+    const { imagen, codigo, nombre, cantidad, fecha, almacen,isUpdate, isDelete, creationDate, creationUpdate } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "productosSurtidosPedido" SET imagen = $1, codigo = $2, nombre= $3, cantidad= $4, fecha= $5, almacen= $6, "isUpdate"= $7, "isDelete"= $8, "creationDate"= $9, "creationUpdate"= $10 WHERE id = $11 RETURNING *',
+        [imagen, codigo, nombre, cantidad, fecha, almacen, isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Productos surtidos pedido 
+
+////////////////////////// CONTROLADORES PARA TABLA DE Productos  surtir pedido
+//Mostrar Productos  surtir pedido
+const getAllProductosSurtirPedido = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "productosSurtirPedido"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Productos  surtir pedido
+const getProductosSurtirPedido = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "productosSurtirPedido" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear una Productos  surtir pedido
+const createProductosSurtirPedido = async (req, res, next) =>{
+    const { id, codigo, nombre, cantidad, faltan, surtir, disponibles, series, isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "productosSurtirPedido" (id, codigo, nombre, cantidad, faltan, surtir, disponibles, series, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10. $11, $12) RETURNING *',
+        [id, codigo, nombre, cantidad, faltan, surtir, disponibles, series, isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un ProductosSurtirPedido
+const disableProductosSurtirPedido = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "productosSurtirPedido" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar una Productos  surtir pedido
+const updateProductosSurtirPedido= async (req, res, next) =>{
+    const { id } = req.params;
+    const { codigo, nombre, cantidad, faltan, surtir, disponibles, series,isUpdate, isDelete, creationDate, creationUpdate } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "productosSurtirPedido" SET  codigo = $1, nombre = $2, cantidad= $3, faltan= $4, surtir= $5, disponibles= $6, series= $7, "isUpdate"= $8, "isDelete"= $9, "creationDate"= $10, "creationUpdate"= $11 WHERE id = $12 RETURNING *',
+        [codigo, nombre, cantidad, faltan, surtir, disponibles, series, isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Productos  surtir pedido
+
+////////////////////////// CONTROLADORES PARA TABLA DE Productos transferencia record por producto 
+//Mostrar Productos transferencia record por producto 
+const getAllProductosTransRecordProd = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "productosTransferencia"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un Productos transferencia record por producto 
+const getProductosTransRecordProd = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "productosTransferencia" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear una Productos transferencia record por producto 
+const createProductosTransRecordProd = async (req, res, next) =>{
+    const { id, codigo, imagen, nombre, cantidad, isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "productosTransferencia" (id, codigo, imagen, nombre, cantidad, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+        [id, codigo, imagen, nombre, cantidad, isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un productosTransferencia
+const disableProductosTransRecordProd = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "productosTransferencia" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar una Productos transferencia record por producto 
+const updateProductosTransRecordProd= async (req, res, next) =>{
+    const { id } = req.params;
+    const { codigo, imagen, nombre, cantidad,isUpdate, isDelete, creationDate, creationUpdate} = req.body;
+
+    const result = await pool.query(
+        'UPDATE "productosTransferencia" SET  codigo = $1, imagen = $2, nombre= $3, cantidad= $4, "isUpdate"= $5, "isDelete"= $6, "creationDate"= $7, "creationUpdate"= $8 WHERE id = $9 RETURNING *',
+        [codigo, imagen, nombre, cantidad, isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE Productos transferencia record por producto 
+
+////////////////////////// CONTROLADORES PARA TABLA DE  record por producto 
+//Mostrar  record por producto 
+const getAllRecordProducto = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query('SELECT * FROM "recordProducto"');
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+//mostrar un  record por producto 
+const getRecordProducto = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query('SELECT * FROM "recordProducto" WHERE id = $1', [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: "La tarea no funciona :("
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear un record por producto 
+const createRecordProducto = async (req, res, next) =>{
+    const { id,  fecha, pedido, idProducto, clave, producto, cliente, vendedor, cantidad, monto, total,isUpdate, isDelete, creationDate, creationUpdate,} = req.body
+
+    try {
+    const result = await pool.query(
+        'INSERT INTO "recordProducto" (id,  fecha, pedido, "idProducto", clave, producto, cliente, vendedor, cantidad, monto, total, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15 ) RETURNING *',
+        [id,  fecha, pedido, idProducto, clave, producto, cliente, vendedor, cantidad, monto, total, isUpdate, isDelete, creationDate, creationUpdate]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//disable un recordProducto
+const disableRecordProducto = async (req, res, next) =>{
+    const { id } = req.params;
+    const {isDelete}=req.body;
+    
+
+    const result = await pool.query(
+        `UPDATE "recordProducto" SET "isDelete"= '1' WHERE id = $1 RETURNING *`, 
+        [isDelete,id]
+    );
+
+    if (result.rowCount === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+     
+};
+
+//actualizar un  record por producto 
+const updateRecordProducto = async (req, res, next) =>{
+    const { id } = req.params;
+    const {  fecha, pedido, idProducto, clave, producto, cliente, vendedor, cantidad, monto, total, isUpdate, isDelete, creationDate, creationUpdate } = req.body;
+
+    const result = await pool.query(
+        'UPDATE "recordProducto" SET  fecha = $1, pedido = $2, "idProducto"= $3, clave= $4, producto= $5, cliente= $6, vendedor= $7, cantidad= $8, monto= $9, total= $10, "isUpdate"= $11, "isDelete"= $12, "creationDate"= $13, "creationUpdate"= $14 WHERE id = $15 RETURNING *',
+        [ fecha, pedido, idProducto, clave, producto, cliente, vendedor, cantidad, monto, total, isUpdate, isDelete, creationDate, creationUpdate, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////// FIN DE CONTROLADORES PARA TABLA DE  record por producto 
+
+
+///////////////////////////////////////////// FIN DE MICROSERVICIO DE PRODUCTOS  ////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////  MICROSERVICIO DE VENTAS  ///////////////////////////////////////////////////////
 
@@ -852,7 +1606,19 @@ module.exports = {
     ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO ADMINISTRACION ////////////////////////////////////////////
 
     ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO ADMINISTRACION ////////////////////////////////////////////
+    
 
+    ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO PRODUCTOS ////////////////////////////////////////////
+    getAllTransMasProdTrans,getTransMasProdTrans,createTransMasProdTrans,disableTransMasProdTrans,updateTransMasProdTrans,getAllMarcasproducto,getMarcasproducto,
+    createMarcasproducto,disableMarcasproducto,updateMarcasproducto,getAllProductoscotizados,getProductoscotizados,createProductoscotizados,disableProductoscotizados,
+    updateProductoscotizados,getAllProductosPedido,getProductosPedido,createProductosPedido,disableProductosPedido,updateProductosPedido,
+    getAllProductosRelacionados,getProductosRelacionados,createProductosRelacionados,disableProductosRelacionados,updateProductosRelacionados,getAllProductosSurtidosPedido,
+    getProductosSurtidosPedido,createProductosSurtidosPedido,disableProductosSurtidosPedido,updateProductosSurtidosPedido,getAllProductosSurtirPedido,
+    getProductosSurtirPedido,createProductosSurtirPedido,disableProductosSurtirPedido,updateProductosSurtirPedido,getAllProductosTransRecordProd,getProductosTransRecordProd,
+    createProductosTransRecordProd,disableProductosTransRecordProd,updateProductosTransRecordProd,getAllRecordProducto,getRecordProducto,createRecordProducto,disableRecordProducto,
+    updateRecordProducto,
+    ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO PRODUCTOS ////////////////////////////////////////////
+    
 
 
     ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO ALMACEN ////////////////////////////////////////////
