@@ -684,7 +684,7 @@ const updateProducto = async (req, res, next) =>{
     return res.json(result.rows[0]);
 };//////////////////// FIN DE CONTROLADORES PARA TABLA DE PRODUCTOS
 
-/////////////////////////////////////// CONTROLADORES PARA TABLA DE AGREGAR PRODUCTOS RELACIONADOS - empezar los encargados (Borrar comentario al eviar)
+/////////////////////////////////////// CONTROLADORES PARA TABLA DE AGREGAR PRODUCTOS RELACIONADOS
 //Mostrar los productos
 const getAllagregarProductoRelacionado = async (req, res, next)=> {
     try{
