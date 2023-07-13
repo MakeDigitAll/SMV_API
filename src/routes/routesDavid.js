@@ -10,7 +10,7 @@ const {
     getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, disableOrdenListadoEntrada, updateOrdenListadoEntrada, 
     getAllProductos, getProducto, createProducto, disableProducto, updateProducto, 
     getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, disableProductosOrdenCompra, updateProductosOrdenCompra, 
-    //getAllListadoProduct, getListadoProduct, createListadoProduct, disableListadoProduct, updateListadoProduct,
+    getAllListadoProduct, getListadoProduct, createListadoProduct, disableListadoProduct, updateListadoProduct,
     getAllListadoProductDesc, getListadoProductDesc, createListadoProductDesc, disableListadoProductDesc, updateListadoProductDesc, 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
@@ -50,7 +50,7 @@ const {
     getAllStatus, getStatus, createStatus, disableStatus, updateStatus,             
 
 
-    } = require('../controllers/task.controller');
+    } = require('../controllers/controllersDavid');
 
 const router =  Router();
 
@@ -68,7 +68,7 @@ router.get('/NuevaOrdenCompra/Folios/:id', getOrcFoliosSur)
 router.post('/NuevaOrdenCompra/Folios', createOrcFoliosSur)
 
 //deshabilita  estatus
-router.put('/NuevaOrdenCompra/Folios/:id', disableOrcFoliosSur)
+router.put('/NuevaOrdenCompra/FoliosDisable/:id', disableOrcFoliosSur)
 
 //actualizar estatus
 router.put('/NuevaOrdenCompra/Folios/:id', updateOrcFoliosSur)
@@ -86,7 +86,7 @@ router.get('/NuevaOrdenCompra/ArchivosAdjuntos/:id', getOrcArchvivosAdj)
 router.post('/NuevaOrdenCompra/ArchivosAdjuntos', createOrcArchvivosAdj)
 
 //deshabilita  estatus
-router.put('/NuevaOrdenCompra/ArchivosAdjuntos/:id', disableOrcArchvivosAdj)
+router.put('/NuevaOrdenCompra/ArchivosAdjuntosDisable/:id', disableOrcArchvivosAdj)
 
 //actualizar estatus
 router.put('/NuevaOrdenCompra/ArchivosAdjuntos/:id', updateOrcArchvivosAdj)
@@ -104,7 +104,7 @@ router.get('/OrdenCompra/ArchivosAdjuntos/:id', getOrdenArchvivosAdj)
 router.post('/OrdenCompra/ArchivosAdjuntos', createOrdenArchivosAdjuntos)
 
 //deshabilita  estatus
-router.put('/OrdenCompra/ArchivosAdjuntos/:id', disableOrdenArchivosAdjuntos)
+router.put('/OrdenCompra/ArchivosAdjuntosDisable/:id', disableOrdenArchivosAdjuntos)
 
 //actualizar estatus
 router.put('/OrdenCompra/ArchivosAdjuntos/:id', updateOrdenArchivosAdjuntos)
@@ -122,7 +122,7 @@ router.get('/OrdenCompra/FoliosSurtidos/:id', getOrdenFoliosSurtidos)
 router.post('/OrdenCompra/FoliosSurtidos', createOrdenFoliosSurtidos)
 
 //deshabilita  estatus
-router.put('/OrdenCompra/FoliosSurtidos/:id', disableOrdenFoliosSurtidos)
+router.put('/OrdenCompra/FoliosSurtidosDisable/:id', disableOrdenFoliosSurtidos)
 
 //actualizar estatus
 router.put('/OrdenCompra/FoliosSurtidos/:id', updateOrdenFoliosSurtidos)
@@ -140,7 +140,7 @@ router.get('/OrdenCompra/ListadoEntradas/:id', getOrdenListadoEntrada)
 router.post('/OrdenCompra/ListadoEntradas', createOrdenListadoEntrada)
 
 //deshabilita  estatus
-router.put('/OrdenCompra/ListadoEntradas/:id', disableOrdenListadoEntrada)
+router.put('/OrdenCompra/ListadoEntradasDisable/:id', disableOrdenListadoEntrada)
 
 //actualizar estatus
 router.put('/OrdenCompra/ListadoEntradas/:id', updateOrdenListadoEntrada)
@@ -158,7 +158,7 @@ router.get('/OrdenCompra/ProductosOrdenCompra/:id', getProductosOrdenCompra)
 router.post('/OrdenCompra/ProductosOrdenCompra', createProductosOrdenCompra)
 
 //deshabilita  estatus
-router.put('/OrdenCompra/ProductosOrdenCompra/:id', disableProductosOrdenCompra)
+router.put('/OrdenCompra/ProductosOrdenCompraDisable/:id', disableProductosOrdenCompra)
 
 //actualizar estatus
 router.put('/OrdenCompra/ProductosOrdenCompra/:id', updateProductosOrdenCompra)
@@ -167,7 +167,7 @@ router.put('/OrdenCompra/ProductosOrdenCompra/:id', updateProductosOrdenCompra)
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE LISTADO PRODUCTOS  
-/*router.get('/ListadoProductos', getAllListadoProduct)
+router.get('/ListadoProductos', getAllListadoProduct)
 
 //ver un estatus
 router.get('/ListadoProductos/:id', getListadoProduct)
@@ -176,10 +176,10 @@ router.get('/ListadoProductos/:id', getListadoProduct)
 router.post('/ListadoProductos', createListadoProduct)
 
 //deshabilita  estatus
-router.put('/ListadoProductos/:id', disableListadoProduct)
+router.put('/ListadoProductosDisable/:id', disableListadoProduct)
 
 //actualizar estatus
-router.put('/ListadoProductos/:id', updateListadoProduct) */
+router.put('/ListadoProductos/:id', updateListadoProduct)
 ////////////////// FIN DE LISTADO PRODUCTOS
 
 
@@ -193,7 +193,7 @@ router.get('/Productos/:id', getProducto)
 router.post('/Productos', createProducto)
 
 //deshabilita  estatus
-router.put('/Productos/:id', disableProducto)
+router.put('/ProductosDisable/:id', disableProducto)
 
 //actualizar estatus
 router.put('/Productos/:id', updateProducto)
@@ -210,7 +210,7 @@ router.get('/ListadoProductosDescuento/:id', getListadoProductDesc )
 router.post('/ListadoProductosDescuento', createListadoProductDesc)
 
 //deshabilita  estatus
-router.put('/ListadoProductosDescuento/:id', disableListadoProductDesc )
+router.put('/ListadoProductosDescuentoDisable/:id', disableListadoProductDesc )
 
 //actualizar estatus
 router.put('/ListadoProductosDescuento/:id', updateListadoProductDesc)
@@ -238,7 +238,7 @@ router.get('/Cotizaciones/:id',  getCotizaciones)
 router.post('/Cotizaciones', createCotizaciones)
 
 //deshabilita  estatus
-router.put('/Cotizaciones/:id',  disableCotizaciones)
+router.put('/CotizacionesDisable/:id',  disableCotizaciones)
 
 //actualizar estatus
 router.put('/Cotizaciones/:id', updateCotizaciones)
@@ -255,7 +255,7 @@ router.get('/Pedido/:id',  getPedido)
 router.post('/Pedido', createPedido)
 
 //deshabilita  estatus
-router.put('/Pedido/:id',  disablePedido)
+router.put('/PedidoDisable/:id',  disablePedido)
 
 //actualizar estatus
 router.put('/Pedido/:id', updatePedido)
@@ -272,7 +272,7 @@ router.get('/Pedidos/:id',  getPedidos)
 router.post('/Pedidos', createPedidos)
 
 //deshabilita  estatus
-router.put('/Pedidos/:id',  disablePedidos)
+router.put('/PedidosDisable/:id',  disablePedidos)
 
 //actualizar estatus
 router.put('/Pedidos/:id', updatePedidos)
@@ -289,7 +289,7 @@ router.get('/DetallePedido/:id',  getDetallePedido)
 router.post('/DetallePedido', createDetallePedido)
 
 //deshabilita  estatus
-router.put('/DetallePedido/:id',  disableDetallePedido)
+router.put('/DetallePedidoDisable/:id',  disableDetallePedido)
 
 //actualizar estatus
 router.put('/DetallePedido/:id', updateDetallePedido)
@@ -306,7 +306,7 @@ router.get('/VerPedido/:id', getVerPedido)
 router.post('/VerPedido', createVerPedido)
 
 //deshabilita  estatus
-router.put('/VerPedido/:id', disableVerPedido)
+router.put('/VerPedidoDisable/:id', disableVerPedido)
 
 //actualizar estatus
 router.put('/VerPedido/:id', updateVerPedido)
@@ -323,7 +323,7 @@ router.get('/FormaPagoPedido/:id',getFormasPagoPedido)
 router.post('/FormaPagoPedido', createFormasPagoPedido)
 
 //deshabilita  estatus
-router.put('/FormaPagoPedido/:id', disableFormasPagoPedido)
+router.put('/FormaPagoPedidoDisable/:id', disableFormasPagoPedido)
 
 //actualizar estatus
 router.put('/FormaPagoPedido/:id', updateFormasPagoPedido)
@@ -340,7 +340,7 @@ router.get('/LogisticaPedidos/:id',getLogisticaPedidos)
 router.post('/LogisticaPedidos', createLogisticaPedidos)
 
 //deshabilita  estatus
-router.put('/LogisticaPedidos/:id', disableLogisticaPedidos)
+router.put('/LogisticaPedidosDisable/:id', disableLogisticaPedidos)
 
 //actualizar estatus
 router.put('/LogisticaPedidos/:id', updateLogisticaPedidos)
@@ -357,7 +357,7 @@ router.get('/PedidosPendientesSurtir/:id', getPedidosPendientesSurt)
 router.post('/PedidosPendientesSurtir', createPedidosPendientesSurt)
 
 //deshabilita  estatus
-router.put('/PedidosPendientesSurtir/:id', disablePedidosPendientesSurt)
+router.put('/PedidosPendientesSurtirDisable/:id', disablePedidosPendientesSurt)
 
 //actualizar estatus
 router.put('/PedidosPendientesSurtir/:id', updatePedidosPendientesSurt)
@@ -374,7 +374,7 @@ router.get('/AgregarProveedor/:id', getAgregarProveedor)
 router.post('/AgregarProveedor', createAgregarProveedor)
 
 //deshabilita  estatus
-router.put('/AgregarProveedor/:id', disableAgregarProveedor)
+router.put('/AgregarProveedorDisable/:id', disableAgregarProveedor)
 
 //actualizar estatus
 router.put('/AgregarProveedor/:id', updateAgregarProveedor)
@@ -391,7 +391,7 @@ router.get('/Proveedores/:id', getProveedores)
 router.post('/Proveedores', createProveedores)
 
 //deshabilita  estatus
-router.put('/Proveedores/:id', disableProveedores)
+router.put('/ProveedoresDisable/:id', disableProveedores)
 
 //actualizar estatus
 router.put('/Proveedores/:id', updateProveedores)
@@ -408,7 +408,7 @@ router.get('/ProveedoresProducto/:id', getProveedoresProducto)
 router.post('/ProveedoresProducto', createProveedoresProducto)
 
 //deshabilita  estatus
-router.put('/ProveedoresProducto/:id', disableProveedoresProducto)
+router.put('/ProveedoresProductoDisable/:id', disableProveedoresProducto)
 
 //actualizar estatus
 router.put('/ProveedoresProducto/:id', updateProveedoresProducto)
@@ -456,7 +456,7 @@ router.get('/status/:id', getStatus)
 router.post('/status', createStatus)
 
 //deshabilita  estatus
-router.put('/status/:id', disableStatus)
+router.put('/statusDisable/:id', disableStatus)
 
 //actualizar estatus
 router.put('/status/:id', updateStatus)
