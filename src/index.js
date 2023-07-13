@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const tasksRoutes = require('./routes/tasks.routes');
-
+const zuleRoutes=require('./routes/zulema.routes');
 const app = express();
 
 app.use(cors());
@@ -17,6 +17,7 @@ app.use(express.urlencoded({extended: false}));
 
 //definir rutas
 app.use(tasksRoutes);
+app.use(zuleRoutes);
 
 app.use((err, req, res, next) =>{
     return res.json({
