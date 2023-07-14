@@ -39,7 +39,7 @@ const {
 
 
     ///////////////////////////////////////////// RUTAS SIN UBICAR  ////////////////////////////////////////////
-    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus, 
+
 
 
     } = require('../controllers/productosDanielTask.controller');
@@ -61,7 +61,7 @@ router.get('/Agregar/ProductoRelacionado/:id', getagregarProductoRelacionado)
 router.post('/Agregar/ProductoRelacionado', createagregarProductoRelacionado)
 
 //eliminar estatus
-router.delete('/Agregar/ProductoRelacionado/:id', disableagregarProductoRelacionado)
+router.put('/Agregar/ProductoRelacionadoDisable/:id', disableagregarProductoRelacionado)
 
 //actualizar estatus
 router.put('/Agregar/ProductoRelacionado/:id', updateagregarProductoRelacionado)
@@ -77,7 +77,7 @@ router.get('/BuscarProducto/:id', getbuscarProducto)
 router.post('/BuscarProducto', createbuscarProducto)
 
 //eliminar estatus
-router.delete('/BuscarProducto/:id', disablebuscarProducto)
+router.put('/BuscarProductoDisable/:id', disablebuscarProducto)
 
 //actualizar estatus
 router.put('/BuscarProducto/:id', updatebuscarProducto)
@@ -93,7 +93,7 @@ router.get('/Categoria/:sku', getcategoria)
 router.post('/Categoria', createcategoria)
 
 //eliminar estatus
-router.delete('/Categoria/:sku', disablecategoria)
+router.put('/CategoriaDisable/:sku', disablecategoria)
 
 //actualizar estatus
 router.put('/Categoria/:sku', updatecategoria)
@@ -109,7 +109,7 @@ router.get('/costoProductos/:id', getcostoProductos)
 router.post('/costoProductos', createcostoProductos)
 
 //eliminar estatus
-router.delete('/costoProductos/:id', disablecostoProductos)
+router.put('/costoProductosDisable/:id', disablecostoProductos)
 
 //actualizar estatus
 router.put('/costoProductos/:id', updatecostoProductos)
@@ -125,7 +125,7 @@ router.get('/historialProducto/:id', gethistorialProducto)
 router.post('/historialProducto', createhistorialProducto)
 
 //eliminar estatus
-router.delete('/historialProducto/:id', disablehistorialProducto)
+router.put('/historialProductoDisable/:id', disablehistorialProducto)
 
 //actualizar estatus
 router.put('/historialProducto/:id', updatehistorialProducto)
@@ -141,7 +141,7 @@ router.get('/historialProductoUltimasCompras/:id', gethistorialProductoUltimasCo
 router.post('/historialProductoUltimasCompras', createhistorialProductoUltimasCompras)
 
 //eliminar estatus
-router.delete('/historialProductoUltimasCompras/:id', disablehistorialProductoUltimasCompras)
+router.put('/historialProductoUltimasComprasDisable/:id', disablehistorialProductoUltimasCompras)
 
 //actualizar estatus
 router.put('/historialProductoUltimasCompras/:id', updatehistorialProductoUltimasCompras)
@@ -157,7 +157,7 @@ router.get('/historialProductoUltimasVentas/:id', gethistorialProductoUltimasVen
 router.post('/historialProductoUltimasVentas', createhistorialProductoUltimasVentas)
 
 //eliminar estatus
-router.delete('/historialProductoUltimasVentas/:id', disablehistorialProductoUltimasVentas)
+router.put('/historialProductoUltimasVentasDisable/:id', disablehistorialProductoUltimasVentas)
 
 //actualizar estatus
 router.put('/historialProductoUltimasVentas/:id', updatehistorialProductoUltimasVentas)
@@ -173,7 +173,7 @@ router.get('/inventarioGeneralReporteInventario/:id', getinventarioGeneralReport
 router.post('/inventarioGeneralReporteInventario', createinventarioGeneralReporteInventario)
 
 //eliminar estatus
-router.delete('/inventarioGeneralReporteInventario/:id', disableinventarioGeneralReporteInventario)
+router.put('/inventarioGeneralReporteInventarioDisable/:id', disableinventarioGeneralReporteInventario)
 
 //actualizar estatus
 router.put('/inventarioGeneralReporteInventario/:id', updateinventarioGeneralReporteInventario)
@@ -189,7 +189,7 @@ router.get('/listadoProductosMargenProductos/:id', getlistadoProductosMargenProd
 router.post('/listadoProductosMargenProductos', createlistadoProductosMargenProductos)
 
 //eliminar estatus
-router.delete('/listadoProductosMargenProductos/:id', disablelistadoProductosMargenProductos)
+router.put('/listadoProductosMargenProductosDisable/:id', disablelistadoProductosMargenProductos)
 
 //actualizar estatus
 router.put('/listadoProductosMargenProductos/:id', updatelistadoProductosMargenProductos)
