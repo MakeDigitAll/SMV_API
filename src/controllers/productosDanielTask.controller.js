@@ -170,11 +170,11 @@ next (error)
 const updatebuscarProducto = async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const {nombre, precio, existencia, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {nombre, precio, existencia} = req.body;
 
     const result = await pool.query(
-        'UPDATE "buscarProducto" SET nombre = $1, precio = $2, existencia = $3, "isUpdated" = $4, "isDeleted" = $5, "DateCreation"= $6, "DateModification"= $7 WHERE id = $8 RETURNING *',
-        [nombre, precio, existencia, isUpdated, isDeleted, DateCreation, DateModification, id]
+        'UPDATE "buscarProducto" SET nombre = $1, precio = $2, existencia = $3, "DateModification"= NOW() WHERE id = $4 RETURNING *',
+        [nombre, precio, existencia, id]
     );
     if (result.rows.length === 0)
     return res.status(404).json({
@@ -262,11 +262,11 @@ next (error);
 const updatecategoria= async (req, res, next) =>{
     try {
     const { sku } = req.params;
-    const {nombre, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {nombre, } = req.body;
 
     const result = await pool.query(
-        'UPDATE "categoria" SET nombre = $1, "isUpdated" = $2, "isDeleted" = $3, "DateCreation"= $4, "DateModification"= $5 WHERE sku = $6 RETURNING *',
-        [nombre, isUpdated, isDeleted, DateCreation, DateModification, sku]
+        'UPDATE "categoria" SET nombre = $1, "DateModification"= NOW() WHERE sku = $2 RETURNING *',
+        [nombre, sku]
     );
 
     if (result.rows.length === 0)
@@ -356,11 +356,11 @@ next (error)
 const updatecostoProductos = async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const {codigoEmpresa, nombre, inventario, costoMN, totalMN, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {codigoEmpresa, nombre, inventario, costoMN, totalMN} = req.body;
 
     const result = await pool.query(
-        'UPDATE "costoProductos" SET "codigoEmpresa" = $1, nombre = $2, inventario = $3, "costoMN" = $4, "totalMN"= $5, "isUpdated"= $6,"isDeleted"= $7,"DateCreation"= $8,"DateModification"= $9 WHERE id = $10 RETURNING *',
-        [codigoEmpresa, nombre, inventario, costoMN, totalMN, isUpdated, isDeleted, DateCreation, DateModification, id]
+        'UPDATE "costoProductos" SET "codigoEmpresa" = $1, nombre = $2, inventario = $3, "costoMN" = $4, "totalMN"= $5, "DateModification"= NOW() WHERE id = $6 RETURNING *',
+        [codigoEmpresa, nombre, inventario, costoMN, totalMN,  id]
     );
 
     if (result.rows.length === 0)
@@ -449,11 +449,11 @@ const disablehistorialProducto= async (req, res, next) =>{
 const updatehistorialProducto = async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const {codigoFabricante, codigoEmpresa, estufa, marca, minimo, maximo, sucursal, almacen, entradas, salidas, existencia, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {codigoFabricante, codigoEmpresa, estufa, marca, minimo, maximo, sucursal, almacen, entradas, salidas, existencia} = req.body;
 
     const result = await pool.query(
-        'UPDATE "historialProducto" SET "codigoFabricante"=$1, "codigoEmpresa"=$2, estufa=$3, marca=$4, minimo=$5, maximo=$6, sucursal=$7, almacen=$8, entradas=$9, salidas=$10, existencia=$11, "isUpdated"=$12, "isDeleted"=$13, "DateCreation"=$14, "DateModification"=$15 WHERE id = $16 RETURNING *',
-        [codigoFabricante, codigoEmpresa, estufa, marca, minimo, maximo, sucursal, almacen, entradas, salidas, existencia, isUpdated, isDeleted, DateCreation, DateModification, id]
+        'UPDATE "historialProducto" SET "codigoFabricante"=$1, "codigoEmpresa"=$2, estufa=$3, marca=$4, minimo=$5, maximo=$6, sucursal=$7, almacen=$8, entradas=$9, salidas=$10, existencia=$11, "DateModification"=NOW() WHERE id = $12 RETURNING *',
+        [codigoFabricante, codigoEmpresa, estufa, marca, minimo, maximo, sucursal, almacen, entradas, salidas, existencia,  id]
     );
 
     if (result.rows.length === 0)
@@ -543,11 +543,11 @@ const disablehistorialProductoUltimasCompras= async (req, res, next) =>{
 const updatehistorialProductoUltimasCompras = async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const {numeroOrdenCompra, fecha, cantidad, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {numeroOrdenCompra, fecha, cantidad} = req.body;
 
     const result = await pool.query(
-        'UPDATE "historialProductoUltimasCompras" SET "numeroOrdenCompra"=$1, fecha=$2, cantidad=$3, "isUpdated"=$4, "isDeleted"=$5, "DateCreation"=$6, "DateModification"=$7 WHERE id = $8 RETURNING *',
-        [numeroOrdenCompra, fecha, cantidad, isUpdated, isDeleted, DateCreation, DateModification, id]
+        'UPDATE "historialProductoUltimasCompras" SET "numeroOrdenCompra"=$1, fecha=$2, cantidad=$3, "DateModification"=NOW() WHERE id = $4 RETURNING *',
+        [numeroOrdenCompra, fecha, cantidad, id]
     );
 
     if (result.rows.length === 0)
@@ -635,11 +635,11 @@ const disablehistorialProductoUltimasVentas= async (req, res, next) =>{
 const updatehistorialProductoUltimasVentas = async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const {numeroPedido, fecha, cantidad, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {numeroPedido, fecha, cantidad} = req.body;
 
     const result = await pool.query(
-        'UPDATE "historialProductoUltimasVentas" SET "numeroPedido"=$1, fecha=$2, cantidad=$3, "isUpdated"=$4, "isDeleted"=$5, "DateCreation"=$6, "DateModification"=$7 WHERE id = $8 RETURNING *',
-        [numeroPedido, fecha, cantidad, isUpdated, isDeleted, DateCreation, DateModification, id]
+        'UPDATE "historialProductoUltimasVentas" SET "numeroPedido"=$1, fecha=$2, cantidad=$3, "DateModification"=NOW () WHERE id = $4 RETURNING *',
+        [numeroPedido, fecha, cantidad,id]
     );
 
     if (result.rows.length === 0)
@@ -727,11 +727,11 @@ const disableinventarioGeneralReporteInventario= async (req, res, next) =>{
 const updateinventarioGeneralReporteInventario= async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const {codigoFabrica, codigoEmpresa, nombre, marca, minimo, maximo, total, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {codigoFabrica, codigoEmpresa, nombre, marca, minimo, maximo, total} = req.body;
 
     const result = await pool.query(
-        'UPDATE "inventarioGeneralReporteInventario" SET "codigoFabrica"=$1, "codigoEmpresa"=$2, nombre=$3, marca=$4, minimo=$5, maximo=$6, total=$7, "isUpdated"=$8, "isDeleted"=$9, "DateCreation"=$10, "DateModification"=$11 WHERE id = $12 RETURNING *',
-        [codigoFabrica, codigoEmpresa, nombre, marca, minimo, maximo, total, isUpdated, isDeleted, DateCreation, DateModification, id]
+        'UPDATE "inventarioGeneralReporteInventario" SET "codigoFabrica"=$1, "codigoEmpresa"=$2, nombre=$3, marca=$4, minimo=$5, maximo=$6, total=$7,  "DateModification"=NOW () WHERE id = $18 RETURNING *',
+        [codigoFabrica, codigoEmpresa, nombre, marca, minimo, maximo, total, id]
     );
 
     if (result.rows.length === 0)
@@ -821,11 +821,11 @@ const disablelistadoProductosMargenProductos= async (req, res, next) =>{
 const updatelistadoProductosMargenProductos= async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const {codigoFabricante, codigoEmpresa, nombre, activo, precioBaseMN, descuentoMN, precioMN, costoMN, diferenciaMN, margen, isUpdated, isDeleted, DateCreation, DateModification} = req.body;
+    const {codigoFabricante, codigoEmpresa, nombre, activo, precioBaseMN, descuentoMN, precioMN, costoMN, diferenciaMN, margen} = req.body;
 
     const result = await pool.query(
-        'UPDATE "listadoProductosMargenProductos" SET "codigoFabricante"=$1, "codigoEmpresa"=$2, nombre=$3, activo=$4, "precioBaseMN"=$5, "descuentoMN"=$6, "precioMN"=$7, "costoMN"=$8, "diferenciaMN"=$9, margen=$10, "isUpdated"=$11, "isDeleted"=$12, "DateCreation"=$13, "DateModification"=$14 WHERE id = $15 RETURNING *',
-        [codigoFabricante, codigoEmpresa, nombre, activo, precioBaseMN, descuentoMN, precioMN, costoMN, diferenciaMN, margen, isUpdated, isDeleted, DateCreation, DateModification, id]
+        'UPDATE "listadoProductosMargenProductos" SET "codigoFabricante"=$1, "codigoEmpresa"=$2, nombre=$3, activo=$4, "precioBaseMN"=$5, "descuentoMN"=$6, "precioMN"=$7, "costoMN"=$8, "diferenciaMN"=$9, margen=$10, "DateModification"=NOW() WHERE id = $11 RETURNING *',
+        [codigoFabricante, codigoEmpresa, nombre, activo, precioBaseMN, descuentoMN, precioMN, costoMN, diferenciaMN, margen, id]
     );
 
     if (result.rows.length === 0)
