@@ -1,32 +1,45 @@
 const { Router } = require("express")
 const pool = require('../database')
 
-const { 
+const {
+    ///////////////////////////////////////////// RUTAS DE USUARIOS ////////////////////////////////////////////
+    getAllUsers, getUser, updateUser, deleteUser, createUser,
     ///////////////////////////////////////////// RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
-    getAllOrcFoliosSur,getOrcFoliosSur, createOrcFoliosSur, deleteOrcFoliosSur, updateOrcFoliosSur, 
-    getAllOrcArchvivosAdj,getOrcArchvivosAdj,createOrcArchvivosAdj,deleteOrcArchvivosAdj,updateOrcArchvivosAdj,
-    getAllOrdenArchivosAdjuntos, getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, deleteOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
-    getAllOrdenFoliosSurtidos, getOrdenFoliosSurtidos, createOrdenFoliosSurtidos, deleteOrdenFoliosSurtidos, updateOrdenFoliosSurtidos, 
-    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, deleteOrdenListadoEntrada, updateOrdenListadoEntrada, 
-    getAllProductos, getProducto, createProducto, deleteProducto, updateProducto, 
-    getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, deleteProductosOrdenCompra, updateProductosOrdenCompra, 
-    getAllListadoProduct, getListadoProduct, createListadoProduct, deleteListadoProduct, updateListadoProduct,
-    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
+    getAllOrcFoliosSur,getOrcFoliosSur, createOrcFoliosSur, disableOrcFoliosSur, updateOrcFoliosSur, 
+    getAllOrcArchvivosAdj,getOrcArchvivosAdj,createOrcArchvivosAdj,disableOrcArchvivosAdj,updateOrcArchvivosAdj,
+    getAllOrdenArchivosAdjuntos, getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, disableOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
+    getAllOrdenFoliosSurtidos, getOrdenFoliosSurtidos, createOrdenFoliosSurtidos, disableOrdenFoliosSurtidos, updateOrdenFoliosSurtidos, 
+    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, disableOrdenListadoEntrada, updateOrdenListadoEntrada, 
+    getAllProductos, getProducto, createProducto, disableProducto, updateProducto, 
+    getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, disableProductosOrdenCompra, updateProductosOrdenCompra, 
+    getAllListadoProduct, getListadoProduct, createListadoProduct, disableListadoProduct, updateListadoProduct,
+    getAllListadoProductDesc, getListadoProductDesc, createListadoProductDesc, disableListadoProductDesc, updateListadoProductDesc, 
+   
+    getAllagregarProductoRelacionado, getagregarProductoRelacionado, createagregarProductoRelacionado, updateagregarProductoRelacionado, disableagregarProductoRelacionado, 
+    getAllbuscarProducto, getbuscarProducto, createbuscarProducto, disablebuscarProducto,updatebuscarProducto,
+    getAllcategoria, getcategoria, createcategoria, disablecategoria,updatecategoria,
+    getAllcostoProductos, getcostoProductos, createcostoProductos, disablecostoProductos, updatecostoProductos,
+    getAllhistorialProducto, gethistorialProducto, createhistorialProducto, disablehistorialProducto, updatehistorialProducto,
+    getAllhistorialProductoUltimasCompras, gethistorialProductoUltimasCompras, createhistorialProductoUltimasCompras, disablehistorialProductoUltimasCompras, updatehistorialProductoUltimasCompras,
+    getAllhistorialProductoUltimasVentas, gethistorialProductoUltimasVentas, createhistorialProductoUltimasVentas, disablehistorialProductoUltimasVentas, updatehistorialProductoUltimasVentas,
+    getAllinventarioGeneralReporteInventario, getinventarioGeneralReporteInventario, createinventarioGeneralReporteInventario, disableinventarioGeneralReporteInventario, updateinventarioGeneralReporteInventario,
+    getAlllistadoProductosMargenProductos, getlistadoProductosMargenProductos, createlistadoProductosMargenProductos, disablelistadoProductosMargenProductos, updatelistadoProductosMargenProductos,
 
-    ///////////////////////////////////////////// RUTAS DE MICROSERVICIO PRODUCTOS ////////////////////////////////////////////
-    getAllTransMasProdTrans,getTransMasProdTrans,createTransMasProdTrans,disableTransMasProdTrans,updateTransMasProdTrans,getAllMarcasproducto,getMarcasproducto,
-    createMarcasproducto,disableMarcasproducto,updateMarcasproducto,getAllProductoscotizados,getProductoscotizados,createProductoscotizados,disableProductoscotizados,
-    updateProductoscotizados,getAllProductosPedido,getProductosPedido,createProductosPedido,disableProductosPedido,updateProductosPedido,
-    getAllProductosRelacionados,getProductosRelacionados,createProductosRelacionados,disableProductosRelacionados,updateProductosRelacionados,
-    getAllProductosSurtidosPedido,getProductosSurtidosPedido,createProductosSurtidosPedido,disableProductosSurtidosPedido,updateProductosSurtidosPedido,
-    getAllProductosSurtirPedido,getProductosSurtirPedido,createProductosSurtirPedido,disableProductosSurtirPedido,updateProductosSurtirPedido,
-    getAllProductosTransRecordProd,getProductosTransRecordProd,createProductosTransRecordProd,disableProductosTransRecordProd,updateProductosTransRecordProd,
-    getAllRecordProducto,getRecordProducto,createRecordProducto,disableRecordProducto,updateRecordProducto,
-    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO PRODUCTOS////////////////////////////////////////////
+    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
 
     ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
-
+    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, updateCotizaciones,
+    getAllPedido, getPedido, createPedido, disablePedido, updatePedido,
+    getAllPedidos, getPedidos, createPedidos, disablePedidos, updatePedidos,
+    getAllDetallePedido, getDetallePedido, createDetallePedido, disableDetallePedido, updateDetallePedido,
+    getAllVerPedido, getVerPedido, createVerPedido, disableVerPedido, updateVerPedido,
+    getAllFormasPagoPedido, getFormasPagoPedido, createFormasPagoPedido, disableFormasPagoPedido, updateFormasPagoPedido,
+    getAllLogisticaPedidos, getLogisticaPedidos, createLogisticaPedidos, disableLogisticaPedidos, updateLogisticaPedidos,
+    getAllPedidosPendientesSurt, getPedidosPendientesSurt, createPedidosPendientesSurt, disablePedidosPendientesSurt, updatePedidosPendientesSurt,
+    getAllAgregarProveedor, getAgregarProveedor, createAgregarProveedor, disableAgregarProveedor, updateAgregarProveedor,
+    getAllProveedores, getProveedores, createProveedores, disableProveedores, updateProveedores,
+    getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto,
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 
@@ -47,13 +60,27 @@ const {
 
 
     ///////////////////////////////////////////// RUTAS SIN UBICAR  ////////////////////////////////////////////
-    getAllStatus, getStatus, createStatus, deleteStatus, updateStatus, 
+    getAllStatus, getStatus, createStatus, disableStatus, updateStatus,             
 
 
-    } = require('../controllers/task.controller');
+} = require('../controllers/task.controller');
 
-const router =  Router();
+const router = Router();
+///////////////////////////////////////////// SERVICIO DE USUARIOS    ////////////////////////////////////////////
+//ver usuario
+router.get('/listadoUsuarios', getAllUsers)
 
+//ver un usuario
+router.get('/listadoUsuarios/:id', getUser)
+
+//crear usuario
+router.post('/nuevoUsuario', createUser)
+
+//eliminar usuario
+router.put('/deleteUsuario/:id', deleteUser)
+
+//actualizar usuario
+router.put('/updateUsuario/:id', updateUser)
 
 ///////////////////////////////////////////// RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
@@ -67,8 +94,8 @@ router.get('/NuevaOrdenCompra/Folios/:id', getOrcFoliosSur)
 //crear estatus
 router.post('/NuevaOrdenCompra/Folios', createOrcFoliosSur)
 
-//eliminar estatus
-router.delete('/NuevaOrdenCompra/Folios/:id', deleteOrcFoliosSur)
+//deshabilita  estatus
+router.put('/NuevaOrdenCompra/Folios/:id', disableOrcFoliosSur)
 
 //actualizar estatus
 router.put('/NuevaOrdenCompra/Folios/:id', updateOrcFoliosSur)
@@ -85,8 +112,8 @@ router.get('/NuevaOrdenCompra/ArchivosAdjuntos/:id', getOrcArchvivosAdj)
 //crear estatus
 router.post('/NuevaOrdenCompra/ArchivosAdjuntos', createOrcArchvivosAdj)
 
-//eliminar estatus
-router.delete('/NuevaOrdenCompra/ArchivosAdjuntos/:id', deleteOrcArchvivosAdj)
+//deshabilita  estatus
+router.put('/NuevaOrdenCompra/ArchivosAdjuntos/:id', disableOrcArchvivosAdj)
 
 //actualizar estatus
 router.put('/NuevaOrdenCompra/ArchivosAdjuntos/:id', updateOrcArchvivosAdj)
@@ -103,8 +130,8 @@ router.get('/OrdenCompra/ArchivosAdjuntos/:id', getOrdenArchvivosAdj)
 //crear estatus
 router.post('/OrdenCompra/ArchivosAdjuntos', createOrdenArchivosAdjuntos)
 
-//eliminar estatus
-router.delete('/OrdenCompra/ArchivosAdjuntos/:id', deleteOrdenArchivosAdjuntos)
+//deshabilita  estatus
+router.put('/OrdenCompra/ArchivosAdjuntos/:id', disableOrdenArchivosAdjuntos)
 
 //actualizar estatus
 router.put('/OrdenCompra/ArchivosAdjuntos/:id', updateOrdenArchivosAdjuntos)
@@ -121,8 +148,8 @@ router.get('/OrdenCompra/FoliosSurtidos/:id', getOrdenFoliosSurtidos)
 //crear estatus
 router.post('/OrdenCompra/FoliosSurtidos', createOrdenFoliosSurtidos)
 
-//eliminar estatus
-router.delete('/OrdenCompra/FoliosSurtidos/:id', deleteOrdenFoliosSurtidos)
+//deshabilita  estatus
+router.put('/OrdenCompra/FoliosSurtidos/:id', disableOrdenFoliosSurtidos)
 
 //actualizar estatus
 router.put('/OrdenCompra/FoliosSurtidos/:id', updateOrdenFoliosSurtidos)
@@ -139,8 +166,8 @@ router.get('/OrdenCompra/ListadoEntradas/:id', getOrdenListadoEntrada)
 //crear estatus
 router.post('/OrdenCompra/ListadoEntradas', createOrdenListadoEntrada)
 
-//eliminar estatus
-router.delete('/OrdenCompra/ListadoEntradas/:id', deleteOrdenListadoEntrada)
+//deshabilita  estatus
+router.put('/OrdenCompra/ListadoEntradas/:id', disableOrdenListadoEntrada)
 
 //actualizar estatus
 router.put('/OrdenCompra/ListadoEntradas/:id', updateOrdenListadoEntrada)
@@ -157,8 +184,8 @@ router.get('/OrdenCompra/ProductosOrdenCompra/:id', getProductosOrdenCompra)
 //crear estatus
 router.post('/OrdenCompra/ProductosOrdenCompra', createProductosOrdenCompra)
 
-//eliminar estatus
-router.delete('/OrdenCompra/ProductosOrdenCompra/:id', deleteProductosOrdenCompra)
+//deshabilita  estatus
+router.put('/OrdenCompra/ProductosOrdenCompra/:id', disableProductosOrdenCompra)
 
 //actualizar estatus
 router.put('/OrdenCompra/ProductosOrdenCompra/:id', updateProductosOrdenCompra)
@@ -175,8 +202,8 @@ router.get('/ListadoProductos/:id', getListadoProduct)
 //crear estatus
 router.post('/ListadoProductos', createListadoProduct)
 
-//eliminar estatus
-router.delete('/ListadoProductos/:id', deleteListadoProduct)
+//deshabilita  estatus
+router.put('/ListadoProductos/:id', disableListadoProduct)
 
 //actualizar estatus
 router.put('/ListadoProductos/:id', updateListadoProduct)
@@ -192,178 +219,173 @@ router.get('/Productos/:id', getProducto)
 //crear estatus
 router.post('/Productos', createProducto)
 
-//eliminar estatus
-router.delete('/Productos/:id', deleteProducto)
+//deshabilita  estatus
+router.put('/Productos/:id', disableProducto)
 
 //actualizar estatus
 router.put('/Productos/:id', updateProducto)
 /////////// FIN DE PRODUCTOS
 
-///////////////////////////////////////////// RUTAS DE MICROSERVICIO Productos ////////////////////////////////////////////
+/////////////////////////////////////// RUTAS PARA TABLA DE AGREGAR UN PRODUCTO RELACIONADO
+router.get('/Agregar/ProductoRelacionado', getAllagregarProductoRelacionado)
 
-/////////////////////////////////////// RUTAS PARA TABLA DE Listado transferencia masiva productos transferencia  
-router.get('/ListMasivaProductos', getAllTransMasProdTrans)
+/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS  
+router.get('/ListadoProductosDescuento', getAllListadoProductDesc)
 
-//ver 
-router.get('/ListMasivaProductos/:id', getTransMasProdTrans)
+//ver un estatus
+router.get('/ListadoProductosDescuento/:id', getListadoProductDesc )
 
-//crear 
-router.post('/ListMasivaProductos', createTransMasProdTrans)
+//crear estatus
+router.post('/ListadoProductosDescuento', createListadoProductDesc)
 
-//disable 
-router.put('/ListMasivaProductos/:id', disableTransMasProdTrans)
+//deshabilita  estatus
+router.put('/ListadoProductosDescuento/:id', disableListadoProductDesc )
 
-//actualizar 
-router.put('/ListMasivaProductos/:id', updateTransMasProdTrans)
-/////////// FIN DE ListMasivaProductos
-
-/////////////////////////////////////// RUTAS PARA TABLA DE Marcas Producto 
-router.get('/MarcasProducto', getAllMarcasproducto)
-
-//ver un
-router.get('/MarcasProducto/:id', getMarcasproducto)
-
-//crear  
-router.post('/MarcasProducto', createMarcasproducto)
-
-//disable 
-router.put('/MarcasProducto/:id', disableMarcasproducto)
-
-//actualizar 
-router.put('/MarcasProducto/:id', updateMarcasproducto)
-/////////// FIN DE Marcas Producto
-
-/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS COTIZADOS 
-router.get('/ProductosCotizados', getAllProductoscotizados)
-
-//ver un 
-router.get('/ProductosCotizados/:id', getProductoscotizados)
-
-//crear 
-router.post('/ProductosCotizados', createProductoscotizados)
-
-//disable 
-router.put('/ProductosCotizados/:id', disableProductoscotizados)
-
-//actualizar 
-router.put('/ProductosCotizados/:id', updateProductoscotizados)
-/////////// FIN DE PRODUCTOS COTIZADOS
-
-/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS PEDIDO 
-router.get('/ProductosPedido', getAllProductosPedido)
-
-//ver un 
-router.get('/ProductosPedido/:id', getProductosPedido)
-
-//crear
-router.post('/ProductosPedido', createProductosPedido)
-
-//disable 
-router.put('/ProductosPedido/:id', disableProductosPedido)
-
-//actualizar 
-router.put('/ProductosPedido/:id', updateProductosPedido)
-/////////// FIN DE PRODUCTOS PEDIDO 
-
-/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS RELACIONADOS
-router.get('/ProductosRelacionados', getAllProductosRelacionados)
-
-//ver un
-router.get('/ProductosRelacionados/:id', getProductosRelacionados)
-
-//crear
-router.post('/ProductosRelacionados', createProductosRelacionados)
-
-//disable 
-router.put('/ProductosRelacionados/:id', disableProductosRelacionados)
-
-//actualizar
-router.put('/ProductosRelacionados/:id', updateProductosRelacionados)
-/////////// FIN DE PRODUCTOS RELACIONADOS
-
-/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS SURTIDOS PEDIDOS
-router.get('/ProductosSurtidosPedido', getAllProductosSurtidosPedido)
-
-//ver un 
-router.get('/ProductosSurtidosPedido/:id', getProductosSurtidosPedido)
-
-//crear 
-router.post('/ProductosSurtidosPedido', createProductosSurtidosPedido)
-
-//disable 
-router.put('/ProductosSurtidosPedido/:id', disableProductosSurtidosPedido)
-
-//actualizar 
-router.put('/ProductosSurtidosPedido/:id', updateProductosSurtidosPedido)
-/////////// FIN DE PRODUCTOS SURTIDOS PEDIDOS
-
-/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS SURTIR PEDIDOS
-router.get('/ProductosSurtirPedido', getAllProductosSurtirPedido)
-
-//ver un 
-router.get('/ProductosSurtirPedido/:id', getProductosSurtirPedido)
-
-//crear 
-router.post('/ProductosSurtirPedido', createProductosSurtirPedido)
-
-//disable 
-router.put('/ProductosSurtirPedido/:id', disableProductosSurtirPedido)
-
-//actualizar 
-router.put('/ProductosSurtirPedido/:id', updateProductosSurtirPedido)
-/////////// FIN DE PRODUCTOS SURTIR PEDIDOS
-
-/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS SURTIR PEDIDOS
-router.get('/ProductosSurtirPedido', getAllProductosSurtirPedido)
-
-//ver un
-router.get('/ProductosSurtirPedido/:id', getProductosSurtirPedido)
-
-//crear 
-router.post('/ProductosSurtirPedido', createProductosSurtirPedido)
-
-//disable 
-router.put('/ProductosSurtirPedido/:id', disableProductosSurtirPedido)
-
-//actualizar 
-router.put('/ProductosSurtirPedido/:id', updateProductosSurtirPedido)
-/////////// FIN DE PRODUCTOS SURTIR PEDIDOS
-
-////////////////////////////////////// RUTAS PARA TABLA DE ProductosTransRecordProd
-router.get('/ProductosTransRecord', getAllProductosTransRecordProd)
-
-//ver uno
-router.get('/ProductosTransRecord/:id', getProductosTransRecordProd)
-
-//crear 
-router.post('/ProductosTransRecord', createProductosTransRecordProd)
-
-//disable 
-router.put('/ProductosTransRecord/:id', disableProductosTransRecordProd)
-
-//actualizar 
-router.put('/ProductosTransRecord/:id', updateProductosTransRecordProd)
-/////////// FIN DE ProductosTransRecordProd
-
-////////////////////////////////////// RUTAS PARA TABLA DE Record Producto
-router.get('/RecordProducto', getAllRecordProducto)
-
-//ver uno
-router.get('/RecordProducto/:id', getRecordProducto)
-
-//crear 
-router.post('/RecordProducto', createRecordProducto)
-
-//disable
-router.put('/RecordProducto/:id', disableRecordProducto)
-
-//actualizar 
-router.put('/RecordProducto/:id', updateRecordProducto)
-/////////// FIN DE Record Producto
-
-///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO Productos ////////////////////////////////////////////
+//actualizar estatus
+router.put('/ListadoProductosDescuento/:id', updateListadoProductDesc)
+/////////// FIN DE PRODUCTOS
 
 
+//ver un estatus
+router.get('/Agregar/ProductoRelacionado/:id', getagregarProductoRelacionado)
+
+//crear estatus
+router.post('/Agregar/ProductoRelacionado', createagregarProductoRelacionado)
+
+//eliminar estatus
+router.delete('/Agregar/ProductoRelacionado/:id', disableagregarProductoRelacionado)
+
+//actualizar estatus
+router.put('/Agregar/ProductoRelacionado/:id', updateagregarProductoRelacionado)
+///////////////////// FIN DE AGREGAR UN PRODUCTO RELACIONADO
+
+/////////////////////////////////////// RUTAS PARA TABLA DE BUSCAR PRODUCTO
+router.get('/BuscarProducto', getAllbuscarProducto)
+
+//ver un estatus
+router.get('/BuscarProducto/:id', getbuscarProducto)
+
+//crear estatus
+router.post('/BuscarProducto', createbuscarProducto)
+
+//eliminar estatus
+router.delete('/BuscarProducto/:id', disablebuscarProducto)
+
+//actualizar estatus
+router.put('/BuscarProducto/:id', updatebuscarProducto)
+///////////////////// FIN DE BUSCAR PRODUCTO    
+
+/////////////////////////////////////// RUTAS PARA CATEGORIA
+router.get('/Categoria', getAllcategoria)
+
+//ver un estatus
+router.get('/Categoria/:sku', getcategoria)
+
+//crear estatus
+router.post('/Categoria', createcategoria)
+
+//eliminar estatus
+router.delete('/Categoria/:sku', disablecategoria)
+
+//actualizar estatus
+router.put('/Categoria/:sku', updatecategoria)
+///////////////////// FIN DE CATEGORIA
+
+/////////////////////////////////////// RUTAS PARA COSTO DE PRODUCTOS
+router.get('/costoProductos', getAllcostoProductos)
+
+//ver un estatus
+router.get('/costoProductos/:id', getcostoProductos)
+
+//crear estatus
+router.post('/costoProductos', createcostoProductos)
+
+//eliminar estatus
+router.delete('/costoProductos/:id', disablecostoProductos)
+
+//actualizar estatus
+router.put('/costoProductos/:id', updatecostoProductos)
+///////////////////// FIN DE COSTO DE PRODUCOS
+
+/////////////////////////////////////// RUTAS PARA HISTORIAL DE PRODUCTOS
+router.get('/historialProducto', getAllhistorialProducto)
+
+//ver un estatus
+router.get('/historialProducto/:id', gethistorialProducto)
+
+//crear estatus
+router.post('/historialProducto', createhistorialProducto)
+
+//eliminar estatus
+router.delete('/historialProducto/:id', disablehistorialProducto)
+
+//actualizar estatus
+router.put('/historialProducto/:id', updatehistorialProducto)
+///////////////////// FIN DE HISTORIAAL DE PRODUCTOS
+
+/////////////////////////////////////// RUTAS PARA HISTORIAL DE PRODUCTOS ULTIMAS COMPRAS
+router.get('/historialProductoUltimasCompras', getAllhistorialProductoUltimasCompras)
+
+//ver un estatus
+router.get('/historialProductoUltimasCompras/:id', gethistorialProductoUltimasCompras)
+
+//crear estatus
+router.post('/historialProductoUltimasCompras', createhistorialProductoUltimasCompras)
+
+//eliminar estatus
+router.delete('/historialProductoUltimasCompras/:id', disablehistorialProductoUltimasCompras)
+
+//actualizar estatus
+router.put('/historialProductoUltimasCompras/:id', updatehistorialProductoUltimasCompras)
+///////////////////// FIN DE HISTORIAAL DE PRODUCTOS ULTIMAS COMPRAS
+
+/////////////////////////////////////// RUTAS PARA HISTORIAL DE PRODUCTOS ULTIMAS VENTAS
+router.get('/historialProductoUltimasVentas', getAllhistorialProductoUltimasVentas)
+
+//ver un estatus
+router.get('/historialProductoUltimasVentas/:id', gethistorialProductoUltimasVentas)
+
+//crear estatus
+router.post('/historialProductoUltimasVentas', createhistorialProductoUltimasVentas)
+
+//eliminar estatus
+router.delete('/historialProductoUltimasVentas/:id', disablehistorialProductoUltimasVentas)
+
+//actualizar estatus
+router.put('/historialProductoUltimasVentas/:id', updatehistorialProductoUltimasVentas)
+///////////////////// FIN DE HISTORIAAL DE PRODUCTOS ULTIMAS VENTAS
+
+/////////////////////////////////////// RUTAS PARA INVENTARIO GENERAL REPORTE DE INVENTARIO
+router.get('/inventarioGeneralReporteInventario', getAllinventarioGeneralReporteInventario)
+
+//ver un estatus
+router.get('/inventarioGeneralReporteInventario/:id', getinventarioGeneralReporteInventario)
+
+//crear estatus
+router.post('/inventarioGeneralReporteInventario', createinventarioGeneralReporteInventario)
+
+//eliminar estatus
+router.delete('/inventarioGeneralReporteInventario/:id', disableinventarioGeneralReporteInventario)
+
+//actualizar estatus
+router.put('/inventarioGeneralReporteInventario/:id', updateinventarioGeneralReporteInventario)
+///////////////////// FIN DE INVENTARIO GENERAL REPORTE DE INVENTARIO
+
+/////////////////////////////////////// RUTAS PARA INVENTARIO GENERAL REPORTE DE INVENTARIO
+router.get('/listadoProductosMargenProductos', getAlllistadoProductosMargenProductos)
+
+//ver un estatus
+router.get('/listadoProductosMargenProductos/:id', getlistadoProductosMargenProductos)
+
+//crear estatus
+router.post('/listadoProductosMargenProductos', createlistadoProductosMargenProductos)
+
+//eliminar estatus
+router.delete('/listadoProductosMargenProductos/:id', disablelistadoProductosMargenProductos)
+
+//actualizar estatus
+router.put('/listadoProductosMargenProductos/:id', updatelistadoProductosMargenProductos)
+///////////////////// FIN DE INVENTARIO GENERAL REPORTE DE INVENTARIO
 
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
@@ -371,6 +393,192 @@ router.put('/RecordProducto/:id', updateRecordProducto)
 
 
 ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
+
+/////////////////////////////////////// RUTAS PARA TABLA DE COTIZACIONES  
+router.get('/Cotizaciones', getAllCotizaciones)
+
+//ver un estatus
+router.get('/Cotizaciones/:id',  getCotizaciones)
+
+//crear estatus
+router.post('/Cotizaciones', createCotizaciones)
+
+//deshabilita  estatus
+router.put('/Cotizaciones/:id',  disableCotizaciones)
+
+//actualizar estatus
+router.put('/Cotizaciones/:id', updateCotizaciones)
+/////////// FIN DE COTIZACIONES
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDO  
+router.get('/Pedido', getAllPedido)
+
+//ver un estatus
+router.get('/Pedido/:id',  getPedido)
+
+//crear estatus
+router.post('/Pedido', createPedido)
+
+//deshabilita  estatus
+router.put('/Pedido/:id',  disablePedido)
+
+//actualizar estatus
+router.put('/Pedido/:id', updatePedido)
+/////////// FIN DE PEDIDO
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDOS
+router.get('/Pedidos', getAllPedidos)
+
+//ver un estatus
+router.get('/Pedidos/:id',  getPedidos)
+
+//crear estatus
+router.post('/Pedidos', createPedidos)
+
+//deshabilita  estatus
+router.put('/Pedidos/:id',  disablePedidos)
+
+//actualizar estatus
+router.put('/Pedidos/:id', updatePedidos)
+/////////// FIN DE PEDIDOS
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE DETALLE DE PEDIDO  
+router.get('/DetallePedido', getAllDetallePedido)
+
+//ver un estatus
+router.get('/DetallePedido/:id',  getDetallePedido)
+
+//crear estatus
+router.post('/DetallePedido', createDetallePedido)
+
+//deshabilita  estatus
+router.put('/DetallePedido/:id',  disableDetallePedido)
+
+//actualizar estatus
+router.put('/DetallePedido/:id', updateDetallePedido)
+/////////// FIN DE DETALLE DE PEDIDO
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE VER PEDIDO  
+router.get('/VerPedido', getAllVerPedido)
+
+//ver un estatus
+router.get('/VerPedido/:id', getVerPedido)
+
+//crear estatus
+router.post('/VerPedido', createVerPedido)
+
+//deshabilita  estatus
+router.put('/VerPedido/:id', disableVerPedido)
+
+//actualizar estatus
+router.put('/VerPedido/:id', updateVerPedido)
+/////////// FIN DE VER PEDIDO
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE FORMAS DE PAGO DE PEDIDO
+router.get('/FormaPagoPedido', getAllFormasPagoPedido)
+
+//ver un estatus
+router.get('/FormaPagoPedido/:id',getFormasPagoPedido)
+
+//crear estatus
+router.post('/FormaPagoPedido', createFormasPagoPedido)
+
+//deshabilita  estatus
+router.put('/FormaPagoPedido/:id', disableFormasPagoPedido)
+
+//actualizar estatus
+router.put('/FormaPagoPedido/:id', updateFormasPagoPedido)
+/////////// FIN DE FORMAS DE PAGO DE PEDIDO
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE LOGISTICA DE PEDIDOS
+router.get('/LogisticaPedidos', getAllLogisticaPedidos)
+
+//ver un estatus
+router.get('/LogisticaPedidos/:id',getLogisticaPedidos)
+
+//crear estatus
+router.post('/LogisticaPedidos', createLogisticaPedidos)
+
+//deshabilita  estatus
+router.put('/LogisticaPedidos/:id', disableLogisticaPedidos)
+
+//actualizar estatus
+router.put('/LogisticaPedidos/:id', updateLogisticaPedidos)
+/////////// FIN DE LOGISTICA DE PEDIDOS
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDOS PENDIENTES POR SURTIR
+router.get('/PedidosPendientesSurtir', getAllPedidosPendientesSurt)
+
+//ver un estatus
+router.get('/PedidosPendientesSurtir/:id', getPedidosPendientesSurt)
+
+//crear estatus
+router.post('/PedidosPendientesSurtir', createPedidosPendientesSurt)
+
+//deshabilita  estatus
+router.put('/PedidosPendientesSurtir/:id', disablePedidosPendientesSurt)
+
+//actualizar estatus
+router.put('/PedidosPendientesSurtir/:id', updatePedidosPendientesSurt)
+/////////// FIN DE PEDIDOS PENDIENTES POR SURTIR
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE AGREGAR PROVEEDOR
+router.get('/AgregarProveedor', getAllAgregarProveedor)
+
+//ver un estatus
+router.get('/AgregarProveedor/:id', getAgregarProveedor)
+
+//crear estatus
+router.post('/AgregarProveedor', createAgregarProveedor)
+
+//deshabilita  estatus
+router.put('/AgregarProveedor/:id', disableAgregarProveedor)
+
+//actualizar estatus
+router.put('/AgregarProveedor/:id', updateAgregarProveedor)
+/////////// FIN DE AGREGAR PROVEEDOR
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PROVEEDORES
+router.get('/Proveedores', getAllProveedores)
+
+//ver un estatus
+router.get('/Proveedores/:id', getProveedores)
+
+//crear estatus
+router.post('/Proveedores', createProveedores)
+
+//deshabilita  estatus
+router.put('/Proveedores/:id', disableProveedores)
+
+//actualizar estatus
+router.put('/Proveedores/:id', updateProveedores)
+/////////// FIN DE PROVEEDORES
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PROVEEDORES DEL PRODUCTO
+router.get('/ProveedoresProducto', getAllProveedoresProducto)
+
+//ver un estatus
+router.get('/ProveedoresProducto/:id', getProveedoresProducto)
+
+//crear estatus
+router.post('/ProveedoresProducto', createProveedoresProducto)
+
+//deshabilita  estatus
+router.put('/ProveedoresProducto/:id', disableProveedoresProducto)
+
+//actualizar estatus
+router.put('/ProveedoresProducto/:id', updateProveedoresProducto)
+/////////// FIN DE PROVEEDORES DEL PRODUCTO
 
 
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
@@ -413,8 +621,8 @@ router.get('/status/:id', getStatus)
 //crear estatus
 router.post('/status', createStatus)
 
-//eliminar estatus
-router.delete('/status/:id', deleteStatus)
+//deshabilita  estatus
+router.put('/status/:id', disableStatus)
 
 //actualizar estatus
 router.put('/status/:id', updateStatus)
@@ -427,4 +635,4 @@ router.put('/status/:id', updateStatus)
 
 
 
-module.exports  =  router;
+module.exports = router;
