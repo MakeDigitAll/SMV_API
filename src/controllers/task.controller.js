@@ -613,14 +613,14 @@ const getListadoProduct = async (req, res, next) => {
 };
 
 //crear un estatus 
-const createListadoProduct = async (req, res, next) => {
-    const { imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio } = req.body
+const createListadoProduct = async (req, res, next) =>{
+    const { imagen , id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio, isUpdate, isDelete, creationDate, creationUpdate} = req.body
 
     try {
-        const result = await pool.query(
-            'INSERT INTO "listadoProductos" (imagen, id, "codigoFabricante", "codigoEmpresa", nombre, marca, categoria, "codigoSat", actualizado, activo, web, pos, venta, precio) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING *',
-            [imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio]
-        );
+    const result = await pool.query(
+        'INSERT INTO "listadoProductos" (imagen, id, "codigoFabricante", "codigoEmpresa", nombre, marca, categoria, "codigoSat", actualizado, activo, web, pos, venta, precio, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) RETURNING *',
+        [imagen, id, codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, activo, web, pos, venta, precio, isUpdate, isDelete, creationDate, creationUpdate]
+    );
 
         res.json(result.json);
     } catch (error) {
@@ -662,7 +662,7 @@ const updateListadoProduct = async (req, res, next) => {
         });
 
     return res.json(result.rows[0]);
-};
+}; 
 //////////////// FIN DE CONTROLADORES PARA TABLA DE LISTADO DE PRODUCTOS
 
 
@@ -2338,7 +2338,7 @@ const updatePedidos = async (req, res, next) =>{
 
     return res.json(result.rows[0]);
 };
-/////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE PEDIDO
+/////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE PEDIDOS
 
 
 ///////////// CONTROLADORES PARA TABLA DE DETALLES PEDIDO 
@@ -3138,7 +3138,7 @@ module.exports = {
     getAllOrdenArchivosAdjuntos,getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, disableOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
     getAllOrdenFoliosSurtidos,getOrdenFoliosSurtidos,createOrdenFoliosSurtidos, disableOrdenFoliosSurtidos, updateOrdenFoliosSurtidos,
     getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, disableOrdenListadoEntrada, updateOrdenListadoEntrada,
-    getAllListadoProduct,getListadoProduct,createListadoProduct,disableListadoProduct,updateListadoProduct,
+    //getAllListadoProduct,getListadoProduct,createListadoProduct,disableListadoProduct,updateListadoProduct,
     getAllProductos,getProducto,createProducto,disableProducto,updateProducto,
     getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, disableProductosOrdenCompra, updateProductosOrdenCompra,
     getAllListadoProductDesc,getListadoProductDesc, createListadoProductDesc, disableListadoProductDesc, updateListadoProductDesc,
@@ -3163,8 +3163,8 @@ module.exports = {
     getAllPedido, getPedido, createPedido, disablePedido, updatePedido,
     getAllPedidos, getPedidos, createPedidos, disablePedidos, updatePedidos,
     getAllDetallePedido, getDetallePedido, createDetallePedido, disableDetallePedido, updateDetallePedido,
-    getAllVerPedido, getVerPedido, createVerPedido, disableVerPedido, updateVerPedido,
     getAllFormasPagoPedido, getFormasPagoPedido, createFormasPagoPedido, disableFormasPagoPedido, updateFormasPagoPedido,
+    getAllVerPedido, getVerPedido, createVerPedido, disableVerPedido, updateVerPedido,
     getAllLogisticaPedidos, getLogisticaPedidos, createLogisticaPedidos, disableLogisticaPedidos, updateLogisticaPedidos,
     getAllPedidosPendientesSurt, getPedidosPendientesSurt, createPedidosPendientesSurt, disablePedidosPendientesSurt, updatePedidosPendientesSurt,
     getAllAgregarProveedor, getAgregarProveedor, createAgregarProveedor, disableAgregarProveedor, updateAgregarProveedor,

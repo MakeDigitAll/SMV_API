@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+
+const davidRoutes = require('./routes/routesDavid');
 const tasksRoutes = require('./routes/tasks.routes');
 const zuleRoutes=require('./routes/zulema.routes');
 const DanieltasksRoutes = require('./routes/productosDanieltasks.routes');
@@ -19,6 +21,7 @@ app.use("/api/signout", require("./routes/signout"));
 app.use(tasksRoutes);
 app.use(zuleRoutes);
 app.use(DanieltasksRoutes);
+app.use(davidRoutes);
 
 app.use((err, req, res, next) => {
     return res.json({
