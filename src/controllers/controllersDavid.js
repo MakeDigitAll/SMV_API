@@ -683,7 +683,7 @@ const updateListadoProduct = async (req, res, next) =>{
         
         [codigoFabricante, codigoEmpresa, nombre, marca, categoria, codigoSat, actualizado, precio, id]
     );
-S
+
     if (result.rows.length === 0)
     return res.status(404).json({
         message: "La tarea no se pudo actualizar en la base de datos"

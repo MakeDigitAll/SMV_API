@@ -456,7 +456,7 @@ router.get('/status/:id', getStatus)
 router.post('/status', createStatus)
 
 //deshabilita  estatus
-router.put('/statusDisable/:id', disableStatus)
+router.put('/status/:id', disableStatus)
 
 //actualizar estatus
 router.put('/status/:id', updateStatus)
