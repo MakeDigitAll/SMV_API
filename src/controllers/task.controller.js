@@ -861,6 +861,8 @@ const getListadoProductDesc = async (req, res, next) =>{
     try {
         const { id } = req.params;
         const result = await pool.query(`SELECT * FROM "listadoProductosDescuento" WHERE id = $1 AND "isDelete" = '0' `, [id]);
+    } catch (error) {
+        console.log(error.message);
     }
 }
 //mostrar un estatus
@@ -889,6 +891,8 @@ const createListadoProductDesc = async (req, res, next) =>{
         'INSERT INTO "listadoProductosDescuento" (id, imagen, "codigoEmpresa", nombre, desde, hasta, "precioBase", descuento, precio, activo) VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10) RETURNING *',
         [id, imagen, codigoEmpresa, nombre, desde, hasta, precioBase, descuento, precio, activo]
     );
+    } catch (error) {
+        console.log(error.message);
     }
 }       
 const createbuscarProducto = async (req, res, next) =>{
