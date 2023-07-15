@@ -27,6 +27,8 @@ const {
 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
+    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
+
 
     ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
     getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, updateCotizaciones,
@@ -245,12 +247,23 @@ router.put('/ListadoProductosDescuento/:id', disableListadoProductDesc )
 router.put('/ListadoProductosDescuento/:id', updateListadoProductDesc)
 /////////// FIN DE PRODUCTOS
 
+///////////////////////////////////////////// RUTAS DE MICROSERVICIO Productos ////////////////////////////////////////////
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS  
+router.get('/ListadoProductosDescuento', getAllListadoProductDesc)
 
 //ver un estatus
-router.get('/Agregar/ProductoRelacionado/:id', getagregarProductoRelacionado)
+router.get('/ListadoProductosDescuento/:id', getListadoProductDesc )
 
 //crear estatus
-router.post('/Agregar/ProductoRelacionado', createagregarProductoRelacionado)
+router.post('/ListadoProductosDescuento', createListadoProductDesc)
+
+//deshabilita  estatus
+router.put('/ListadoProductosDescuento/:id', disableListadoProductDesc )
+
+//actualizar estatus
+router.put('/ListadoProductosDescuento/:id', updateListadoProductDesc)
+/////////// FIN DE PRODUCTOS
 
 //eliminar estatus
 router.delete('/Agregar/ProductoRelacionado/:id', disableagregarProductoRelacionado)
