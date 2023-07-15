@@ -121,8 +121,8 @@ const createOrcFoliosSur = async (req, res, next) => {
     }
 };
 
-//eliminar un estatus
-const deleteOrcFoliosSur = async (req, res, next) =>{
+//deshabilita un estatus
+const disableOrcFoliosSur = async (req, res, next) =>{
     const { id } = req.params;
     const { isDelete} = req.body;
 
@@ -666,10 +666,11 @@ const updateListadoProduct = async (req, res, next) => {
 //////////////// FIN DE CONTROLADORES PARA TABLA DE LISTADO DE PRODUCTOS
 
 
+//////////////// FIN DE CONTROLADORES PARA BUSCAR PRODUCTO
 
-/////////////////////////////////////// CONTROLADORES PARA TABLA DE PRODUCTOS 
+/////////////////////////////////////// CONTROLADORES PARA CATEGORIAS
 //Mostrar los productos
-const getAllProductos = async (req, res, next)=> {
+const getAllcategoria = async (req, res, next)=> {
     try{
     const allTasks = await pool.query(`SELECT * FROM "productos" WHERE "isDelete" = '0'`);
     res.json(allTasks.rows)
@@ -846,16 +847,6 @@ const getAllbuscarProducto = async (req, res, next)=> {
 }
 
 
-////////////////////////// CONTROLADORES PARA TABLA DE Listado transferencia masiva productos transferencia 
-//Mostrar Listado transferencia masiva productos transferencia 
-const getAllTransMasProdTrans = async (req, res, next)=> {
-    try{
-    const allTasks = await pool.query('SELECT * FROM "listadoTransferenciasMasivasProductosTransferencia"');
-    res.json(allTasks.rows)
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 
 //mostrar un Listado transferencia masiva productos transferencia 
@@ -3186,19 +3177,7 @@ module.exports = {
     ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO ADMINISTRACION ////////////////////////////////////////////
 
     ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO ADMINISTRACION ////////////////////////////////////////////
-    
 
-    ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO PRODUCTOS ////////////////////////////////////////////
-    getAllTransMasProdTrans,getTransMasProdTrans,createTransMasProdTrans,disableTransMasProdTrans,updateTransMasProdTrans,getAllMarcasproducto,getMarcasproducto,
-    createMarcasproducto,disableMarcasproducto,updateMarcasproducto,getAllProductoscotizados,getProductoscotizados,createProductoscotizados,disableProductoscotizados,
-    updateProductoscotizados,getAllProductosPedido,getProductosPedido,createProductosPedido,disableProductosPedido,updateProductosPedido,
-    getAllProductosRelacionados,getProductosRelacionados,createProductosRelacionados,disableProductosRelacionados,updateProductosRelacionados,getAllProductosSurtidosPedido,
-    getProductosSurtidosPedido,createProductosSurtidosPedido,disableProductosSurtidosPedido,updateProductosSurtidosPedido,getAllProductosSurtirPedido,
-    getProductosSurtirPedido,createProductosSurtirPedido,disableProductosSurtirPedido,updateProductosSurtirPedido,getAllProductosTransRecordProd,getProductosTransRecordProd,
-    createProductosTransRecordProd,disableProductosTransRecordProd,updateProductosTransRecordProd,getAllRecordProducto,getRecordProducto,createRecordProducto,disableRecordProducto,
-    updateRecordProducto,
-    ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO PRODUCTOS ////////////////////////////////////////////
-    
 
 
     ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO ALMACEN ////////////////////////////////////////////
