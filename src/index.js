@@ -3,9 +3,10 @@ const morgan = require('morgan');
 const cors = require('cors');
 
 const davidRoutes = require('./routes/routesDavid');
-const tasksRoutes = require('./routes/tasks.routes');
-const zuleRoutes=require('./routes/zulema.routes');
-const DanieltasksRoutes = require('./routes/productosDanieltasks.routes');
+const zuleRoutes=require('./routes/zulemaRoutes');
+const danieltasksRoutes = require('./routes/danielRoutes');
+const microservCompras = require('./routes/routesCompras');
+const microserVentas = require('./routes/routesVentas');
 
 const app = express();
 app.use(cors());
@@ -18,10 +19,12 @@ app.use("/api/user", require("./routes/user"));
 app.use("/api/todos", require("./routes/todos"));
 app.use("/api/refresh-token", require("./routes/refreshToken"));
 app.use("/api/signout", require("./routes/signout"));
-app.use(tasksRoutes);
 app.use(zuleRoutes);
-app.use(DanieltasksRoutes);
+app.use(danieltasksRoutes);
 app.use(davidRoutes);
+app.use(microserVentas);
+app.use(microservCompras);
+
 
 app.use((err, req, res, next) => {
     return res.json({

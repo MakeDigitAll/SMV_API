@@ -1,0 +1,1 @@
+/* aqui estaran las rutas de los API del microservicio Almacen */
