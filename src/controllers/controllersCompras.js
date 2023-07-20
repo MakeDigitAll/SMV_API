@@ -714,7 +714,7 @@ const getAllProductos = async (req, res, next)=> {
 const getProducto = async (req, res, next) =>{
     try {
         const { id } = req.params;
-        const result = await pool.query(`SELECT * FROM "productos" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+        const result = await pool.query(`SELECT * FROM "productos" WHERE idproducto = $1 AND "isDeleted" = '0' `, [id]);
 
         if (result.rows.length === 0 )
         return res.status(404).json({
@@ -752,7 +752,7 @@ const disableProducto = async (req, res, next) =>{
     const { id } = req.params;
 
     const result = await pool.query(
-        `UPDATE "productos" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+        `UPDATE "productos" SET "isDeleted" = '1' WHERE idproducto = $1 RETURNING *`,
         [id]
     );
 
@@ -772,12 +772,12 @@ const disableProducto = async (req, res, next) =>{
 //actualizar un folio para la nueva orden de compra
 const updateProducto = async (req, res, next) =>{
     try {
-    const { id } = req.params;
+    const { idproducto } = req.params;
     const { imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total} = req.body;
 
     const result = await pool.query(
-        'UPDATE "productos" SET imagen = $1, "codigoEmpresa" = $2, "codigoFabricante" = $3, nombre = $4, marca = $5, categoria = $6, existencia= $7, "backOrder" = $8, cantidad = $9, precio = $10, descuento = $11, total = $12, "DateModification" = NOW() WHERE id = $13 RETURNING *',
-        [imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total, id]
+        'UPDATE "productos" SET imagen = $1, "codigoEmpresa" = $2, "codigoFabricante" = $3, nombre = $4, marca = $5, categoria = $6, existencia= $7, "backOrder" = $8, cantidad = $9, precio = $10, descuento = $11, total = $12, "DateModification" = NOW() WHERE idproducto = $13 RETURNING *',
+        [imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total, idproducto]
     );
 
     if (result.rows.length === 0)
