@@ -772,12 +772,12 @@ const disableProducto = async (req, res, next) =>{
 //actualizar un folio para la nueva orden de compra
 const updateProducto = async (req, res, next) =>{
     try {
-    const { idproducto } = req.params;
-    const { imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total} = req.body;
+    const { id } = req.params;
+    const { codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, cantidad, precio, descuento, total} = req.body;
 
     const result = await pool.query(
-        'UPDATE "productos" SET imagen = $1, "codigoEmpresa" = $2, "codigoFabricante" = $3, nombre = $4, marca = $5, categoria = $6, existencia= $7, "backOrder" = $8, cantidad = $9, precio = $10, descuento = $11, total = $12, "DateModification" = NOW() WHERE idproducto = $13 RETURNING *',
-        [imagen, codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, backOrder, cantidad, precio, descuento, total, idproducto]
+        'UPDATE "productos" SET  "codigoEmpresa" = $1, "codigoFabricante" = $2, nombre = $3, marca = $4, categoria = $5, existencia= $6, cantidad = $7, precio = $8, descuento = $9, total = $10, "DateModification" = NOW() WHERE idproducto = $11 RETURNING *',
+        [ codigoEmpresa, codigoFabricante, nombre, marca, categoria, existencia, cantidad, precio, descuento, total, id]
     );
 
     if (result.rows.length === 0)

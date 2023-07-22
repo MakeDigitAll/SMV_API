@@ -181,7 +181,7 @@ router.get('/Productos/:id', getProducto)
 router.post('/Productos', createProducto)
 
 //deshabilita  estatus
-router.put('/ProductosDisable/:id', disableProducto)
+router.delete('/Productos/:id', disableProducto)
 
 //actualizar estatus
 router.put('/Productos/:id', updateProducto)
