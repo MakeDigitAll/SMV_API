@@ -47,7 +47,7 @@ const createOrcFoliosSur = async (req, res, next) =>{
     res.json(result.json);
 } catch (error) {
     console.log("Error",error.message);
-    console.log("linea de error:", error.stack.split('\n')[1]);
+    console.log("linea de error:", error.stack.split('\n')[1])
     next(error) 
 }
 };
