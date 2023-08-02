@@ -76,69 +76,6 @@ alter table "providersProfile"
 add constraint fk_profile_providerLI foreign key ("providerId") references "providerLI" ("id");
 
 
-------------------------------------------------------------------------------------   Llaves foraneas   ------------------------------------------------------------------------------------------------------------
-
--- userDEFAULT: admin
--- passDEFAULT: admin
-
---DATA providersProfileDEFAULT: admin
---providerID: 1
---providerName: Proveedor 1
---socialReason: Razon social 1
---discountSale: 10
---address: Calle 1
---col: Colonia 1
---rfc: RFC 1
---city: Ciudad 1
---state: Estado 1
---postalCode: Codigo postal 1
---country: Pais 1
---contact: Contacto 1
---phone: Telefono 1
---email: Correo 1
-
---DATA usersDEFAULT: admin
---providerId: 1
---userName: Usuario 1
---lastName: Apellido 1
---email: Correo 1
---contact: Contacto 1
---phone: Telefono 1
---branchAssigned: Sucursal 1
---commission: 10
---expireDate: 2021-12-31
-
---DATA providerProductsDEFAULT: admin
---providerId: 1
---productName: Producto 1
---manofacturerCode: Codigo de fabricante 1
---companyCode: Codigo de empresa 1
---brand: Marca 1
---model: Modelo 1
---retailPrice: 100
---wholesalePrice: 90
---satProductCode: Codigo SAT 1
---satUnitCode: Codigo SAT 1
---unitMeasurement: Unidad de medida 1
-
---DATA providerOrdersDEFAULT: admin
---providerId: 1
---userId: 1
---productId: 1
---productDescription: Descripcion 1
---productPrice: 100
---productQuantity: 1
---total: 100
-
-
--------------------------------------------------------------------------------------------- Inserciones DEFAULT  ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
 
 CREATE OR REPLACE FUNCTION update_provider_profile(
 	_id INT,
