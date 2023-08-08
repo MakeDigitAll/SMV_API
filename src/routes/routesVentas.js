@@ -4,9 +4,8 @@ const pool = require('../database')
 const {
 
     ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
-    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, updateCotizaciones,
     getAllPedido, getPedido, createPedido, disablePedido, updatePedido,
-    getAllPedidos, getPedidos, createPedidos, disablePedidos, updatePedidos,
+    getAllPedidos, getPedidos, createPedidos, disablePedidos, pedidoGanado, pedidoCancelado, updatePedidos,
     getAllDetallePedido, getDetallePedido, createDetallePedido, disableDetallePedido, updateDetallePedido,
     getAllVerPedido, getVerPedido, createVerPedido, disableVerPedido, updateVerPedido,
     getAllFormasPagoPedido, getFormasPagoPedido, createFormasPagoPedido, disableFormasPagoPedido, updateFormasPagoPedido,
@@ -14,7 +13,10 @@ const {
     getAllPedidosPendientesSurt, getPedidosPendientesSurt, createPedidosPendientesSurt, disablePedidosPendientesSurt, updatePedidosPendientesSurt,
     getAllAgregarProveedor, getAgregarProveedor, createAgregarProveedor, disableAgregarProveedor, updateAgregarProveedor,
     getAllProveedores, getProveedores, createProveedores, disableProveedores, updateProveedores,
-    getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto,
+    getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto, 
+    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones, 
+    getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
+    getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 
@@ -26,21 +28,28 @@ const router =  Router();
 
 ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
-/////////////////////////////////////// RUTAS PARA TABLA DE COTIZACIONES  
-router.get('/Cotizaciones', getAllCotizaciones)
+/////////////////////////////////////// RUTAS PARA TABLA DE COTIZACIONES 
+//ver estatus
+router.get('/Cotizaciones', getAllCotizaciones);
 
 //ver un estatus
-router.get('/Cotizaciones/:id',  getCotizaciones)
+router.get('/Cotizaciones/:id', getCotizaciones );
 
 //crear estatus
-router.post('/Cotizaciones', createCotizaciones)
+router.post('/Cotizaciones', createCotizaciones );
 
 //deshabilita  estatus
-router.put('/CotizacionesDisable/:id',  disableCotizaciones)
+router.post('/CotizacionesDisable', disableCotizaciones);
+
+//Editar Estatus Ganada
+router.post('/CotizacionesGanada/:id', cotizacionGanada)
+
+//Editar Estatus Cancelada
+router.post('/CotizacionesCancelada/:id', cotizacionCancelada)
 
 //actualizar estatus
-router.put('/Cotizaciones/:id', updateCotizaciones)
-/////////// FIN DE COTIZACIONES
+router.put('/Cotizaciones/:id', updateCotizaciones);
+//////////////// FIN DE COTIZACIONES
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE PEDIDO  
@@ -53,28 +62,35 @@ router.get('/Pedido/:id',  getPedido)
 router.post('/Pedido', createPedido)
 
 //deshabilita  estatus
-router.put('/PedidoDisable/:id',  disablePedido)
+router.post('/PedidoDisable/:id',  disablePedido)
 
 //actualizar estatus
 router.put('/Pedido/:id', updatePedido)
 /////////// FIN DE PEDIDO
 
 
-/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDOS
+/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDOS 
+//ver estatus
 router.get('/Pedidos', getAllPedidos)
 
 //ver un estatus
-router.get('/Pedidos/:id',  getPedidos)
+router.get('/Pedidos/:id', getPedidos)
 
 //crear estatus
 router.post('/Pedidos', createPedidos)
 
 //deshabilita  estatus
-router.put('/PedidosDisable/:id',  disablePedidos)
+router.post('/PedidosDisable/:id', disablePedidos)
+
+//Ganar pedidos
+router.post('/PedidosGanado/:id', pedidoGanado)
+
+//Cancelar pedidos
+router.post('/PedidosCancelado/:id',pedidoCancelado)
 
 //actualizar estatus
 router.put('/Pedidos/:id', updatePedidos)
-/////////// FIN DE PEDIDOS
+//////////////// FIN DE PEDIDOS
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE DETALLE DE PEDIDO  
@@ -87,7 +103,7 @@ router.get('/DetallePedido/:id',  getDetallePedido)
 router.post('/DetallePedido', createDetallePedido)
 
 //deshabilita  estatus
-router.put('/DetallePedidoDisable/:id',  disableDetallePedido)
+router.post('/DetallePedidoDisable/:id',  disableDetallePedido)
 
 //actualizar estatus
 router.put('/DetallePedido/:id', updateDetallePedido)
@@ -104,7 +120,7 @@ router.get('/VerPedido/:id', getVerPedido)
 router.post('/VerPedido', createVerPedido)
 
 //deshabilita  estatus
-router.put('/VerPedidoDisable/:id', disableVerPedido)
+router.post('/VerPedidoDisable/:id', disableVerPedido)
 
 //actualizar estatus
 router.put('/VerPedido/:id', updateVerPedido)
@@ -121,7 +137,7 @@ router.get('/FormaPagoPedido/:id',getFormasPagoPedido)
 router.post('/FormaPagoPedido', createFormasPagoPedido)
 
 //deshabilita  estatus
-router.put('/FormaPagoPedidoDisable/:id', disableFormasPagoPedido)
+router.post('/FormaPagoPedidoDisable/:id', disableFormasPagoPedido)
 
 //actualizar estatus
 router.put('/FormaPagoPedido/:id', updateFormasPagoPedido)
@@ -138,7 +154,7 @@ router.get('/LogisticaPedidos/:id',getLogisticaPedidos)
 router.post('/LogisticaPedidos', createLogisticaPedidos)
 
 //deshabilita  estatus
-router.put('/LogisticaPedidosDisable/:id', disableLogisticaPedidos)
+router.post('/LogisticaPedidosDisable/:id', disableLogisticaPedidos)
 
 //actualizar estatus
 router.put('/LogisticaPedidos/:id', updateLogisticaPedidos)
@@ -155,7 +171,7 @@ router.get('/PedidosPendientesSurtir/:id', getPedidosPendientesSurt)
 router.post('/PedidosPendientesSurtir', createPedidosPendientesSurt)
 
 //deshabilita  estatus
-router.put('/PedidosPendientesSurtirDisable/:id', disablePedidosPendientesSurt)
+router.post('/PedidosPendientesSurtirDisable/:id', disablePedidosPendientesSurt)
 
 //actualizar estatus
 router.put('/PedidosPendientesSurtir/:id', updatePedidosPendientesSurt)
@@ -172,7 +188,7 @@ router.get('/AgregarProveedor/:id', getAgregarProveedor)
 router.post('/AgregarProveedor', createAgregarProveedor)
 
 //deshabilita  estatus
-router.put('/AgregarProveedorDisable/:id', disableAgregarProveedor)
+router.post('/AgregarProveedorDisable/:id', disableAgregarProveedor)
 
 //actualizar estatus
 router.put('/AgregarProveedor/:id', updateAgregarProveedor)
@@ -189,7 +205,7 @@ router.get('/Proveedores/:id', getProveedores)
 router.post('/Proveedores', createProveedores)
 
 //deshabilita  estatus
-router.put('/ProveedoresDisable/:id', disableProveedores)
+router.post('/ProveedoresDisable/:id', disableProveedores)
 
 //actualizar estatus
 router.put('/Proveedores/:id', updateProveedores)
@@ -206,11 +222,47 @@ router.get('/ProveedoresProducto/:id', getProveedoresProducto)
 router.post('/ProveedoresProducto', createProveedoresProducto)
 
 //deshabilita  estatus
-router.put('/ProveedoresProductoDisable/:id', disableProveedoresProducto)
+router.post('/ProveedoresProductoDisable/:id', disableProveedoresProducto)
 
 //actualizar estatus
 router.put('/ProveedoresProducto/:id', updateProveedoresProducto)
 /////////// FIN DE PROVEEDORES DEL PRODUCTO
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE REPORTE DE COMISIONES
+router.get('/ReporteComisiones', getAllReporteComision )
+
+//ver un estatus
+router.get('/ReporteComisiones/:id', getReporteComision )
+
+//crear estatus
+router.post('/ReporteComisiones', createReporteComision )
+
+//deshabilita  estatus
+router.post('/ReporteComisionesDisable/:id', disableReporteComision )
+
+//actualizar estatus
+router.put('/ReporteComisiones/:id', updateReporteComision )
+/////////// FIN DE REPORTE DE COMISONES
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE LISTADO CLIENTES
+router.get('/ListadoClientes',  getAllListadoClientes)
+
+//ver un estatus
+router.get('/ListadoClientes/:id', getListadoClientes )
+
+//crear estatus
+router.post('/ListadoClientes', createListadoClientes )
+
+//deshabilita  estatus
+router.post('/ListadoClientesDisabled/:id', disableListadoClientes)
+
+//actualizar estatus
+router.put('/ListadoClientes/:id', updateListadoClientes )
+/////////// FIN DE LISTADO CLIENTES
 
 
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////

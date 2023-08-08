@@ -180,6 +180,8 @@ router.get('/Productos/:id', getProducto)
 //crear estatus
 router.post('/Productos', createProducto)
 
+router.get('/ProductosDisable', getAllProductos)
+
 //deshabilita  estatus
 router.put('/ProductosDisable/:id', disableProducto)
 
