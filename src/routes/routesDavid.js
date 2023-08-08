@@ -3,12 +3,15 @@ const pool = require('../database')
 
 const { 
     
-
-    ///////////////////////////////////////////// RUTAS SIN UBICAR  ////////////////////////////////////////////
-    getAllStatus, getStatus, createStatus, disableStatus, updateStatus,
     
-    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, updateCotizaciones, 
-    getAllPedidos, getPedidos, createPedidos, disablePedidos, updatePedidos,             
+    getAllAlmacen, getAlmacenes, createAlmacenes, disableAlmacenes, updateAlmacenes,
+    getAllContenedores,getContenedores,createContenedores,disableContenedores,updateContenedores,
+    getAllCostoEnvio, getCostosEnvios, createCostosEnvios, disableCostosEnvios, updateCostosEnvios, 
+    getAllGastosEnvio, getGastosEnvios, createGastosEnvios, disableGastosEnvios, updateGastosEnvios, 
+    
+    
+    
+             
 
 
     } = require('../controllers/controllersDavid');
@@ -18,62 +21,74 @@ const router =  Router();
 
 
 
-
-/////////////////////////////////////// RUTAS PARA TABLA DE ESTATUS 
-//ver estatus
-router.get('/status', getAllStatus)
+/////////////////////////////////////// RUTAS PARA TABLA DE ALMACEN  
+router.get('/Almacenes', getAllAlmacen )
 
 //ver un estatus
-router.get('/status/:id', getStatus)
+router.get('/Almacenes/:id', getAlmacenes )
 
 //crear estatus
-router.post('/status', createStatus)
+router.post('/Almacenes', createAlmacenes)
 
 //deshabilita  estatus
-router.put('/status/:id', disableStatus)
+router.post('/AlmacenesDisable/:id', disableAlmacenes )
 
 //actualizar estatus
-router.put('/status/:id', updateStatus)
-//////////////// FIN DE ESTATUS
+router.put('/Almacenes/:id', updateAlmacenes )
+/////////// FIN DE ALMACEN
 
 
 
-/////////////////////////////////////// RUTAS PARA TABLA DE COTIZACIONES 
-//ver estatus
-router.get('/Cotizaciones', getAllCotizaciones)
+/////////////////////////////////////// RUTAS PARA TABLA DE CONTENEDORES  
+router.get('/Contenedores', getAllContenedores)
+
 
 //ver un estatus
-router.get('/Cotizaciones/:id', getCotizaciones)
+router.get('/Contenedores/:id',  getContenedores)
 
 //crear estatus
-router.post('/Cotizaciones', createCotizaciones)
+router.post('/Contenedores', createContenedores)
 
 //deshabilita  estatus
-router.put('/Cotizaciones/:id', disableCotizaciones)
+router.post('/ContenedoresDisable/:id',  disableContenedores)
 
 //actualizar estatus
-router.put('/Cotizaciones/:id', updateCotizaciones)
-//////////////// FIN DE COTIZACIONES
+router.put('/Contenedores/:id', updateContenedores)
+/////////// FIN DE CONTENEDORES
 
 
-
-/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDOS 
-//ver estatus
-router.get('/Pedidos', getAllPedidos)
+/////////////////////////////////////// RUTAS PARA TABLA DE COSTOS ENVIOS 
+router.get('/CostosEnvios', getAllCostoEnvio)
 
 //ver un estatus
-router.get('/Pedidos/:id', getPedidos)
+router.get('/CostosEnvios/:id', getCostosEnvios )
 
 //crear estatus
-router.post('/Pedidos', createPedidos)
+router.post('/CostosEnvios', createCostosEnvios)
 
 //deshabilita  estatus
-router.put('/PedidosDisable/:id', disablePedidos)
+router.post('/CostosEnviosDisable/:id', disableCostosEnvios )
 
 //actualizar estatus
-router.put('/Pedidos/:id', updatePedidos)
-//////////////// FIN DE PEDIDOS
+router.put('/CostosEnvios/:id', updateCostosEnvios )
+/////////// FIN DE COSTOS ENVIOS
 
+
+/////////////////////////////////////// RUTAS PARA TABLA DE GASTOS ENVIOS 
+router.get('/GastosEnvios', getAllGastosEnvio)
+
+//ver un estatus
+router.get('/GastosEnvios/:id', getGastosEnvios )
+
+//crear estatus
+router.post('/GastosEnvios', createGastosEnvios )
+
+//deshabilita  estatus
+router.post('/GastosEnvios/:id', disableGastosEnvios )
+
+//actualizar estatus
+router.put('/GastosEnvios/:id', updateGastosEnvios )
+/////////// FIN DE GASTOS ENVIOS
 
 
 
