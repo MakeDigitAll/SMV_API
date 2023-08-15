@@ -9,9 +9,12 @@ const {
     getAllCostoEnvio, getCostosEnvios, createCostosEnvios, disableCostosEnvios, updateCostosEnvios, 
     getAllGastosEnvio, getGastosEnvios, createGastosEnvios, disableGastosEnvios, updateGastosEnvios, 
     
+    createImagen,
+    getImagenPrueba, 
     
     
-             
+    
+            
 
 
     } = require('../controllers/controllersDavid');
@@ -90,6 +93,15 @@ router.post('/GastosEnvios/:id', disableGastosEnvios )
 router.put('/GastosEnvios/:id', updateGastosEnvios )
 /////////// FIN DE GASTOS ENVIOS
 
+
+
+const multer = require("multer"); // Importar multer
+const upload = multer(); // Crear una instancia de multer
+
+
+router.post('/ImagenUsuario', upload.single("image"), createImagen)
+
+router.get('/ImagenUsuario/:id', getImagenPrueba)
 
 
 module.exports  =  router;

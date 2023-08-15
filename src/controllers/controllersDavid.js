@@ -16,7 +16,7 @@ const getAllAlmacen = async (req, res, next)=> {
     const allTasks = await pool.query(`SELECT * FROM public."almacenSucursal" WHERE "isDeleted" = '0'`);
     res.json(allTasks.rows)
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message); 
     }
 }
 //mostrar un estatus
@@ -343,6 +343,40 @@ const updateContenedores = async (req, res, next) =>{
 
 
 
+const multer = require("multer"); // Importar multer
+const upload = multer(); // Crear una instancia de multer
+
+///////////////////// IMAGEN PRUEBA ////////////////////////
+const createImagen = async (req, res, next) =>{
+    const imagen = req.file.buffer
+    console.log(imagen);
+    try {
+    const result = await pool.query(
+        `INSERT INTO "ImagenPrueba" (imagen) VALUES ($1) RETURNING *`,
+        [imagen]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+const getImagenPrueba = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "ImagenPrueba" WHERE id = $1`, [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: error.message
+        });
+        res.send(result.rows[0].imagen);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 
 
 
@@ -353,4 +387,6 @@ module.exports = {
     getAllCostoEnvio, getCostosEnvios, createCostosEnvios, disableCostosEnvios, updateCostosEnvios,
     getAllContenedores, getContenedores, createContenedores, disableContenedores, updateContenedores,
     
+
+    createImagen,getImagenPrueba,
 }
