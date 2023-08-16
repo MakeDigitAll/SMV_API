@@ -125,7 +125,7 @@ async function verificarUsuarioExistente(email) {
     const resultado = await pool.query(consulta, valores);
     return resultado.rows.length > 0;
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 }
 const createUser = async (req, res, next) => {
