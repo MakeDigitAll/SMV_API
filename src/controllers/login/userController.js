@@ -40,6 +40,7 @@ const autenticarUser = async (req, res) => {
         );
       }
       const user = result.rows[0];
+      console.log(user);
       const realPassword = bcrypt.compareSync(password, user.password);
       if (realPassword !== true) {
         return res.status(500).json(
@@ -117,6 +118,22 @@ const getUser = async (req, res, next) => {
     console.log(error.message);
   }
 };
+//mostrar un usuarios
+const getUserImage = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(`SELECT * FROM "usuarios" WHERE id = $1`, [id]);
+
+    if (result.rows.length === 0 )
+    return res.status(404).json({
+        message: error.message
+    });
+    console.log(result.rows[0].imagen)
+    res.send(result.rows[0].imagen);
+} catch (error) {
+    console.log(error.message);
+}
+};
 //crear un usuarios
 async function verificarUsuarioExistente(email) {
   try {
@@ -129,9 +146,11 @@ async function verificarUsuarioExistente(email) {
   }
 }
 const createUser = async (req, res, next) => {
-  const { nombre, apellido, email, password } = req.body;
+  const imagen = req.file.buffer
+  const document = JSON.parse(req.body.document)
+  const { nombre, apellido, email, password } = document;
   var passwordhash = bcrypt.hashSync(password, 10);
-  if (!!!nombre || !!!apellido || !!!email || !!!password) {
+  if (!!!nombre || !!!apellido || !!!email || !!!password || !!!imagen) {
     return res.status(400).json(
       jsonResponse(400, {
         error: "Faltan datos",
@@ -146,8 +165,8 @@ const createUser = async (req, res, next) => {
     } else {
       try {
         await pool.query(
-          `INSERT INTO "usuarios" ("nombre","apellido","email","password", "isUpdated", "isDeleted", "creationDate", "updatedDate") VALUES ($1,$2,$3,$4, 'false', 'false', NOW() , NOW() ) RETURNING *`,
-          [nombre, apellido, email, passwordhash]
+          `INSERT INTO "usuarios" ("nombre","apellido","email","password","imagen", "isUpdated", "isDeleted", "creationDate", "updatedDate") VALUES ($1, $2, $3, $4, $5, 'false', 'false', NOW() , NOW() ) RETURNING *`,
+          [nombre, apellido, email, passwordhash, imagen]
         );
         res.status(200).json(jsonResponse(200, { message: "Usuario creado" }));
       } catch (error) {
@@ -278,4 +297,5 @@ module.exports = {
   todos,
   userAuth,
   userLogout,
+  getUserImage
 };
