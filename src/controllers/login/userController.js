@@ -40,7 +40,6 @@ const autenticarUser = async (req, res) => {
         );
       }
       const user = result.rows[0];
-      console.log(user);
       const realPassword = bcrypt.compareSync(password, user.password);
       if (realPassword !== true) {
         return res.status(500).json(
@@ -122,17 +121,17 @@ const getUser = async (req, res, next) => {
 const getUserImage = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await pool.query(`SELECT * FROM "usuarios" WHERE id = $1`, [id]);
-
-    if (result.rows.length === 0 )
-    return res.status(404).json({
-        message: error.message
-    });
-    console.log(result.rows[0].imagen)
+    const result = await pool.query(`SELECT * FROM "usuarios" WHERE id = $1`, [
+      id,
+    ]);
+    if (result.rows.length === 0)
+      return res.status(404).json({
+        message: error.message,
+      });
     res.send(result.rows[0].imagen);
-} catch (error) {
+  } catch (error) {
     console.log(error.message);
-}
+  }
 };
 //crear un usuarios
 async function verificarUsuarioExistente(email) {
@@ -146,8 +145,8 @@ async function verificarUsuarioExistente(email) {
   }
 }
 const createUser = async (req, res, next) => {
-  const imagen = req.file.buffer
-  const document = JSON.parse(req.body.document)
+  const imagen = req.file.buffer;
+  const document = JSON.parse(req.body.document);
   const { nombre, apellido, email, password } = document;
   var passwordhash = bcrypt.hashSync(password, 10);
   if (!!!nombre || !!!apellido || !!!email || !!!password || !!!imagen) {
@@ -262,7 +261,6 @@ const todos = async (req, res, next) => {
 };
 //Logout
 const userLogout = async (req, res, next) => {
-  console.log("emtrp");
   try {
     const refreshToken = getTokenFromHeader(req.headers);
     if (refreshToken) {
@@ -297,5 +295,5 @@ module.exports = {
   todos,
   userAuth,
   userLogout,
-  getUserImage
+  getUserImage,
 };
