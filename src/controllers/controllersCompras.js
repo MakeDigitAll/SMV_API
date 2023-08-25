@@ -430,12 +430,12 @@ const getOrdenListadoEntrada = async (req, res, next) =>{
 
 //crear un estatus 
 const createOrdenListadoEntrada = async (req, res, next) =>{
-    const { numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos} = req.body
+    const { folio, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia,  total, productos} = req.body
 
     try {
     const result = await pool.query(
-        `INSERT INTO "ordenesCompraListadoEntradas" (numero, "fechaRegistrada", "fechaCompra", "fechaEntrega", provedor, vendedor, referencia, estatus, total, productos, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9, $10, '0', '0', NOW() , NOW()) RETURNING *`,
-        [ numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos]
+        `INSERT INTO "ordenesCompraListadoEntradas" (folio, "fechaRegistrada", "fechaCompra", "fechaEntrega", provedor, vendedor, referencia, total, productos, status,"isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3 ,$4, $5, $6, $7, $8, $9,'0', '0', '0', NOW() , NOW()) RETURNING *`,
+        [ folio, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, total, productos]
     );
 
     res.json(result.json);
@@ -469,16 +469,117 @@ const disableOrdenListadoEntrada = async (req, res, next) =>{
     
     }
 };
+ 
 
+/////////Orden parcial
+const parcialOrdenListadoEntrada = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."ordenesCompraListadoEntradas" SET "status" = '1' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+/////////orden entregada
+const entregasOrdenListadoEntrada = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."ordenesCompraListadoEntradas" SET "status" = '2' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+    /////////Orden rutas
+const rutasOrdenListadoEntrada = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."ordenesCompraListadoEntradas" SET "status" = '3' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+     /////////Orden embarque
+const  embarqueOrdenListadoEntrada= async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."ordenesCompraListadoEntradas" SET "status" = '4' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+    /////orden surtido
+    const  surtidoOrdenListadoEntrada= async (req, res, next) =>{
+        try {
+            const { id } = req.params;
+            const result = await pool.query(
+                `UPDATE public."ordenesCompraListadoEntradas" SET "status" = '5' WHERE id = $1 RETURNING *`,
+            [id]
+            );
+            if (result.rows.length === 0)
+                return res.status(404).json({
+                    message: "La tarea no se pudo actualizar"
+            });
+                return res.json(result.rows[0]);
+            }catch (error) {
+                    res.status(404).json({
+                    message: error             
+            });
+               
+            }
+        };
 //actualizar un folio para la nueva orden de compra
 const updateOrdenListadoEntrada = async (req, res, next) =>{
     try {
     const { id } = req.params;
-    const { numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos} = req.body;
+    const { folio, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos} = req.body;
 
     const result = await pool.query(
-        'UPDATE "ordenesCompraListadoEntradas" SET numero = $1, fechaRegistrada = $2, fechaCompra = $3, fechaEntrega = $4, provedor = $5, vendedor = $6, referencia= $7, estatus = $8, total = $9, productos = $10, "DateModification" = NOW() WHERE id = $11 RETURNING *',
-        [numero, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos, id]
+        'UPDATE "ordenesCompraListadoEntradas" SET folio = $1, fechaRegistrada = $2, fechaCompra = $3, fechaEntrega = $4, provedor = $5, vendedor = $6, referencia= $7, estatus = $8, total = $9, productos = $10, "DateModification" = NOW() WHERE id = $11 RETURNING *',
+        [folio, fechaRegistrada, fechaCompra, fechaEntrega, provedor, vendedor, referencia, estatus, total, productos, id]
     );sur
 
     if (result.rows.length === 0)
@@ -2574,7 +2675,7 @@ module.exports = {
     getAllOrcArchvivosAdj,getOrcArchvivosAdj, createOrcArchvivosAdj, disableOrcArchvivosAdj,updateOrcArchvivosAdj,
     getAllOrdenArchivosAdjuntos,getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, disableOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
     getAllOrdenFoliosSurtidos,getOrdenFoliosSurtidos,createOrdenFoliosSurtidos, disableOrdenFoliosSurtidos, updateOrdenFoliosSurtidos,
-    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, disableOrdenListadoEntrada, updateOrdenListadoEntrada,
+    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, disableOrdenListadoEntrada, updateOrdenListadoEntrada,parcialOrdenListadoEntrada,entregasOrdenListadoEntrada,rutasOrdenListadoEntrada,embarqueOrdenListadoEntrada,surtidoOrdenListadoEntrada,
     getAllListadoProduct,getListadoProduct,createListadoProduct,disableListadoProduct,updateListadoProduct,
     getAllProductos,getProducto,createProducto,disableProducto,updateProducto,
     getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, disableProductosOrdenCompra, updateProductosOrdenCompra,

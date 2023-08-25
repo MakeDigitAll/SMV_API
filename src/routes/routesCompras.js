@@ -8,7 +8,7 @@ const {
     getAllOrcArchvivosAdj,getOrcArchvivosAdj,createOrcArchvivosAdj,disableOrcArchvivosAdj,updateOrcArchvivosAdj,
     getAllOrdenArchivosAdjuntos, getOrdenArchvivosAdj, createOrdenArchivosAdjuntos, disableOrdenArchivosAdjuntos, updateOrdenArchivosAdjuntos,
     getAllOrdenFoliosSurtidos, getOrdenFoliosSurtidos, createOrdenFoliosSurtidos, disableOrdenFoliosSurtidos, updateOrdenFoliosSurtidos, 
-    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, disableOrdenListadoEntrada, updateOrdenListadoEntrada, 
+    getAllOrdenListadoEntrada, getOrdenListadoEntrada, createOrdenListadoEntrada, disableOrdenListadoEntrada, updateOrdenListadoEntrada,parcialOrdenListadoEntrada,entregasOrdenListadoEntrada,rutasOrdenListadoEntrada,embarqueOrdenListadoEntrada,surtidoOrdenListadoEntrada, 
     getAllProductos, getProducto, createProducto, disableProducto, updateProducto, 
     getAllProductosOrdenCompra, getProductosOrdenCompra, createProductosOrdenCompra, disableProductosOrdenCompra, updateProductosOrdenCompra, 
     getAllListadoProduct, getListadoProduct, createListadoProduct, disableListadoProduct, updateListadoProduct,
@@ -134,6 +134,16 @@ router.put('/OrdenCompra/ListadoEntradasDisable/:id', disableOrdenListadoEntrada
 router.put('/OrdenCompra/ListadoEntradas/:id', updateOrdenListadoEntrada)
 /////////////////////// FIN DE LISTADO DE ENTRADAS
 
+//Parcial  estatus
+router.post('/OrdenCompra/ListadoEntradasParcial/:id', parcialOrdenListadoEntrada)
+//Entregas  estatus
+router.post('/OrdenCompra/ListadoEntradasEntregas/:id', entregasOrdenListadoEntrada)
+//rutas  estatus
+router.post('/OrdenCompra/ListadoEntradasRutas/:id', rutasOrdenListadoEntrada)
+//Embarque  estatus
+router.post('/OrdenCompra/ListadoEntradasEmbarque/:id', embarqueOrdenListadoEntrada)
+//Embarque  estatus
+router.post('/OrdenCompra/ListadoEntradasSurtido/:id', surtidoOrdenListadoEntrada)
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS EN LA ORDEN DE COMPRA  

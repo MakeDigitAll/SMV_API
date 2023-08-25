@@ -5,7 +5,7 @@ const {
 
     ///////////////////////////////////////////// RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
     getAllPedido, getPedido, createPedido, disablePedido, updatePedido,
-    getAllPedidos, getPedidos, createPedidos, disablePedidos, pedidoGanado, pedidoCancelado, updatePedidos,
+    getAllPedidos, getPedidos, createPedidos, disablePedidos, pedidoGanado, pedidoCancelado, updatePedidos,PedidosPendientes,  PedidosDevueltos,PedidosDespachados,PedidosEntregado,pedidoCerrado,pedidoDevuelto, pedidoSurtido,pedidoFacturado,
     getAllDetallePedido, getDetallePedido, createDetallePedido, disableDetallePedido, updateDetallePedido,
     getAllVerPedido, getVerPedido, createVerPedido, disableVerPedido, updateVerPedido,
     getAllFormasPagoPedido, getFormasPagoPedido, createFormasPagoPedido, disableFormasPagoPedido, updateFormasPagoPedido,
@@ -14,9 +14,10 @@ const {
     getAllAgregarProveedor, getAgregarProveedor, createAgregarProveedor, disableAgregarProveedor, updateAgregarProveedor,
     getAllProveedores, getProveedores, createProveedores, disableProveedores, updateProveedores,
     getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto, 
-    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones, 
+    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones, cotizacionVencida, cotizacionPerdida,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, 
+    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 
@@ -47,11 +48,17 @@ router.post('/CotizacionesGanada/:id', cotizacionGanada)
 //Editar Estatus Cancelada
 router.post('/CotizacionesCancelada/:id', cotizacionCancelada)
 
+//Editar Estatus Ganada
+router.post('/CotizacionesVencidas/:id', cotizacionVencida)
+
+//Editar Estatus Cancelada
+router.post('/CotizacionesPerdidas/:id', cotizacionPerdida)
+
 //actualizar estatus
 router.put('/Cotizaciones/:id', updateCotizaciones);
 //////////////// FIN DE COTIZACIONES
 
-
+ 
 /////////////////////////////////////// RUTAS PARA TABLA DE PEDIDO  
 router.get('/Pedido', getAllPedido)
 
@@ -88,9 +95,27 @@ router.post('/PedidosGanado/:id', pedidoGanado)
 //Cancelar pedidos
 router.post('/PedidosCancelado/:id',pedidoCancelado)
 
+//Pedidos pendientes
+router.post('/PedidosPendientes/:id',PedidosPendientes)
 //actualizar estatus
 router.put('/Pedidos/:id', updatePedidos)
+//Devolver pedidos
+router.post('/PedidosDevueltos/:id',PedidosDevueltos)
+//Despachar pedidos
+router.post('/PedidosDespachados/:id',PedidosDespachados)
+//entregar pedidos
+router.post('/PedidosEntregados/:id',PedidosEntregado)
+//cerrar pedidos
+router.post('/PedidosCerrados/:id',pedidoCerrado)
+//devolver pedidos
+router.post('/PedidosDevuelto/:id',pedidoDevuelto)
+//surtir pedidos
+router.post('/PedidosSurtido/:id',pedidoSurtido)
+//facturra pedidos
+router.post('/PedidosFacturado/:id',pedidoFacturado)
+
 //////////////// FIN DE PEDIDOS
+
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE DETALLE DE PEDIDO  
@@ -264,6 +289,34 @@ router.post('/ListadoClientesDisabled/:id', disableListadoClientes)
 router.put('/ListadoClientes/:id', updateListadoClientes )
 /////////// FIN DE LISTADO CLIENTES
 
+/////////////////////////////////////// RUTAS PARA TABLA DE Pagos 
+//ver estatus
+router.get('/Pagos', getAllPagos);
+
+//ver un estatus
+router.get('/Pagos/:id', getPagos );
+
+//crear estatus
+router.post('/Pagos', createPagos );
+
+//deshabilita  estatus
+router.post('/PagosParcial/:id', PagosParcial);
+
+//Editar Estatus Ganada
+router.post('/PagosGanada/:id', PagosCredito)
+
+//Editar Estatus Cancelada
+router.post('/PagosFacturado/:id', PagosFacturado)
+
+//Editar Estatus Ganada
+router.post('/PagosPendiente2/:id', PagosPendiente2)
+
+//Editar Estatus Cancelada
+router.post('/PagosPendiente/:id', PagosPendiente1)
+
+//actualizar estatus
+router.put('/Pagos/:id', updatePagos);
+//////////////// FIN DE Pagos
 
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
