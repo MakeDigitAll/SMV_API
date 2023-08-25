@@ -92,6 +92,8 @@ const updateAlmacenes = async (req, res, next) =>{
 
 
 
+
+
 ///////////// CONTROLADORES PARA TABLA DE ALMACEN
 //Mostrar los estatus
 const getAllGastosEnvio = async (req, res, next)=> {
@@ -376,6 +378,7 @@ const getImagenPrueba = async (req, res, next) =>{
         console.log(error.message);
     }
 };
+
 
 
 

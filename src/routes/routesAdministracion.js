@@ -1,1 +1,11 @@
-/* aqui estaran las rutas de los API del microservicio Administracion */
+const { Router } = require("express")
+const pool = require('../database');
+
+
+
+const router = Router();
+
+
+
+
+module.exports  =  router;
