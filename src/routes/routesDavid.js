@@ -96,12 +96,61 @@ router.put('/GastosEnvios/:id', updateGastosEnvios )
 
 
 const multer = require("multer"); // Importar multer
+
 const upload = multer(); // Crear una instancia de multer
 
 
 router.post('/ImagenUsuario', upload.single("image"), createImagen)
 
 router.get('/ImagenUsuario/:id', getImagenPrueba)
+
+
+
+
+
+
+//////////////////////////// DE AQUI HACIA ABAJO SON LAS RUTAS PARA ADMINISTRACION //////////////////////////////////////
+const { 
+        getAllNotasCredito, getNotasCredito, 
+        getAllEstadosCuenta, getEstadosCuenta, 
+        getAllMargenVentas, getMargenVentas, 
+        getAllReporteVentas, getReporteVentas, 
+        getAllComisiones, getComisiones } = require("../controllers/controllersAdministracion");
+
+
+////////////////////////////////////////// CREDITOS
+router.get('/Creditos', getAllNotasCredito)
+
+router.get('/Creditos/:id', getNotasCredito)
+//////////////////////////////// FIN DE CREDITOS
+
+///////////////////////////////////////// ESTADOS DE CUENTA
+router.get('/EstadosCuenta', getAllEstadosCuenta)
+
+router.get('/EstadosCuenta/:id', getEstadosCuenta)
+//////////////////////////// FIN DE ESTADOS DE CUENTA
+
+
+///////////////////////////////////////// MARGEN DE VENTAS
+router.get('/MargenVenta', getAllMargenVentas)
+
+router.get('/MargenVenta/:id', getMargenVentas)
+//////////////////////////// FIN DE MARGEN DE VENTAS
+
+
+///////////////////////////////////////// REPORTE DE VENTAS
+router.get('/ReporteVentas', getAllReporteVentas)
+
+router.get('/ReporteVentas/:id', getReporteVentas)
+//////////////////////////// FIN DE REPORTE DE VENTAS
+
+
+///////////////////////////////////////// COMISIONES
+router.get('/Comisiones', getAllComisiones)
+
+router.get('/Comisiones/:id', getComisiones)
+//////////////////////////// FIN DE COMISIONES
+
 
 
 module.exports  =  router;
