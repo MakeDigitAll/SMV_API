@@ -115,7 +115,10 @@ const {
         getAllEstadosCuenta, getEstadosCuenta, 
         getAllMargenVentas, getMargenVentas, 
         getAllReporteVentas, getReporteVentas, 
-        getAllComisiones, getComisiones } = require("../controllers/controllersAdministracion");
+        getAllComisiones, getComisiones,
+        getAllListadoPrecios, getListadoPrecios, createListadoPrecios, disableListadoPrecios, updateListadoPrecios 
+    
+    } = require("../controllers/controllersAdministracion");
 
 
 ////////////////////////////////////////// CREDITOS
@@ -150,6 +153,22 @@ router.get('/Comisiones', getAllComisiones)
 
 router.get('/Comisiones/:id', getComisiones)
 //////////////////////////// FIN DE COMISIONES
+
+
+///////////////////////////////////////// LISTADO DE PRECIOS
+router.get('/ListadoPrecios', getAllListadoPrecios)
+
+router.get('/ListadoPrecios/:id', getListadoPrecios)
+
+//crear estatus
+router.post('/ListadoPrecios', createListadoPrecios)
+
+//deshabilita  estatus
+router.post('/ListadoPreciosDisable/:id',  disableListadoPrecios)
+
+//actualizar estatus
+router.put('/ListadoPrecios/:id', updateListadoPrecios)
+//////////////////////////// FIN DE LISTADO DE PRECIOS
 
 
 

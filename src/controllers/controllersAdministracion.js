@@ -401,6 +401,87 @@ const updateComisiones = async (req, res, next) =>{
 /////////////////////////////////////// FIN DE COMISIONES
 
 
+///////////////////////////////////////////////////////// LISTADO DE PRECIOS
+const getAllListadoPrecios = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT * FROM public."listadoPrecios" `);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message); 
+    }
+}
+//mostrar un estatus
+const getListadoPrecios = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "listadoPrecios" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: error.message
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear un estatus 
+const createListadoPrecios = async (req, res, next) =>{
+    const {nombre, variacion, clientes} = req.body
+
+    try {
+    const result = await pool.query(
+        `INSERT INTO "listadoPrecios" (fecha, nombre, variacion, clientes, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ( NOW(), $1, $2, $3, '0', '0', NOW() , NOW() ) RETURNING *`,
+        [nombre, variacion, clientes]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//deshabilitar un estatus
+const disableListadoPrecios = async (req, res, next) =>{
+    const { id } = req.params;
+
+    const result = await pool.query(
+        `UPDATE "listadoPrecios" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+        [ id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+
+//actualizar un estatus
+const updateListadoPrecios = async (req, res, next) =>{
+    const { id } = req.params;
+    const { nombre, tipo} = req.body;
+
+    const result = await pool.query(
+        'UPDATE "listadoPrecios" SET "nombre" = $1, tipo = $2, "creationUpdate" = CURRENT_DATE WHERE id = $3 RETURNING *',
+        [nombre, tipo, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////////////////////// FIN DE COMISIONES
+
+
+
+
 module.exports = {
 
     getAllNotasCredito, getNotasCredito, createNotasCredito, disableNotasCredito, updateNotasCredito,
@@ -408,5 +489,6 @@ module.exports = {
     getAllMargenVentas, getMargenVentas, createMargenVentas, disableMargenVentas, updateMargenVentas,
     getAllReporteVentas, getReporteVentas, createReporteVentas, disableReporteVentas, updateReporteVentas,
     getAllComisiones, getComisiones, createComisiones, disableComisiones, updateComisiones,
+    getAllListadoPrecios, getListadoPrecios, createListadoPrecios, disableListadoPrecios, updateListadoPrecios,
 
 }
