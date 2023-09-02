@@ -116,7 +116,8 @@ const {
         getAllMargenVentas, getMargenVentas, 
         getAllReporteVentas, getReporteVentas, 
         getAllComisiones, getComisiones,
-        getAllListadoPrecios, getListadoPrecios, createListadoPrecios, disableListadoPrecios, updateListadoPrecios 
+        getAllListadoPrecios, getListadoPrecios, createListadoPrecios, disableListadoPrecios, updateListadoPrecios, 
+        getAllFormasPago, getFormasPago, createFormasPago, disableFormasPago, updateFormasPago 
     
     } = require("../controllers/controllersAdministracion");
 
@@ -168,6 +169,23 @@ router.post('/ListadoPreciosDisable/:id',  disableListadoPrecios)
 
 //actualizar estatus
 router.put('/ListadoPrecios/:id', updateListadoPrecios)
+//////////////////////////// FIN DE LISTADO DE PRECIOS
+
+
+
+///////////////////////////////////////// FORMAS DE PAGO
+router.get('/FormasPago', getAllFormasPago)
+
+router.get('/FormasPago/:id', getFormasPago)
+
+//crear estatus
+router.post('/FormasPago', createFormasPago)
+
+//deshabilita  estatus
+router.post('/FormasPagoDisable/:id',  disableFormasPago)
+
+//actualizar estatus
+router.put('/FormasPago/:id', updateFormasPago)
 //////////////////////////// FIN DE LISTADO DE PRECIOS
 
 

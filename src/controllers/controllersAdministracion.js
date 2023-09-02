@@ -404,7 +404,7 @@ const updateComisiones = async (req, res, next) =>{
 ///////////////////////////////////////////////////////// LISTADO DE PRECIOS
 const getAllListadoPrecios = async (req, res, next)=> {
     try{
-    const allTasks = await pool.query(`SELECT * FROM public."listadoPrecios" `);
+    const allTasks = await pool.query(`SELECT * FROM public."listadoPrecios" WHERE "isDelated" = '0' `);
     res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message); 
@@ -477,7 +477,86 @@ const updateListadoPrecios = async (req, res, next) =>{
 
     return res.json(result.rows[0]);
 };
-/////////////////////////////////////// FIN DE COMISIONES
+/////////////////////////////////////// FIN DE LISTADO DE PRECIOS
+
+
+
+///////////////////////////////////////////////////////// FORMAS DE PAGO
+const getAllFormasPago = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT * FROM public."listadoFormasPago" WHERE "isDelated" = '0' `);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message); 
+    }
+}
+//mostrar un estatus
+const getFormasPago = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "listadoFormasPago" WHERE id = $1 AND "isDelated" = '0' `, [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: error.message
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear un estatus 
+const createFormasPago = async (req, res, next) =>{
+    const {nombreForma, comision, claveSAT} = req.body
+
+    try {
+    const result = await pool.query(
+        `INSERT INTO "listadoFormasPago" ("nombreForma", comision, "claveSAT", "isUpdated", "isDelated", "dateModication", "dateCreation") VALUES ($1, $2, $3, '0', '0', NOW() , NOW() ) RETURNING *`,
+        [nombreForma, comision, claveSAT]
+    );
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//deshabilitar un estatus
+const disableFormasPago = async (req, res, next) =>{
+    const { id } = req.params;
+
+    const result = await pool.query(
+        `UPDATE "listadoFormasPago" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+        [ id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+
+//actualizar un estatus
+const updateFormasPago = async (req, res, next) =>{
+    const { id } = req.params;
+    const { nombre, tipo} = req.body;
+
+    const result = await pool.query(
+        'UPDATE "listadoFormasPago" SET "nombre" = $1, tipo = $2, "creationUpdate" = CURRENT_DATE WHERE id = $3 RETURNING *',
+        [nombre, tipo, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+/////////////////////////////////////// FIN DE FORMAS DE PAGO
 
 
 
@@ -490,5 +569,6 @@ module.exports = {
     getAllReporteVentas, getReporteVentas, createReporteVentas, disableReporteVentas, updateReporteVentas,
     getAllComisiones, getComisiones, createComisiones, disableComisiones, updateComisiones,
     getAllListadoPrecios, getListadoPrecios, createListadoPrecios, disableListadoPrecios, updateListadoPrecios,
+    getAllFormasPago, getFormasPago, createFormasPago, disableFormasPago, updateFormasPago,
 
 }
