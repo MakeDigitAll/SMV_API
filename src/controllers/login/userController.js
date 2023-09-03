@@ -145,8 +145,9 @@ async function verificarUsuarioExistente(email) {
   }
 }
 const createUser = async (req, res, next) => {
-  const imagen = req.file.buffer;
-  const document = JSON.parse(req.body.document);
+  const imagen = req.file.buffer
+  const document = JSON.parse(req.body.document)
+  
   const { nombre, apellido, email, password } = document;
   var passwordhash = bcrypt.hashSync(password, 10);
   if (!!!nombre || !!!apellido || !!!email || !!!password || !!!imagen) {
@@ -164,7 +165,7 @@ const createUser = async (req, res, next) => {
     } else {
       try {
         await pool.query(
-          `INSERT INTO "usuarios" ("nombre","apellido","email","password","imagen", "isUpdated", "isDeleted", "creationDate", "updatedDate") VALUES ($1, $2, $3, $4, $5, 'false', 'false', NOW() , NOW() ) RETURNING *`,
+          `INSERT INTO public."usuarios" ("nombre","apellido","email","password","imagen", "isUpdated", "isDeleted", "creationDate", "updatedDate") VALUES ($1, $2, $3, $4, $5, 'false', 'false', NOW() , NOW() ) RETURNING *`,
           [nombre, apellido, email, passwordhash, imagen]
         );
         res.status(200).json(jsonResponse(200, { message: "Usuario creado" }));

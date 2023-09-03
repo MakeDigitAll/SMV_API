@@ -922,6 +922,26 @@ const cotizacionGanada = async (req, res, next) =>{
            
         }
     };
+    ///////// COTIZACION Perdida
+const cotizacionPerdida = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."cotizaciones" SET "status" = '2' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    }; 
 ////////////CANCELAR COTIZACION
 const cotizacionCancelada = async (req, res, next) =>{
         try {
@@ -942,7 +962,26 @@ const cotizacionCancelada = async (req, res, next) =>{
                
             }
         };
-
+//////////// COTIZACION Vencida
+const cotizacionVencida = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."cotizaciones" SET "status" = '4' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
 //actualizar un estatus
 const updateCotizaciones = async (req, res, next) =>{
     const { id } = req.params;
@@ -996,12 +1035,12 @@ const getPedidos = async (req, res, next) =>{
 
 //crear un estatus 
 const createPedidos = async (req, res, next) =>{
-    const {folio, fecha, cotizacion, numeroCliente, cliente , razonSocial, rfc, monto, saldo, surtido, poductos} = req.body
+    const {folio, fecha, cotizacion, numeroCliente, cliente , razonSocial, rfc, monto, factura, saldo, surtido, poductos} = req.body
 
     try {
     const result = await pool.query(
-        `INSERT INTO "pedidos" (folio, fecha, cotizacion, "numeroCliente", cliente, "razonSocial", rfc, monto, saldo, estatus, factura, surtido, poductos, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, '0', '0', NOW() , NOW() ) RETURNING *`,
-        [folio, fecha, cotizacion, numeroCliente, cliente , razonSocial, rfc, monto, saldo, surtido, poductos]
+        `INSERT INTO "pedidos" (folio, fecha, cotizacion, "numeroCliente", cliente, "razonSocial", rfc, monto, saldo, factura, surtido, poductos, status, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, '0', '0', '0', NOW() , NOW() ) RETURNING *`,
+        [folio, fecha, cotizacion, numeroCliente, cliente , razonSocial, rfc, monto, factura, saldo, surtido, poductos]
     );
 
     res.json(result.json);
@@ -1027,12 +1066,52 @@ const disablePedidos = async (req, res, next) =>{
     return res.json(result.rows[0]);
 };
 
-/////////GANAR COTIZACION
+/////////GANAR Pedido
 const pedidoGanado = async (req, res, next) =>{
     try {
         const { id } = req.params;
         const result = await pool.query(
             `UPDATE public."pedidos" SET "status" = '1' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    }; 
+    /////////Facturar Pedido
+const pedidoFacturado = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '2' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };  
+    ////////////Surtido pedido
+const pedidoSurtido= async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '3' WHERE id = $1 RETURNING *`,
         [id]
         );
         if (result.rows.length === 0)
@@ -1052,7 +1131,7 @@ const pedidoCancelado = async (req, res, next) =>{
         try {
             const { id } = req.params;
             const result = await pool.query(
-                `UPDATE public."pedidos" SET "status" = '3' WHERE id = $1 RETURNING *`,
+                `UPDATE public."pedidos" SET "status" = '4' WHERE id = $1 RETURNING *`,
             [id]
             );
             if (result.rows.length === 0)
@@ -1067,7 +1146,126 @@ const pedidoCancelado = async (req, res, next) =>{
                
             }
         };
-
+////////////Devuelto
+const pedidoDevuelto = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '5' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        } 
+    };
+    ////////////Devuelto
+const pedidoCerrado = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '6' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+        ////////////Pendiente
+const PedidosPendientes = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '7' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+           ////////////Pendiente
+const PedidosEntregado = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '8' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    }; 
+         ////////////Despachado
+const PedidosDespachados = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '9' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+            ////////////Devuelto
+const PedidosDevueltos = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pedidos" SET "status" = '10' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
 //actualizar un estatus
 const updatePedidos = async (req, res, next) =>{
     const { id } = req.params;
@@ -1252,6 +1450,171 @@ const updateListadoClientes = async (req, res, next) =>{
 /////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE REPORTE DE COMISION
 
 
+
+/////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE Pagos
+const getAllPagos = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT * FROM  "pagos"`);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//mostrar un estatus
+const getPagos = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "pagos"`, [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: error.message
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear un estatus 
+const createPagos = async (req, res, next) =>{
+    const {folio} = req.body
+
+    try {
+    const result = await pool.query(
+        `INSERT INTO "pagos" (folio) VALUES ($1) RETURNING *`,
+        [folio]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+}; 
+
+/////////Pagos a  Parcial
+const PagosParcial = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pagos" SET "status" = '1' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    }; 
+    /////////Pagos a Credito
+const PagosCredito = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pagos" SET "status" = '2' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    }; 
+    /////////Pagos a  Parcial
+const PagosFacturado = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pagos" SET "status" = '3' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    }; 
+     /////////Pagos pendiente
+const PagosPendiente1 = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pagos" SET "status2" = '1' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    }; 
+       /////////Pagos pendiente
+const PagosPendiente2 = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(
+            `UPDATE public."pagos" SET "status2" = '2' WHERE id = $1 RETURNING *`,
+        [id]
+        );
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+        });
+            return res.json(result.rows[0]);
+        }catch (error) {
+                res.status(404).json({
+                message: error             
+        });
+           
+        }
+    };
+    
+//actualizar un estatus
+const updatePagos= async (req, res, next) =>{
+    const { id } = req.params;
+    const { folio,status} = req.body;
+
+    const result = await pool.query(
+        'UPDATE "pagos" SET "folio" = $1, status= $2 WHERE id = $3 RETURNING *',
+        [folio, status, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+
+/////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE Pagos
+
 ////////////////////////////////////////////// FIN DE MICROSERVICIO DE VENTAS  ///////////////////////////////////////////////////
 
 
@@ -1259,9 +1622,9 @@ const updateListadoClientes = async (req, res, next) =>{
 module.exports = {
 
     ///////////////////////////////////////////// CONTROLADORES DE MICROSERVICIO VENTAS ////////////////////////////////////////////
-    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones,
+    getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones,cotizacionVencida, cotizacionPerdida,
     getAllPedido, getPedido, createPedido, disablePedido, updatePedido,
-    getAllPedidos, getPedidos, createPedidos, disablePedidos, pedidoGanado, pedidoCancelado, updatePedidos,
+    getAllPedidos, getPedidos, createPedidos, disablePedidos, pedidoGanado, pedidoCancelado, updatePedidos,PedidosPendientes,  PedidosDevueltos,PedidosDespachados,PedidosEntregado,pedidoCerrado,pedidoDevuelto, pedidoSurtido,pedidoFacturado,
     getAllDetallePedido, getDetallePedido, createDetallePedido, disableDetallePedido, updateDetallePedido,
     getAllFormasPagoPedido, getFormasPagoPedido, createFormasPagoPedido, disableFormasPagoPedido, updateFormasPagoPedido,
     getAllVerPedido, getVerPedido, createVerPedido, disableVerPedido, updateVerPedido,
@@ -1272,5 +1635,6 @@ module.exports = {
     getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes,
+    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
     ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 }

@@ -96,12 +96,98 @@ router.put('/GastosEnvios/:id', updateGastosEnvios )
 
 
 const multer = require("multer"); // Importar multer
+
 const upload = multer(); // Crear una instancia de multer
 
 
 router.post('/ImagenUsuario', upload.single("image"), createImagen)
 
 router.get('/ImagenUsuario/:id', getImagenPrueba)
+
+
+
+
+
+
+//////////////////////////// DE AQUI HACIA ABAJO SON LAS RUTAS PARA ADMINISTRACION //////////////////////////////////////
+const { 
+        getAllNotasCredito, getNotasCredito, 
+        getAllEstadosCuenta, getEstadosCuenta, 
+        getAllMargenVentas, getMargenVentas, 
+        getAllReporteVentas, getReporteVentas, 
+        getAllComisiones, getComisiones,
+        getAllListadoPrecios, getListadoPrecios, createListadoPrecios, disableListadoPrecios, updateListadoPrecios, 
+        getAllFormasPago, getFormasPago, createFormasPago, disableFormasPago, updateFormasPago 
+    
+    } = require("../controllers/controllersAdministracion");
+
+
+////////////////////////////////////////// CREDITOS
+router.get('/Creditos', getAllNotasCredito)
+
+router.get('/Creditos/:id', getNotasCredito)
+//////////////////////////////// FIN DE CREDITOS
+
+///////////////////////////////////////// ESTADOS DE CUENTA
+router.get('/EstadosCuenta', getAllEstadosCuenta)
+
+router.get('/EstadosCuenta/:id', getEstadosCuenta)
+//////////////////////////// FIN DE ESTADOS DE CUENTA
+
+
+///////////////////////////////////////// MARGEN DE VENTAS
+router.get('/MargenVenta', getAllMargenVentas)
+
+router.get('/MargenVenta/:id', getMargenVentas)
+//////////////////////////// FIN DE MARGEN DE VENTAS
+
+
+///////////////////////////////////////// REPORTE DE VENTAS
+router.get('/ReporteVentas', getAllReporteVentas)
+
+router.get('/ReporteVentas/:id', getReporteVentas)
+//////////////////////////// FIN DE REPORTE DE VENTAS
+
+
+///////////////////////////////////////// COMISIONES
+router.get('/Comisiones', getAllComisiones)
+
+router.get('/Comisiones/:id', getComisiones)
+//////////////////////////// FIN DE COMISIONES
+
+
+///////////////////////////////////////// LISTADO DE PRECIOS
+router.get('/ListadoPrecios', getAllListadoPrecios)
+
+router.get('/ListadoPrecios/:id', getListadoPrecios)
+
+//crear estatus
+router.post('/ListadoPrecios', createListadoPrecios)
+
+//deshabilita  estatus
+router.post('/ListadoPreciosDisable/:id',  disableListadoPrecios)
+
+//actualizar estatus
+router.put('/ListadoPrecios/:id', updateListadoPrecios)
+//////////////////////////// FIN DE LISTADO DE PRECIOS
+
+
+
+///////////////////////////////////////// FORMAS DE PAGO
+router.get('/FormasPago', getAllFormasPago)
+
+router.get('/FormasPago/:id', getFormasPago)
+
+//crear estatus
+router.post('/FormasPago', createFormasPago)
+
+//deshabilita  estatus
+router.post('/FormasPagoDisable/:id',  disableFormasPago)
+
+//actualizar estatus
+router.put('/FormasPago/:id', updateFormasPago)
+//////////////////////////// FIN DE LISTADO DE PRECIOS
+
 
 
 module.exports  =  router;
