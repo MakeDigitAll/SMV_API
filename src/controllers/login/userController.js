@@ -101,9 +101,9 @@ function createRefreshToken(email) {
 //mostrar un usuarios
 const getUser = async (req, res, next) => {
   try {
-    const { id, isDeleted } = req.params;
+    const { id } = req.params;
     const result = await pool.query(
-      `SELECT * FROM "usuarios" WHERE id = $1 AND "isDeleted" = 'false' `,
+      `SELECT "nombre","apellido","id","perfilSeguridadId","vendedorId","email" FROM "usuarios" WHERE id = $1 AND "isDeleted" = 'false' `,
       [id]
     );
 
@@ -149,6 +149,7 @@ const createUser = async (req, res, next) => {
   const document = JSON.parse(req.body.document)
   
   const { nombre, apellido, email, password } = document;
+  console.log("imagen", imagen, "document", document);
   var passwordhash = bcrypt.hashSync(password, 10);
   if (!!!nombre || !!!apellido || !!!email || !!!password || !!!imagen) {
     return res.status(400).json(

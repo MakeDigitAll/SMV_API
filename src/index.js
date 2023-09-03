@@ -7,6 +7,7 @@ const microservCompras = require('./routes/routesCompras');
 const microserVentas = require('./routes/routesVentas');
 const user = require('./routes/login/login');
 const app = express();
+const chat = require('./routes/chat/chatRoutes');
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
@@ -15,6 +16,7 @@ app.use(davidRoutes);
 app.use(microserVentas);
 app.use(microservCompras);
 app.use(user);
+app.use(chat);
 
 app.use((err, req, res, next) => {
     return res.json({

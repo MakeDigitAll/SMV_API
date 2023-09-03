@@ -1,0 +1,15 @@
+{
+  "name": "socket_smv",
+  "version": "1.0.0",
+  "description": "socket for the smv system",
+  "main": "index.js",
+  "scripts": {
+    "dev":"nodemon index.js"
+  },
+  "author": "Christian S",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^3.0.1",
+    "socket.io": "^4.7.2"
+  }
+}
