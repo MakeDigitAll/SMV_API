@@ -286,6 +286,84 @@ const userLogout = async (req, res, next) => {
   }
 };
 
+//////////////////////API para datosUsuarios
+
+const getAlldatosUsuarios = async (req, res, next)=> {
+  try{
+  const allTasks = await pool.query(`SELECT * FROM public."datosUsuarios" WHERE "isDeleted" = '0'`);
+  res.json(allTasks.rows)
+  } catch (error) {
+      console.log(error.message); 
+  }
+}
+//mostrar un estatus
+const getdatosUsuarios = async (req, res, next) =>{
+  try {
+      const { id } = req.params;
+      const result = await pool.query(`SELECT * FROM "datosUsuarios" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+
+      if (result.rows.length === 0 )
+      return res.status(404).json({
+          message: error.message
+      });
+
+      res.json(result.rows[0]);
+  } catch (error) {
+      console.log(error.message);
+  }
+};
+
+//crear un estatus 
+const createdatosUsuarios = async (req, res, next) =>{
+  const {direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular} = req.body
+
+  try {
+  const result = await pool.query(
+      `INSERT INTO public."datosUsuarios"(
+        direccion, colonia, estado, ciudad, "codigoPostal", "telefonoContacto", "telefonoCelular", status, "isDeleted", "isUpdated", "dateModification", "dateCreation") VALUES ($1, $2, $3, $4, $5, $6, $7, '0','0', '0', NOW() , NOW() ) RETURNING *`,
+      [direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular]
+  );
+
+  res.json(result.json);
+  } catch (error) {
+      next(error)
+  }
+};
+
+//deshabilitar un estatus
+const disabledatosUsuarios = async (req, res, next) =>{
+  const { id } = req.params;
+
+  const result = await pool.query(
+      `UPDATE "datosUsuarios" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+      [ id]
+  );
+
+  if (result.rows.length === 0)
+  return res.status(404).json({
+      message: "La tarea no se pudo actualizar"
+  });
+
+  return res.json(result.rows[0]);
+};
+
+//actualizar un estatus
+const updatedatosUsuarios = async (req, res, next) =>{
+  const { id } = req.params;
+  const {direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular} = req.body;
+
+  const result = await pool.query(
+      'UPDATE "datosUsuarios" SET "direccion" = $1, colonia = $2, estado = $3, ciudad = $4, codigoPostal = $5,  telefonoContacto = $6, telefonoCelular = $7,  "dateCreation" = CURRENT_DATE WHERE id = $8 RETURNING *',
+      [direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular, id]
+  );
+
+  if (result.rows.length === 0)
+  return res.status(404).json({
+      message: "La tarea no se pudo actualizar"
+  });
+
+  return res.json(result.rows[0]);
+};
 module.exports = {
   getAllUsers,
   getUser,
@@ -298,4 +376,9 @@ module.exports = {
   userAuth,
   userLogout,
   getUserImage,
+  getAlldatosUsuarios,
+  getdatosUsuarios,
+  createdatosUsuarios,
+  disabledatosUsuarios,
+  updatedatosUsuarios,
 };

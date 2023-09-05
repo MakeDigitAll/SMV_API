@@ -15,6 +15,11 @@ const {
   userAuth,
   userLogout,
   getUser,
+  getAlldatosUsuarios,
+  getdatosUsuarios,
+  createdatosUsuarios,
+  disabledatosUsuarios,
+  updatedatosUsuarios,
 } = require("../../controllers/login/userController");
 getAllUsers, getUser, createUser, updateUser, disableUser, todos;
 router.get("/api/allusers", getAllUsers);
@@ -28,4 +33,9 @@ router.post("/api/auth/refreshToken", refreshToken);
 router.get("/api/auth/user", authenticate, userAuth);
 router.get("/api/auth/todos", authenticate, todos);
 router.delete("/api/auth/logout", userLogout);
+router.get("/api/AlluserData", getAlldatosUsuarios);
+router.get("/api/userData/:id", getdatosUsuarios);
+router.post("/api/createUserData", createdatosUsuarios);
+router.put("/api/updateUserData/:id", updatedatosUsuarios);
+router.post("/api/disableUserData/:id", disabledatosUsuarios);
 module.exports = router;
