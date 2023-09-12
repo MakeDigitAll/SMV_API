@@ -492,6 +492,7 @@ const getAllFormasPago = async (req, res, next)=> {
 }
 //mostrar un estatus
 const getFormasPago = async (req, res, next) =>{
+    console.log(req.params);
     try {
         const { id } = req.params;
         const result = await pool.query(`SELECT * FROM "listadoFormasPago" WHERE id = $1 AND "isDelated" = '0' `, [id]);
@@ -509,12 +510,12 @@ const getFormasPago = async (req, res, next) =>{
 
 //crear un estatus 
 const createFormasPago = async (req, res, next) =>{
-    const {nombreForma, comision, claveSAT} = req.body
+    const {nombre, comision, claveSAT} = req.body
 
     try {
     const result = await pool.query(
         `INSERT INTO "listadoFormasPago" ("nombreForma", comision, "claveSAT", "isUpdated", "isDelated", "dateModication", "dateCreation") VALUES ($1, $2, $3, '0', '0', NOW() , NOW() ) RETURNING *`,
-        [nombreForma, comision, claveSAT]
+        [nombre, comision, claveSAT]
     );
     res.json(result.json);
     } catch (error) {
@@ -527,7 +528,7 @@ const disableFormasPago = async (req, res, next) =>{
     const { id } = req.params;
 
     const result = await pool.query(
-        `UPDATE "listadoFormasPago" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+        `UPDATE "listadoFormasPago" SET "isDelated" = '1' WHERE id = $1 RETURNING *`,
         [ id]
     );
 
@@ -542,11 +543,11 @@ const disableFormasPago = async (req, res, next) =>{
 //actualizar un estatus
 const updateFormasPago = async (req, res, next) =>{
     const { id } = req.params;
-    const { nombre, tipo} = req.body;
+    const { nombre, comision, claveSAT} = req.body;
 
     const result = await pool.query(
-        'UPDATE "listadoFormasPago" SET "nombre" = $1, tipo = $2, "creationUpdate" = CURRENT_DATE WHERE id = $3 RETURNING *',
-        [nombre, tipo, id]
+        'UPDATE "listadoFormasPago" SET "nombreForma" = $1, comision = $2, "claveSAT" = $3, "dateModication" = CURRENT_DATE WHERE id = $4 RETURNING *',
+        [nombre, comision, claveSAT, id]
     );
 
     if (result.rows.length === 0)
