@@ -180,12 +180,12 @@ router.get('/FormasPago/:id', getFormasPago)
 
 //crear estatus
 router.post('/FormasPago', createFormasPago)
-
+ 
 //deshabilita  estatus
 router.post('/FormasPagoDisable/:id',  disableFormasPago)
 
 //actualizar estatus
-router.put('/FormasPago/:id', updateFormasPago)
+router.put('/FormasPagoEdit/:id', updateFormasPago)
 //////////////////////////// FIN DE LISTADO DE PRECIOS
 
 
