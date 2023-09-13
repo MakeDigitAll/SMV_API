@@ -17,6 +17,15 @@ const getAllUsers = async (req, res, next) => {
     console.log(error.message);
   }
 };
+const getLastestUsers = async (req, res, next) => {
+  try {
+    const allTasks = await pool.query(
+      `SELECT nombre,apellido,email,id FROM  "usuarios" WHERE "isDeleted" = 'false' ORDER BY "id" DESC LIMIT 10`
+    );
+    res.json(allTasks.rows);
+  } catch (error) {}
+};
+
 //Autenticar un usuario
 const autenticarUser = async (req, res) => {
   const { email, password } = req.body;
@@ -381,4 +390,5 @@ module.exports = {
   createdatosUsuarios,
   disabledatosUsuarios,
   updatedatosUsuarios,
+  getLastestUsers
 };

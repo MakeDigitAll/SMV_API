@@ -20,6 +20,7 @@ const {
   createdatosUsuarios,
   disabledatosUsuarios,
   updatedatosUsuarios,
+  getLastestUsers,
 } = require("../../controllers/login/userController");
 getAllUsers, getUser, createUser, updateUser, disableUser, todos;
 router.get("/api/allusers", getAllUsers);
@@ -38,4 +39,5 @@ router.get("/api/userData/:id", getdatosUsuarios);
 router.post("/api/createUserData",  upload.single("image"), createdatosUsuarios);
 router.put("/api/updateUserData/:id", updatedatosUsuarios);
 router.post("/api/disableUserData/:id", disabledatosUsuarios);
+router.get("/api/auth/lastestusers", getLastestUsers);
 module.exports = router;
