@@ -35,7 +35,7 @@ router.get("/api/auth/todos", authenticate, todos);
 router.delete("/api/auth/logout", userLogout);
 router.get("/api/AlluserData", getAlldatosUsuarios);
 router.get("/api/userData/:id", getdatosUsuarios);
-router.post("/api/createUserData", createdatosUsuarios);
+router.post("/api/createUserData",  upload.single("image"), createdatosUsuarios);
 router.put("/api/updateUserData/:id", updatedatosUsuarios);
 router.post("/api/disableUserData/:id", disabledatosUsuarios);
 module.exports = router;
