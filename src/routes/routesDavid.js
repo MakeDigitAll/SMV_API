@@ -10,7 +10,9 @@ const {
     getAllGastosEnvio, getGastosEnvios, createGastosEnvios, disableGastosEnvios, updateGastosEnvios, 
     
     createImagen,
-    getImagenPrueba, 
+    getImagenPrueba,
+    getAllPagos,
+    getAllPedidos, 
     
     
     
@@ -105,6 +107,137 @@ router.post('/ImagenUsuario', upload.single("image"), createImagen)
 router.get('/ImagenUsuario/:id', getImagenPrueba)
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////// RUTAS PARA TABLA DE Pagos 
+//ver estatus
+router.get('/Pagos', getAllPagos);
+
+// //ver un estatus
+// router.get('/Pagos/:id', getPagos );
+
+// //crear estatus
+// router.post('/Pagos', createPagos );
+
+// //deshabilita  estatus
+// router.post('/PagosParcial/:id', PagosParcial);
+
+// //Editar Estatus Ganada
+// router.post('/PagosGanada/:id', PagosCredito)
+
+// //Editar Estatus Cancelada
+// router.post('/PagosFacturado/:id', PagosFacturado)
+
+// //Editar Estatus Ganada
+// router.post('/PagosPendiente2/:id', PagosPendiente2)
+
+// //Editar Estatus Cancelada
+// router.post('/PagosPendiente/:id', PagosPendiente1)
+
+// //actualizar estatus
+// router.put('/Pagos/:id', updatePagos);
+//////////////// FIN DE Pagos
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE PEDIDOS 
+//ver estatus
+router.get('/Pedidos', getAllPedidos)
+
+// //ver un estatus
+// router.get('/Pedidos/:id', getPedidos)
+
+// //crear estatus
+// router.post('/Pedidos', createPedidos)
+
+// //deshabilita  estatus
+// router.post('/PedidosDisable/:id', disablePedidos)
+
+// //Ganar pedidos
+// router.post('/PedidosGanado/:id', pedidoGanado)
+
+// //Cancelar pedidos
+// router.post('/PedidosCancelado/:id',pedidoCancelado)
+
+// //Pedidos pendientes
+// router.post('/PedidosPendientes/:id',PedidosPendientes)
+// //actualizar estatus
+// router.put('/Pedidos/:id', updatePedidos)
+// //Devolver pedidos
+// router.post('/PedidosDevueltos/:id',PedidosDevueltos)
+// //Despachar pedidos
+// router.post('/PedidosDespachados/:id',PedidosDespachados)
+// //entregar pedidos
+// router.post('/PedidosEntregados/:id',PedidosEntregado)
+// //cerrar pedidos
+// router.post('/PedidosCerrados/:id',pedidoCerrado)
+// //devolver pedidos
+// router.post('/PedidosDevuelto/:id',pedidoDevuelto)
+// //surtir pedidos
+// router.post('/PedidosSurtido/:id',pedidoSurtido)
+// //facturra pedidos
+// router.post('/PedidosFacturado/:id',pedidoFacturado)
+
+// //////////////// FIN DE PEDIDOS
+
+
+// /////////////////////////////////////// RUTAS PARA TABLA DE COTIZACIONES 
+// //ver estatus
+// router.get('/Cotizaciones', getAllCotizaciones);
+
+// //ver un estatus
+// router.get('/Cotizaciones/:id', getCotizaciones );
+
+// //crear estatus
+// router.post('/Cotizaciones', createCotizaciones );
+
+// //deshabilita  estatus
+// router.post('/CotizacionesDisable', disableCotizaciones);
+
+// //Editar Estatus Ganada
+// router.post('/CotizacionesGanada/:id', cotizacionGanada)
+
+// //Editar Estatus Cancelada
+// router.post('/CotizacionesCancelada/:id', cotizacionCancelada)
+
+// //Editar Estatus Ganada
+// router.post('/CotizacionesVencidas/:id', cotizacionVencida)
+
+// //Editar Estatus Cancelada
+// router.post('/CotizacionesPerdidas/:id', cotizacionPerdida)
+
+// //actualizar estatus
+// router.put('/Cotizaciones/:id', updateCotizaciones);
+// //////////////// FIN DE COTIZACIONES
+
+
+
+// /////////////////////////////////////// RUTAS PARA TABLA DE ORDEN DE COMPRA - LISTADO DE ENTRADAS  
+// router.get('/OrdenCompra/ListadoEntradas', getAllOrdenListadoEntrada)
+
+// //ver un estatus
+// router.get('/OrdenCompra/ListadoEntradas/:id', getOrdenListadoEntrada)
+
+// //crear estatus
+// router.post('/OrdenCompra/ListadoEntradas', createOrdenListadoEntrada)
+
+// //deshabilita  estatus
+// router.put('/OrdenCompra/ListadoEntradasDisable/:id', disableOrdenListadoEntrada)
+
+// //actualizar estatus
+// router.put('/OrdenCompra/ListadoEntradas/:id', updateOrdenListadoEntrada)
+// /////////////////////// FIN DE LISTADO DE ENTRADAS
+
+// //Parcial  estatus
+// router.post('/OrdenCompra/ListadoEntradasParcial/:id', parcialOrdenListadoEntrada)
+// //Entregas  estatus
+// router.post('/OrdenCompra/ListadoEntradasEntregas/:id', entregasOrdenListadoEntrada)
+// //rutas  estatus
+// router.post('/OrdenCompra/ListadoEntradasRutas/:id', rutasOrdenListadoEntrada)
+// //Embarque  estatus
+// router.post('/OrdenCompra/ListadoEntradasEmbarque/:id', embarqueOrdenListadoEntrada)
+// //Embarque  estatus
+// router.post('/OrdenCompra/ListadoEntradasSurtido/:id', surtidoOrdenListadoEntrada)
 
 
 
@@ -117,7 +250,8 @@ const {
         getAllReporteVentas, getReporteVentas, 
         getAllComisiones, getComisiones,
         getAllListadoPrecios, getListadoPrecios, createListadoPrecios, disableListadoPrecios, updateListadoPrecios, 
-        getAllFormasPago, getFormasPago, createFormasPago, disableFormasPago, updateFormasPago 
+        getAllFormasPago, getFormasPago, createFormasPago, disableFormasPago, updateFormasPago,
+
     
     } = require("../controllers/controllersAdministracion");
 
@@ -187,6 +321,11 @@ router.post('/FormasPagoDisable/:id',  disableFormasPago)
 //actualizar estatus
 router.put('/FormasPagoEdit/:id', updateFormasPago)
 //////////////////////////// FIN DE LISTADO DE PRECIOS
+
+
+
+
+
 
 
 
