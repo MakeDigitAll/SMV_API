@@ -1942,12 +1942,12 @@ const getProductoscotizados = async (req, res, next) =>{
 
 //crear una Productoscotizados
 const createProductoscotizados = async (req, res, next) =>{
-    const { imagen, codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total,} = req.body
+    const { codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total,} = req.body
 
     try {
     const result = await pool.query(
-        `INSERT INTO "productosCotizados" (imagen, codigo, nombre, marca, cantidad, inventario, "precioUnitario", descuento, total, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, '0', '0' , NOW(), NOW()) RETURNING *`,
-        [imagen, codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total]
+        `INSERT INTO "productosCotizados" (codigo, nombre, marca, cantidad, inventario, "precioUnitario", descuento, total, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, '0', '0' , NOW(), NOW()) RETURNING *`,
+        [codigo, nombre, marca, cantidad, inventario, precioUnitario, descuento, total]
     );
 
     res.json(result.json);
@@ -2559,10 +2559,294 @@ const updateRecordProducto = async (req, res, next) =>{
 };
 /////////////////////// FIN DE CONTROLADORES PARA TABLA DE  record por producto 
 
+const getAllTransIndividual = async (req, res, next) =>{
+    try{
+        const allTasks = await pool.query(`SELECT * FROM "transferenciaAlmacenesListadoIndividual" WHERE "isDeleted"= '0'`);
+        res.json(allTasks.rows)
+        } catch (error) {
+            console.log("Error",error.message);
+            console.log("Linea de error: ",error.stack.split('\n')[1]);
+        }
+    }
 
+    const createTransIndividual = async (req, res, next) =>{
+        const { folio,fecha, codigoEmpresa, nombre, cantidad, deSucursal, delAlmacen, aSucursal, alAlmacen,} = req.body
+    
+        try {
+        const result = await pool.query(
+            `INSERT INTO "transferenciaAlmacenesListadoIndividual" (folio, fecha, "codigoEmpresa", nombre, cantidad, "deSucursal", "delAlmacen", "aSucursal", "alAlmacen", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, '0', '0' , NOW(), NOW()) RETURNING *`,
+            [folio,fecha, codigoEmpresa, nombre, cantidad, deSucursal, delAlmacen, aSucursal, alAlmacen]
+        );
+    
+        res.json(result.json);
+        } catch (error) {
+            console.log("Error",error.message);
+            console.log("Linea de error: ",error.stack.split('\n')[1]);
+            next(error)
+        }
+    };
 
+    const getAllListadoEntradas = async (req, res, next) =>{
+        try{
+            const allTasks = await pool.query(`SELECT * FROM "listadoEntradas" WHERE "isDeleted"= '0'`);
+            res.json(allTasks.rows)
+            } catch (error) {
+                console.log("Error",error.message);
+                console.log("Linea de error: ",error.stack.split('\n')[1]);
+            }
+        }
+    
+        const createListadoEntradas = async (req, res, next) =>{
+            const { folio, fecha, codigoEmpresa, producto, cantidad, sucursalAlmacen, tipo, motivo,} = req.body
+        
+            try {
+            const result = await pool.query(
+                `INSERT INTO "listadoEntradas" (folio, fecha, "codigoEmpresa", producto, cantidad, "sucursalAlmacen", tipo, motivo, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, '0', '0' , NOW(), NOW()) RETURNING *`,
+                [folio, fecha, codigoEmpresa, producto, cantidad, sucursalAlmacen, tipo, motivo]
+            );
+        
+            res.json(result.json);
+            } catch (error) {
+                console.log("Error",error.message);
+                console.log("Linea de error: ",error.stack.split('\n')[1]);
+                next(error)
+            }
+        };
+
+        const getAllListadoSalidas = async (req, res, next) =>{
+            try{
+                const allTasks = await pool.query(`SELECT * FROM "listadoSalida" WHERE "isDeleted"= '0'`);
+                res.json(allTasks.rows)
+                } catch (error) {
+                    console.log("Error",error.message);
+                    console.log("Linea de error: ",error.stack.split('\n')[1]);
+                }
+            }
+        
+            const getAllMotivosEntrada = async (req, res, next) =>{
+                try{
+                    const allTasks = await pool.query(`SELECT * FROM "motivosEntrada" WHERE "isDeleted"= '0'`);
+                    res.json(allTasks.rows)
+                    } catch (error) {
+                        console.log("Error",error.message);
+                        console.log("Linea de error: ",error.stack.split('\n')[1]);
+                    }
+                }
+            const createMotivosEntrada = async (req, res, next) =>{
+                const { motivo, clase,} = req.body
+            
+                try {
+                const result = await pool.query(
+                    `INSERT INTO "motivosEntrada" (motivo, clase, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, '0', '0' , NOW(), NOW()) RETURNING *`,
+                    [motivo, clase]
+                );
+            
+                res.json(result.json);
+                } catch (error) {
+                    console.log("Error",error.message);
+                    console.log("Linea de error: ",error.stack.split('\n')[1]);
+                    next(error)
+                }
+            };
+            const getMotivosEntrada = async (req, res, next) =>{
+                try {
+                    const { id,isDeleted} = req.params;
+                    const result = await pool.query(`SELECT * FROM "motivosEntrada" WHERE id = $1 AND "isDeleted"='0'`, [id]);
+            
+                    if (result.rows.length === 0 )
+                    return res.status(404).json({
+                        message: "La tarea no funciona en la tabla  Motivos Entrada"
+                    });
+            
+                    res.json(result.rows[0]);
+                } catch (error) {
+                    console.log("Error",error.message);
+                    console.log("Linea de error: ",error.stack.split('\n')[1]);
+                }
+            };
+            const updateMotivosEntrada = async (req, res, next) =>{
+                try{
+                const { id } = req.params;
+                const {  motivo,clase,DateModification,} = req.body;
+            
+                const result = await pool.query(
+                    'UPDATE "motivosEntrada" SET  motivo = $1, clase = $2, "DateModification"= NOW() WHERE id = $3 RETURNING *',
+                    [ motivo,clase, id]
+                );
+            
+                if (result.rows.length === 0)
+                return res.status(404).json({
+                    message: "La tarea no se pudo actualizar en la tabla Motivos Entrada"
+                });
+            
+                return res.json(result.rows[0]);
+            } catch (error) {
+                console.log("Error",error.message);
+                console.log("Linea de error: ",error.stack.split('\n')[1]);
+            }
+            };
+
+            const getAllSucursalesAlmacen = async (req, res, next) =>{
+                try{
+                    const allTasks = await pool.query(`SELECT * FROM "sucursalesAlmacenesListadoProductos" WHERE "isDeleted"= '0'`);
+                    res.json(allTasks.rows)
+                    } catch (error) {
+                        console.log("Error",error.message);
+                        console.log("Linea de error: ",error.stack.split('\n')[1]);
+                    }
+                }
+                const createSucursalesAlmacen = async (req, res, next) => {
+                  const { nombre,ciudad,estado,telefono,gerente,almacenes,web } = req.body;
+
+                  try {
+                    const result = await pool.query(
+                      `INSERT INTO "sucursalesAlmacenesListadoProductos" (nombre, ciudad, estado, telefono, gerente, almacenes, web, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, '0', '0' , NOW(), NOW()) RETURNING *`,
+                      [nombre,ciudad,estado,telefono,gerente,almacenes,web]
+                    );
+
+                    res.json(result.json);
+                  } catch (error) {
+                    console.log("Error", error.message);
+                    console.log("Linea de error: ", error.stack.split("\n")[1]);
+                    next(error);
+                  }
+                };
+                const getSucursalesAlmacen = async (req, res, next) =>{
+                    try {
+                        const { id,isDeleted} = req.params;
+                        const result = await pool.query(`SELECT * FROM "sucursalesAlmacenesListadoProductos" WHERE id = $1 AND "isDeleted"='0'`, [id]);
+                
+                        if (result.rows.length === 0 )
+                        return res.status(404).json({
+                            message: "La tarea no funciona en la sucursales almacen listado productos"
+                        });
+                
+                        res.json(result.rows[0]);
+                    } catch (error) {
+                        console.log("Error",error.message);
+                        console.log("Linea de error: ",error.stack.split('\n')[1]);
+                    }
+                };
+                const updateSucursalesAlmacen = async (req, res, next) =>{
+                    try{
+                    const { id } = req.params;
+                    const { nombre,ciudad,estado,telefono,gerente,almacenes,web,DateModification,} = req.body;
+                
+                    const result = await pool.query(
+                        'UPDATE "sucursalesAlmacenesListadoProductos" SET  nombre=$1, ciudad=$2, estado=$3, telefono=$4, gerente=$5, almacenes=$6, web=$7, "DateModification"= NOW() WHERE id = $8 RETURNING *',
+                        [ nombre,ciudad,estado,telefono,gerente,almacenes,web, id]
+                    );
+                
+                    if (result.rows.length === 0)
+                    return res.status(404).json({
+                        message: "La tarea no se pudo actualizar en la tabla sucursales almacen listado productos"
+                    });
+                
+                    return res.json(result.rows[0]);
+                } catch (error) {
+                    console.log("Error",error.message);
+                    console.log("Linea de error: ",error.stack.split('\n')[1]);
+                }
+                };
+
+                const disableSucursalesAlmacen = async (req, res, next) =>{
+                    const { id } = req.params;
+                
+                    const result = await pool.query(
+                        `UPDATE "sucursalesAlmacenesListadoProductos" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+                        [ id]
+                    );
+                
+                    if (result.rows.length === 0)
+                    return res.status(404).json({
+                        message: "La tarea no se pudo actualizar"
+                    });
+                
+                    return res.json(result.rows[0]);
+                };
+                ///Datos
+                const getAllSucursalesDatos = async (req, res, next) =>{
+                    try{
+                        const allTasks = await pool.query(`SELECT * FROM "sucursalesDatos" WHERE "isDeleted"= '0'`);
+                        res.json(allTasks.rows)
+                        } catch (error) {
+                            console.log("Error",error.message);
+                            console.log("Linea de error: ",error.stack.split('\n')[1]);
+                        }
+                    }
+                    const createSucursalesDatos= async (req, res, next) => {
+                      const { nombreCorto, direccion, colonia, codigoPostal, emailSucursal, rfc, geoUrlMaps, limiteCredito, encabezadoPos, notaEnviosPos, notaTicketPos } = req.body;
+    
+                      try {
+                        const result = await pool.query(
+                          `INSERT INTO "sucursalesDatos" ("nombreCorto", direccion, colonia, "codigoPostal", "emailSucursal", rfc, "geoUrlMaps", "limiteCredito", "encabezadoPos", "notaEnviosPos", "notaTicketPos", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, '0', '0' , NOW(), NOW()) RETURNING *`,
+                          [nombreCorto, direccion, colonia, codigoPostal, emailSucursal, rfc, geoUrlMaps, limiteCredito, encabezadoPos, notaEnviosPos, notaTicketPos]
+                        );
+    
+                        res.json(result.rows[0]);
+                      } catch (error) {
+                        console.log("Error", error.message);
+                        console.log("Linea de error: ", error.stack.split("\n")[1]);
+                        next(error);
+                      }
+                    };
+                    const getSucursalesDatos = async (req, res, next) =>{
+                        try {
+                            const { id,isDeleted} = req.params;
+                            const result = await pool.query(`SELECT * FROM "sucursalesDatos" WHERE id = $1 AND "isDeleted"='0'`, [id]);
+                    
+                            if (result.rows.length === 0 )
+                            return res.status(404).json({
+                                message: "La tarea no funciona en la tbla sucursalesDatos"
+                            });
+                    
+                            res.json(result.rows[0]);
+                        } catch (error) {
+                            console.log("Error",error.message);
+                            console.log("Linea de error: ",error.stack.split('\n')[1]);
+                        }
+                    };
+                    const updateSucursalesDatos = async (req, res, next) =>{
+                        try{
+                        const { id } = req.params;
+                        const { nombreCorto, direccion, colonia, codigoPostal, emailSucursal, rfc, geoUrlMaps, limiteCredito, encabezadoPos, notaEnviosPos, notaTicketPos,DateModification,} = req.body;
+                    
+                        const result = await pool.query(
+                            'UPDATE "sucursalesDatos" SET  "nombreCorto"=$1, direccion=$2, colonia=$3, "codigoPostal"=$4, "emailSucursal"=$5, rfc=$6, "geoUrlMaps"=$7, "limiteCredito"=$8, "encabezadoPos"=$9, "notaEnviosPos"=$10, "notaTicketPos"=$11, "DateModification"= NOW() WHERE id = $12 RETURNING *',
+                            [ nombreCorto, direccion, colonia, codigoPostal, emailSucursal, rfc, geoUrlMaps, limiteCredito, encabezadoPos, notaEnviosPos, notaTicketPos, id]
+                        );
+                    
+                        if (result.rows.length === 0)
+                        return res.status(404).json({
+                            message: "La tarea no se pudo actualizar en la tabla sucursalesDatos"
+                        });
+                    
+                        return res.json(result.rows[0]);
+                    } catch (error) {
+                        console.log("Error",error.message);
+                        console.log("Linea de error: ",error.stack.split('\n')[1]);
+                    }
+                    };
+    
+                    const disableSucursalesDatos = async (req, res, next) =>{
+                        const { id } = req.params;
+                        const {isDeleted}=req.body;
+                        
+                    
+                        const result = await pool.query(
+                            `UPDATE "sucursalesDatos" SET "isDeleted"= '1' WHERE id = $1 RETURNING *`, 
+                            [isDeleted,id]
+                        );
+                    
+                        if (result.rowCount === 0)
+                        return res.status(404).json({
+                            message: "La tarea no se pudo actualizar en la tabla sucursalesDatos"
+                        });
+                    
+                        return res.json(result.rows[0]);
+                         
+                    };
 ///////////////////////////////////////////// FIN DE MICROSERVICIO DE COMPRAS  ////////////////////////////////////////////////////
-
 
 
 
@@ -2600,7 +2884,10 @@ module.exports = {
     getAllProductosSurtidosPedido,getProductosSurtidosPedido,createProductosSurtidosPedido,disableProductosSurtidosPedido,updateProductosSurtidosPedido,
     getAllProductosSurtirPedido,getProductosSurtirPedido,createProductosSurtirPedido,disableProductosSurtirPedido,updateProductosSurtirPedido,
     getAllProductosTransRecordProd,getProductosTransRecordProd,createProductosTransRecordProd,disableProductosTransRecordProd,updateProductosTransRecordProd,
-    getAllRecordProducto,getRecordProducto,createRecordProducto,disableRecordProducto,updateRecordProducto,
+    getAllRecordProducto,getRecordProducto,createRecordProducto,disableRecordProducto,updateRecordProducto, getAllTransIndividual, createTransIndividual,
+    getAllListadoEntradas,getAllListadoSalidas,getAllMotivosEntrada,createMotivosEntrada, getMotivosEntrada, updateMotivosEntrada, createListadoEntradas,
+    getAllSucursalesAlmacen, createSucursalesAlmacen, getSucursalesAlmacen, updateSucursalesAlmacen, disableSucursalesAlmacen,getSucursalesDatos,
+    getAllSucursalesDatos,createSucursalesDatos,updateSucursalesDatos,disableSucursalesDatos,
 
     
 
