@@ -46,7 +46,7 @@ const createAlmacenes = async (req, res, next) =>{
         [nombre, tipo]
     );
 
-    res.json(result.json);
+    res.json(result.rows[0]);
     } catch (error) {
         next(error)
     }
@@ -75,7 +75,7 @@ const updateAlmacenes = async (req, res, next) =>{
     const { nombre, tipo} = req.body;
 
     const result = await pool.query(
-        'UPDATE "almacenSucursal" SET "nombre" = $1, tipo = $2, "creationUpdate" = CURRENT_DATE WHERE id = $3 RETURNING *',
+        'UPDATE "almacenSucursal" SET "nombre" = $1, tipo = $2, "DateCreation" = CURRENT_DATE WHERE id = $3 RETURNING *',
         [nombre, tipo, id]
     );
 

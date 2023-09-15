@@ -33,7 +33,7 @@ const {
     getAllProductosSurtidosPedido,getProductosSurtidosPedido,createProductosSurtidosPedido,disableProductosSurtidosPedido,updateProductosSurtidosPedido,
     getAllProductosSurtirPedido,getProductosSurtirPedido,createProductosSurtirPedido,disableProductosSurtirPedido,updateProductosSurtirPedido,
     getAllProductosTransRecordProd,getProductosTransRecordProd,createProductosTransRecordProd,disableProductosTransRecordProd,updateProductosTransRecordProd,
-    getAllRecordProducto,getRecordProducto,createRecordProducto,disableRecordProducto,updateRecordProducto,
+    getAllRecordProducto,getRecordProducto,createRecordProducto,disableRecordProducto,updateRecordProducto, getAllTransIndividual, createTransIndividual, getAllListadoEntradas, getAllListadoSalidas, getAllMotivosEntrada, createMotivosEntrada, getMotivosEntrada, updateMotivosEntrada, createListadoEntradas, getAllSucursalesAlmacen, getSucursalesAlmacen, createSucursalesAlmacen, disableSucursalesAlmacen, updateSucursalesAlmacen, getAllSucursalesDatos, getSucursalesDatos, createSucursalesDatos, updateSucursalesDatos, disableSucursalesDatos,
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
 
@@ -521,7 +521,34 @@ router.put('/RecordProductoDisable/:id', disableRecordProducto)
 //actualizar 
 router.put('/RecordProducto/:id', updateRecordProducto)
 /////////// FIN DE Record Producto
+router.get('/TransIndividual', getAllTransIndividual)
+router.post('/TransIndividual',createTransIndividual)
 
+router.get('/ListadoEntradas',getAllListadoEntradas)
+router.post('/ListadoEntradas',createListadoEntradas)
+router.get('/ListadoSalida',getAllListadoSalidas)
+router.get('/MotivosEntrada',getAllMotivosEntrada)
+router.post('/MotivosEntrada',createMotivosEntrada)
+router.get('/MotivosEntrada/:id', getMotivosEntrada)
+router.put('/MotivosEntrada/:id', updateMotivosEntrada)
+router.get('/SucursalesAlmacen',getAllSucursalesAlmacen)
+//ver uno
+router.get('/SucursalesAlmacen/:id', getSucursalesAlmacen)
+
+//crear 
+router.post('/SucursalesAlmacen', createSucursalesAlmacen)
+router.put('/SucursalesAlmacen/:id', updateSucursalesAlmacen)
+//disable
+router.post('/SucursalesAlmacenDisable/:id', disableSucursalesAlmacen)
+//vertodos
+router.get('/SucursalesDatos',getAllSucursalesDatos)
+//ver uno
+router.get('/SucursalesDatos/:id', getSucursalesDatos)
+//crear 
+router.post('/SucursalesDatos', createSucursalesDatos)
+router.put('/SucursalesDatos/:id', updateSucursalesDatos)
+//disable
+router.post('/SucursalesDatos/:id', disableSucursalesDatos)
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO COMPRAS ////////////////////////////////////////////
 
 
