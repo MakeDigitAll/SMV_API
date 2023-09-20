@@ -1399,12 +1399,12 @@ const getListadoClientes = async (req, res, next) =>{
 
 //crear un estatus 
 const createListadoClientes = async (req, res, next) =>{
-    const {numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado } = req.body
+    const {numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial } = req.body
 
     try {
     const result = await pool.query(
-        `INSERT INTO "listadoClientes" ("numeroCliente", "numeroComercial", "razonSocial", contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, '0', '0', NOW() , NOW() ) RETURNING *`,
-        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado]
+        `INSERT INTO "listadoClientes" ("numeroCliente", "numeroComercial", "razonSocial", contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, "nombreComercial", "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,$13, '0', '0', NOW() , NOW() ) RETURNING *`,
+        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial]
     );
 
     res.json(result.json);
@@ -1433,11 +1433,11 @@ const disableListadoClientes = async (req, res, next) =>{
 //actualizar un estatus
 const updateListadoClientes = async (req, res, next) =>{
     const { id } = req.params;
-    const { numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado} = req.body;
+    const { numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial} = req.body;
 
     const result = await pool.query(
-        'UPDATE "listadoClientes" SET "numeroCliente" = $1, "numeroComercial" = $2, "razonSocial" = $3, contacto = $4, rfc = $5, telefono = $6, email = $7, vendedor = $8, giro = $9, activo = $10, registro= $11, actualizado = $12 "creationUpdate" = CURRENT_DATE WHERE id = $13 RETURNING *',
-        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, id]
+        'UPDATE "listadoClientes" SET "numeroCliente" = $1, "numeroComercial" = $2, "razonSocial" = $3, contacto = $4, rfc = $5, telefono = $6, email = $7, vendedor = $8, giro = $9, activo = $10, registro= $11, actualizado = $12, "nombreComercial"=$13 "creationUpdate" = CURRENT_DATE WHERE id = $14 RETURNING *',
+        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, nombreComercial,id]
     );
 
     if (result.rows.length === 0)

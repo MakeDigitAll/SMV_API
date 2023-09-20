@@ -1192,8 +1192,8 @@ const getAllcategoria = async (req, res, next)=> {
 //mostrar un estatus
 const getcategoria = async (req, res, next) =>{
     try {
-        const { sku, isDeleted } = req.params;
-        const result = await pool.query(`SELECT * FROM "categoria" WHERE sku = $1 AND "isDeleted"='0'`, [sku]);
+        const { id, isDeleted } = req.params;
+        const result = await pool.query(`SELECT * FROM "categoria" WHERE id = $1 AND "isDeleted"='0'`, [id]);
 
         if (result.rows.length === 0 )
         return res.status(404).json({
@@ -1208,12 +1208,11 @@ const getcategoria = async (req, res, next) =>{
 
 //crear un estatus 
 const createcategoria= async (req, res, next) =>{
-    const { sku, nombre} = req.body
-
+    const {nombre, sku} = req.body
     try {
     const result = await pool.query(
-        `INSERT INTO "categoria" (nombre, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, '0', '0', NOW(), NOW() ) RETURNING *`,
-        [sku, nombre]
+        `INSERT INTO "categoria" (nombre, sku, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, '0', '0', NOW(), NOW() ) RETURNING *`,
+        [nombre, sku]
     );
 
     res.json(result.json);
@@ -1228,11 +1227,11 @@ const createcategoria= async (req, res, next) =>{
 const disablecategoria= async (req, res, next) =>{
     try
     {
-    const { sku } = req.params;
+    const { id } = req.params;
     const result = await pool.query(
 
-        `UPDATE "categoria" SET "isDeleted"='1' WHERE sku=$1 RETURNING *`,
-        [sku]
+        `UPDATE "categoria" SET "isDeleted"='1' WHERE id=$1 RETURNING *`,
+        [id]
     );
     if (result.rows.length === 0)
     return res.status(404).json({
@@ -1249,11 +1248,11 @@ next (error);
 //actualizar un producto
 const updatecategoria= async (req, res, next) =>{
     try {
-    const { sku } = req.params;
-    const {nombre, } = req.body;
+    const { id } = req.params;
+    const {nombre, sku} = req.body;
 
     const result = await pool.query(
-        'UPDATE "categoria" SET nombre = $1, "DateModification"= NOW() WHERE sku = $2 RETURNING *',
+        'UPDATE "categoria" SET nombre = $1,sku=$2, "DateModification"= NOW() WHERE id = $3 RETURNING *',
         [nombre, sku]
     );
 
