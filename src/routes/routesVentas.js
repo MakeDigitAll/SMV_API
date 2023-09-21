@@ -17,7 +17,7 @@ const {
     getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones, cotizacionVencida, cotizacionPerdida,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, 
-    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
+    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores,
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 
@@ -318,6 +318,20 @@ router.post('/PagosPendiente/:id', PagosPendiente1)
 router.put('/Pagos/:id', updatePagos);
 //////////////// FIN DE Pagos
 
+//////////Vendedores/////
+router.get('/ListadoVendedores', getAllListadoVendedores)
+
+//ver un estatus
+router.get('/ListadoVendedores/:id',getListadoVendedores)
+
+//crear estatus
+router.post('/ListadoVendedores', createListadoVendedores)
+
+//deshabilita  estatus
+router.post('/ListadoVendedoresDisable/:id', disableListadoVendedores)
+
+//actualizar estatus
+router.put('/ListadoVendedores/:id', updateListadoVendedores)
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 
