@@ -1958,7 +1958,7 @@ const createMarcasproducto = async (req, res, next) =>{
         [imagen, marca, catalogo, productos]
     );
 
-    res.json(result.json);
+    res.json(result.rows[0]);
     } catch (error) {
         console.log("Error",error.message);
         console.log("Linea de error: ",error.stack.split('\n')[1]);

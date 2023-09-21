@@ -1613,6 +1613,83 @@ const updatePagos= async (req, res, next) =>{
     return res.json(result.rows[0]);
 };
 
+///Vendedores
+const getAllListadoVendedores = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT * FROM "vendedores" WHERE "isDeleted" = '0'`);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//mostrar un estatus
+const getListadoVendedores = async (req, res, next) =>{
+    try {
+        const { id, isDeleted } = req.params;
+        const result = await pool.query(`SELECT * FROM "vendedores" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: error.message
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+//crear un estatus 
+const createListadoVendedores = async (req, res, next) =>{
+    const {imagen, nombre, telefono, sucursal, fechaAlta, referenciaWeb, clientes} = req.body
+
+    try {
+    const result = await pool.query(
+        `INSERT INTO "vendedores" (imagen, nombre, telefono, sucursal, "fechaAlta", "referenciaWeb", clientes, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, '0', '0', NOW() , NOW() ) RETURNING *`,
+        [imagen, nombre, telefono, sucursal, fechaAlta, referenciaWeb, clientes]
+    );
+
+    res.json(result.json);
+    } catch (error) {
+        next(error)
+    }
+};
+
+//deshabilitar un estatus
+const disableListadoVendedores = async (req, res, next) =>{
+    const { id } = req.params;
+
+    const result = await pool.query(
+        `UPDATE "vendedores" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+        [id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+
+//actualizar un estatus
+const updateListadoVendedores = async (req, res, next) =>{
+    const { id } = req.params;
+    const { imagen, nombre, telefono, sucursal, fechaAlta, referenciaWeb, clientes} = req.body;
+
+    const result = await pool.query(
+        'UPDATE "vendedores" SET imagen = $1, nombre = $2, telefono = $3, sucursal = $4, "fechaAlta" = $5, "referenciaWeb"= $6, clientes = $7, "DateModification" = CURRENT_DATE WHERE id = $8 RETURNING *',
+        [imagen, nombre, telefono, sucursal, fechaAlta, referenciaWeb, clientes, id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
 /////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE Pagos
 
 ////////////////////////////////////////////// FIN DE MICROSERVICIO DE VENTAS  ///////////////////////////////////////////////////
@@ -1635,6 +1712,7 @@ module.exports = {
     getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes,
-    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
+    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, getListadoVendedores,
+    getAllListadoVendedores,createListadoVendedores,updateListadoVendedores,disableListadoVendedores,
     ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 }
