@@ -16,7 +16,7 @@ const {
     getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto, 
     getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones, cotizacionVencida, cotizacionPerdida,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
-    getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, 
+    getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores,
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
@@ -287,6 +287,10 @@ router.post('/ListadoClientesDisabled/:id', disableListadoClientes)
 
 //actualizar estatus
 router.put('/ListadoClientes/:id', updateListadoClientes )
+
+//Imagen
+router.get("/api/images/clientImage/:id", getImageClient)
+
 /////////// FIN DE LISTADO CLIENTES
 
 /////////////////////////////////////// RUTAS PARA TABLA DE Pagos 

@@ -1396,15 +1396,30 @@ const getListadoClientes = async (req, res, next) =>{
         console.log(error.message);
     }
 };
-
+//mostrar un estatus
+const getImageClient = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const result = await pool.query(`SELECT * FROM "customerImages" WHERE "idCliente" = $1`, [
+        id,
+      ]);
+      if (result.rows.length === 0)
+        return res.status(404).json({
+          message: error.message,
+        });
+      res.send(result.rows[0].imagen);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 //crear un estatus 
 const createListadoClientes = async (req, res, next) =>{
-    const {numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial } = req.body
+    const {numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial,nombreCliente } = req.body
 
     try {
     const result = await pool.query(
-        `INSERT INTO "listadoClientes" ("numeroCliente", "numeroComercial", "razonSocial", contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, "nombreComercial", "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,$13, '0', '0', NOW() , NOW() ) RETURNING *`,
-        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial]
+        `INSERT INTO "listadoClientes" ("numeroCliente", "numeroComercial", "razonSocial", contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, "nombreComercial","nombreCliente", "isUpdate", "isDelete", "creationDate", "creationUpdate") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,$13, $14,'0', '0', NOW() , NOW() ) RETURNING *`,
+        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial,nombreCliente]
     );
 
     res.json(result.json);
@@ -1433,11 +1448,11 @@ const disableListadoClientes = async (req, res, next) =>{
 //actualizar un estatus
 const updateListadoClientes = async (req, res, next) =>{
     const { id } = req.params;
-    const { numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial} = req.body;
+    const { numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado,nombreComercial,nombreCliente} = req.body;
 
     const result = await pool.query(
-        'UPDATE "listadoClientes" SET "numeroCliente" = $1, "numeroComercial" = $2, "razonSocial" = $3, contacto = $4, rfc = $5, telefono = $6, email = $7, vendedor = $8, giro = $9, activo = $10, registro= $11, actualizado = $12, "nombreComercial"=$13 "creationUpdate" = CURRENT_DATE WHERE id = $14 RETURNING *',
-        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, nombreComercial,id]
+        'UPDATE "listadoClientes" SET "numeroCliente" = $1, "numeroComercial" = $2, "razonSocial" = $3, contacto = $4, rfc = $5, telefono = $6, email = $7, vendedor = $8, giro = $9, activo = $10, registro= $11, actualizado = $12, "nombreComercial"=$13, "nombreCliente"=$14, "creationUpdate" = CURRENT_DATE WHERE id = $15 RETURNING *',
+        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, nombreComercial,nombreCliente,id]
     );
 
     if (result.rows.length === 0)
@@ -1711,7 +1726,7 @@ module.exports = {
     getAllProveedores, getProveedores, createProveedores, disableProveedores, updateProveedores,
     getAllProveedoresProducto, getProveedoresProducto, createProveedoresProducto, disableProveedoresProducto, updateProveedoresProducto,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
-    getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes,
+    getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, getListadoVendedores,
     getAllListadoVendedores,createListadoVendedores,updateListadoVendedores,disableListadoVendedores,
     ///////////////////////////////////////////// FIN DE CONTROLADORES DE MICROSERVICIO VENTAS ////////////////////////////////////////////
