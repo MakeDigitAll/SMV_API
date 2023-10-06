@@ -1,5 +1,7 @@
 const { Router } = require("express")
 const pool = require('../database')
+const multer = require("multer"); // Importar multer
+const upload = multer();
 
 const {
 
@@ -17,7 +19,15 @@ const {
     getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones, cotizacionVencida, cotizacionPerdida,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
-    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores,
+    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, 
+    getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores, 
+    getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias, getSellerImage, 
+    getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion, 
+    getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto, 
+    getAllClientesDireccionEnvio, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
+    getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
+    getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, 
+
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 
@@ -280,18 +290,108 @@ router.get('/ListadoClientes',  getAllListadoClientes)
 router.get('/ListadoClientes/:id', getListadoClientes )
 
 //crear estatus
-router.post('/ListadoClientes', createListadoClientes )
+router.post('/ListadoClientes', upload.single("image"), createListadoClientes )
 
 //deshabilita  estatus
 router.post('/ListadoClientesDisabled/:id', disableListadoClientes)
 
 //actualizar estatus
-router.put('/ListadoClientes/:id', updateListadoClientes )
+router.put('/ListadoClientesEditing/:id', upload.single("image"), updateListadoClientes )
 
 //Imagen
-router.get("/api/images/clientImage/:id", getImageClient)
+router.get("/api/clientImage/:id", getImageClient)
 
 /////////// FIN DE LISTADO CLIENTES
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES FACTURACION
+router.get('/ClientesFacturacion', getAllClientesFacturacion )
+
+//ver un estatus
+router.get('/ClientesFacturacion/:id', getClientesFacturacion)
+
+//crear estatus
+router.post('/ClientesFacturacion', createClientesFacturacion )
+
+//deshabilita  estatus
+router.post('/ClientesFacturacionDisable/:id', disableClientesFacturacion)
+
+//actualizar estatus
+router.put('/ClientesFacturacionEdit/:id', updateClientesFacturacion )
+/////////// FIN DE CLIENTES FACTURACION
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES CONTACTOS
+router.get('/ClientesContactos', getAllClientesContacto)
+
+//ver un estatus
+router.get('/ClientesContactos/:id', getClientesContacto )
+
+//crear estatus
+router.post('/ClientesContactos', createClientesContacto )
+
+//deshabilita  estatus
+router.post('/ClientesContactosDisable/:id', disableClientesContacto )
+
+//actualizar estatus
+router.put('/ClientesContactosEdit/:id', updateClientesContacto )
+/////////// FIN DE CLIENTES CONTACTOS
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES DIRECCION ENVIO
+router.get('/ClientesDireccionEnvio', getAllClientesDireccionEnvio )
+
+//ver un estatus
+router.get('/ClientesDireccionEnvio/:id', getClientesDireccionEnvio )
+
+//crear estatus
+router.post('/ClientesDireccionEnvio', createClientesDireccionEnvio )
+
+//deshabilita  estatus
+router.post('/ClientesDireccionEnvioDisable/:id', disableClientesDireccionEnvio)
+
+//actualizar estatus
+router.put('/ClientesDireccionEnvioEdit/:id', updateClientesDireccionEnvio)
+/////////// FIN DE CLIENTES DIRECCION ENVIO
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES ACCESO WEB
+router.get('/ClientesAccesoWeb', getAllClientesAccesoWeb )
+
+//ver un estatus
+router.get('/ClientesAccesoWeb/:id', getClientesAccesoWeb)
+
+//crear estatus
+router.post('/ClientesAccesoWeb', createClientesAccesoWeb )
+
+//deshabilita  estatus
+router.post('/ClientesAccesoWebDisable/:id', disableClientesAccesoWeb )
+
+//actualizar estatus
+router.put('/ClientesAccesoWebEdit/:id', updateClientesAccesoWeb )
+/////////// FIN DE CLIENTES ACCESO WEB
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES ESTADO DE CUENTA
+router.get('/ClientesEstadoCuenta', getAllClientesEstadoCuenta )
+
+//ver un estatus
+router.get('/ClientesEstadoCuenta/:id', getClientesEstadoCuenta )
+
+//crear estatus
+router.post('/ClientesEstadoCuenta', createClientesEstadoCuenta )
+
+//deshabilita  estatus
+router.post('/ClientesEstadoCuentaDisable/:id', disableClientesEstadoCuenta )
+
+//actualizar estatus
+router.put('/ClientesEstadoCuentaEdit/:id', updateClientesEstadoCuenta )
+/////////// FIN DE CLIENTES ESTADO DE CUENTA 
+
 
 /////////////////////////////////////// RUTAS PARA TABLA DE Pagos 
 //ver estatus
@@ -322,20 +422,43 @@ router.post('/PagosPendiente/:id', PagosPendiente1)
 router.put('/Pagos/:id', updatePagos);
 //////////////// FIN DE Pagos
 
-//////////Vendedores/////
+
+/////////////////////////////////////////////Vendedores/////
 router.get('/ListadoVendedores', getAllListadoVendedores)
 
 //ver un estatus
 router.get('/ListadoVendedores/:id',getListadoVendedores)
 
+
+router.get('/api/sellerImage/:id', getSellerImage)
+
 //crear estatus
-router.post('/ListadoVendedores', createListadoVendedores)
+router.post('/ListadoVendedores', upload.single("image"), createListadoVendedores)
 
 //deshabilita  estatus
 router.post('/ListadoVendedoresDisable/:id', disableListadoVendedores)
 
 //actualizar estatus
-router.put('/ListadoVendedores/:id', updateListadoVendedores)
+router.put('/ListadoVendedoresEditing/:id',upload.single("image"), updateListadoVendedores)
+
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE CATEGORIAS
+router.get('/Categorias',  getAllCategorias)
+
+//ver un estatus
+router.get('/Categorias/:id', getCategorias )
+
+//crear estatus
+router.post('/Categorias', createCategorias )
+
+//deshabilita  estatus
+router.post('/CategoriasDisable/:id', disableCategorias)
+
+//actualizar estatus
+router.put('/CategoriasEdit/:id', updateCategorias )
+/////////// FIN DE CATEGORIAS
+
 ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
 

@@ -2291,7 +2291,7 @@ const getMarcasproducto = async (req, res, next) => {
 
 //crear una Marca producto
 const createMarcasproducto = async (req, res, next) => {
-  console.log("entro");
+  
 
   const document = JSON.parse(req.body.document);
   try {
