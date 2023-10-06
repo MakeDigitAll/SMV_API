@@ -827,6 +827,32 @@ const updatePagos= async (req, res, next) =>{
     return res.json(result.rows[0]);
 };
 
+const getAllVentasCliente = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT * FROM  "reporteVentasClienfe" WHERE "isDeleted" = '0'`);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const getAllInventarioXAlmacen = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT * FROM  "inventarioXAlmacenReporteInventario" WHERE "isDelete" = '0'`);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const getAllListadoTransferencia = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT * FROM  "listadoTransferencia" WHERE "isDeleted" = '0'`);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 /////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE Pagos
 
 
@@ -843,5 +869,5 @@ module.exports = {
     createImagen,getImagenPrueba,
 
     getAllPedidos,
-    getAllPagos,
+    getAllPagos,getAllVentasCliente,getAllInventarioXAlmacen,getAllListadoTransferencia,
 }

@@ -12,7 +12,10 @@ const {
     createImagen,
     getImagenPrueba,
     getAllPagos,
-    getAllPedidos, 
+    getAllPedidos,
+    getAllVentasCliente,
+    getAllInventarioXAlmacen,
+    getAllListadoTransferencia, 
     
     
     
@@ -321,10 +324,10 @@ router.post('/FormasPagoDisable/:id',  disableFormasPago)
 //actualizar estatus
 router.put('/FormasPagoEdit/:id', updateFormasPago)
 //////////////////////////// FIN DE LISTADO DE PRECIOS
+router.get('/ReporteVentasCliente',getAllVentasCliente)
 
-
-
-
+router.get('/InventarioXAlmacen', getAllInventarioXAlmacen);
+router.get('/ListadoTransferencias', getAllListadoTransferencia);
 
 
 
