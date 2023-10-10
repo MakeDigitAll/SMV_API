@@ -872,12 +872,15 @@ const getCotizaciones = async (req, res, next) => {
 
 //crear un estatus 
 const createCotizaciones = async (req, res, next) => {
-    const { folio, fecha, pedido, cliente, vendedor, recurrenciaa, origen, monto } = req.body
+
+    const document = JSON.parse(req.body.document);
+
+    const { cliente, vendedor, recurrenciaa, origen, monto } = document
 
     try {
         const result = await pool.query(
-            `INSERT INTO "cotizaciones" (folio, fecha, pedido, cliente, vendedor, recurrenciaa, origen, monto, status, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, '0', '0', '0', NOW() , NOW() ) RETURNING *`,
-            [folio, fecha, pedido, cliente, vendedor, recurrenciaa, origen, monto]
+            `INSERT INTO "cotizaciones" ( cliente, vendedor, recurrenciaa, origen, monto, status, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, '0', '0', '0', NOW() , NOW() ) RETURNING *`,
+            [cliente, vendedor, recurrenciaa, origen, monto]
         );
 
         res.json(result.json);
@@ -985,11 +988,12 @@ const cotizacionVencida = async (req, res, next) => {
 //actualizar un estatus
 const updateCotizaciones = async (req, res, next) => {
     const { id } = req.params;
-    const { folio, fecha, pedido, cliente, vendedor, recurrenciaa, origen, monto } = req.body;
+    const document = JSON.parse(req.body.document);
+    const { pedido, cliente, vendedor, recurrenciaa, origen, monto } = document;
 
     const result = await pool.query(
-        'UPDATE "cotizaciones" SET "folio" = $1, fecha = $2, pedido = $3, cliente = $4, vendedor = $5, recurrenciaa = $6, origen = $7, monto = $8, "DateModification" = CURRENT_DATE WHERE id = $9 RETURNING *',
-        [folio, fecha, pedido, cliente, vendedor, recurrenciaa, origen, monto, id]
+        'UPDATE "cotizaciones" SET "pedido" = $1, "cliente" = $2, "vendedor" = $3, "recurrenciaa" = $4, "origen" = $5, "monto" = $6, "DateModification" = CURRENT_DATE WHERE id = $7 RETURNING *',
+        [pedido, cliente, vendedor, recurrenciaa, origen, monto, id]
     );
 
     if (result.rows.length === 0)
@@ -1394,47 +1398,16 @@ const getListadoClientes = async (req, res, next) => {
 
         res.json(result.rows[0]);
     } catch (error) {
-        console.log(error.message);
+        console.log("falle");
     }
 };
 //mostrar un estatus
 const getImageClient = async (req, res, next) => {
     try {
-      const { id } = req.params;
-      const result = await pool.query(`SELECT * FROM "clientes" WHERE "isDeleted" = '0'`, [
-        id,
-      ]);
-      if (result.rows.length === 0)
-        return res.status(404).json({
-          message: error.message,
-        });
-      res.send(result.rows[0].imagen);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-//crear un estatus 
-const createListadoClientes = async (req, res, next) => {
-    
-    const document = JSON.parse(req.body.document);
-    const { nombre, nombreComercial, razonSocial, contacto, rfc, telefono, numerodecliente, email, vendedor, giro, direccion  } = document;
-
-    try {
-        const result = await pool.query(
-            `INSERT INTO "clientes" ("nombre","nombreComercial", "razonSocial", "contacto", "rfc", "telefono", "numeroCliente", "email", "vendedor", "giro", "direccion", "activo", "registro", "actualizacion", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, '1', NOW() , NOW(), '0', '0', NOW() , NOW() ) RETURNING *`,
-            [nombre, nombreComercial, razonSocial, contacto, rfc, telefono, numerodecliente, email, vendedor, giro, direccion]
-        );
-
-        res.json(result.json);
-    } catch (error) {
-        next(error)
-    }
-};
-
-const getClientImage = async (req, res, next) => {
-    try {
         const { id } = req.params;
-        const result = await pool.query(`SELECT * FROM "clientes" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+        const result = await pool.query(`SELECT * FROM "clientes" WHERE "isDeleted" = '0'`, [
+            id,
+        ]);
         if (result.rows.length === 0)
             return res.status(404).json({
                 message: error.message,
@@ -1442,6 +1415,23 @@ const getClientImage = async (req, res, next) => {
         res.send(result.rows[0].imagen);
     } catch (error) {
         console.log(error.message);
+    }
+};
+//crear un estatus 
+const createListadoClientes = async (req, res, next) => {
+
+    const document = JSON.parse(req.body.document);
+    const { nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible } = document;
+
+    try {
+        const result = await pool.query(
+            `INSERT INTO "clientes" ("nombreComercial", "giro", "telefono", "whatsApp", "email", "contacto", "condicionesPago", "cuenta", "vendedor", "listaPrecios", "diasCredito", "limiteCredito", "saldoPentiente", "creditoDisponible", "activo", "registro", "actualizacion", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, '1', NOW() , NOW(), '0', '0', NOW() , NOW() ) RETURNING *`,
+            [nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible]
+        );
+
+        res.json(result.json);
+    } catch (error) {
+        console.log(error.message)
     }
 };
 
@@ -1465,11 +1455,13 @@ const disableListadoClientes = async (req, res, next) => {
 //actualizar un estatus
 const updateListadoClientes = async (req, res, next) => {
     const { id } = req.params;
-    const { numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, nombreComercial } = req.body;
+    const document = JSON.parse(req.body.document);
+    const { nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible } = document;
+    console.log(document);
 
     const result = await pool.query(
-        'UPDATE "clientes" SET "numeroCliente" = $1, "numeroComercial" = $2, "razonSocial" = $3, contacto = $4, rfc = $5, telefono = $6, email = $7, vendedor = $8, giro = $9, activo = $10, registro= $11, actualizado = $12, "nombreComercial"=$13 "creationUpdate" = CURRENT_DATE WHERE id = $14 RETURNING *',
-        [numeroCliente, numeroComercial, razonSocial, contacto, rfc, telefono, email, vendedor, giro, activo, registro, actualizado, nombreComercial, id]
+        'UPDATE "clientes" SET "nombreComercial" = $1, "giro" = $2, "telefono" = $3, "whatsApp" = $4, "email" = $5, "contacto" = $6, "condicionesPago" = $7, "cuenta" = $8, "vendedor" = $9, "listaPrecios" = $10, "diasCredito"= $11, "limiteCredito" = $12, "saldoPentiente" = $13, "creditoDisponible" = $14, "actualizacion" = CURRENT_DATE, "DateModification" = CURRENT_DATE WHERE id = $15 RETURNING *',
+        [nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible, id]
     );
 
     if (result.rows.length === 0)

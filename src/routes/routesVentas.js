@@ -50,7 +50,7 @@ router.get('/Cotizaciones/:id', getCotizaciones );
 router.post('/Cotizaciones', createCotizaciones );
 
 //deshabilita  estatus
-router.post('/CotizacionesDisable', disableCotizaciones);
+router.post('/CotizacionesDisable/:id', disableCotizaciones);
 
 //Editar Estatus Ganada
 router.post('/CotizacionesGanada/:id', cotizacionGanada)
@@ -293,7 +293,7 @@ router.get('/ListadoClientes/:id', getListadoClientes )
 router.post('/ListadoClientes', upload.single("image"), createListadoClientes )
 
 //deshabilita  estatus
-router.post('/ListadoClientesDisabled/:id', disableListadoClientes)
+router.post('/ListadoClientesDisabled/:id', disableListadoClientes) 
 
 //actualizar estatus
 router.put('/ListadoClientesEditing/:id', upload.single("image"), updateListadoClientes )
