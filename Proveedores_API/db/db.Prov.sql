@@ -1,6 +1,6 @@
-create database "smv_Proveedores";
+create database "smv_Proveedores_Admin";
 
-/c smv_Proveedores;
+\c smv_Proveedores_Admin;
 
 create table "providersProfile" (
     "id" serial primary key,
@@ -34,6 +34,18 @@ create table "providerLI" (
     "updated_At" timestamp default current_timestamp,
     "isDeleted" boolean default false
 );
+
+create table "providerImage" (
+    "id" serial primary key,
+    "providerId" int not null,
+    "image" bytea,
+    "created_At" timestamp default current_timestamp,
+    "updated_At" timestamp default current_timestamp,
+    "isDeleted" boolean default false
+);
+
+alter table "providerImage"
+add constraint fk_providerImage_providerLI foreign key ("providerId") references "providerLI" ("id");
 
 
 create table "providersLog" (

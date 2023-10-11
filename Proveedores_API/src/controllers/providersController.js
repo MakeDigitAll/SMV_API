@@ -1,5 +1,6 @@
 const pool = require('../database')
 const { encryptPassword } = require('../helpers/hashing');
+const crypto = require('crypto');
 
 //---------------------------------------------------------------------------------------
 //                                       Providers
@@ -46,6 +47,7 @@ const createProvider = async (req, res) => {
       return res.status(200).json({
         message: 'Proveedor creado correctamente',
         data: {
+          id: providerId,
           email,
           password
         }
@@ -55,7 +57,7 @@ const createProvider = async (req, res) => {
       console.error(createAuthError);
       return res.status(500).json({ error: createAuthError.message });
     }
-  } catch (error) {
+ } catch (error) {
     res.status(500).json({ error: 'Error en el servidor' });
   }
 }
@@ -130,6 +132,7 @@ const createAuth = async (username) => {
       const password = crypto.randomBytes(4).toString('hex');
       const hashedPassword = await encryptPassword(password);
       const response = await pool.query('INSERT INTO "providerLI" ("userName", "password") VALUES ($1, $2) RETURNING id', [username, hashedPassword]);
+      await pool.query('INSERT INTO "providerImage" ("providerId") VALUES ($1)', [response.rows[0].id]);
       const resp = {
         id: response.rows[0].id,
         password: password
@@ -140,6 +143,32 @@ const createAuth = async (username) => {
   }
 };
 
+const getImage = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const response = await pool.query('SELECT "image" FROM "providerImage" WHERE "id" = $1', [id]);
+    res.status(200).send(response.rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+}
+
+const updateImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const image = req.file.buffer;
+
+    if (!image) {
+      return res.status(402).json({ message: 'No se ha seleccionado ninguna imagen' });
+    }
+
+    await pool.query('UPDATE "providerImage" SET "image" = $1 WHERE "providerId" = $2', [image, id]);
+    return res.status(200).json({ message: 'Imagen actualizada' });
+  } catch (error) {
+    res.status(400).json({ error: 'Error al actualizar la imagen' });
+ }
+}
+
 
 //---------------------------------------------------------------------------------------
 
@@ -148,5 +177,7 @@ module.exports = {
   getProviderById,
   createProvider,
   updateProvider,
-  deleteProvider
+  deleteProvider,
+  getImage,
+  updateImage
 }
