@@ -1050,7 +1050,7 @@ const getCotizaciones = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      `SELECT * FROM "cotizaciones" WHERE id = $1 AND "isDeleted" = '0' `,
+      `SELECT * FROM "cotizaciones" WHERE folio = $1 AND "isDeleted" = '0' `,
       [id]
     );
 
