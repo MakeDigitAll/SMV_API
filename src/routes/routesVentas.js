@@ -65,7 +65,7 @@ router.post('/CotizacionesVencidas/:id', cotizacionVencida)
 router.post('/CotizacionesPerdidas/:id', cotizacionPerdida)
 
 //actualizar estatus
-router.put('/Cotizaciones/:id', updateCotizaciones);
+router.put('/CotizacionesUpdate/:id', updateCotizaciones);
 //////////////// FIN DE COTIZACIONES
 
  

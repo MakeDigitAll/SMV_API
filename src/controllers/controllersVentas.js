@@ -875,12 +875,12 @@ const createCotizaciones = async (req, res, next) => {
 
     const document = JSON.parse(req.body.document);
 
-    const { cliente, vendedor, recurrenciaa, origen, monto } = document
+    const { idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total } = document
 
     try {
         const result = await pool.query(
-            `INSERT INTO "cotizaciones" ( cliente, vendedor, recurrenciaa, origen, monto, status, "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, '0', '0', '0', NOW() , NOW() ) RETURNING *`,
-            [cliente, vendedor, recurrenciaa, origen, monto]
+            `INSERT INTO "cotizaciones" ( "idCliente", "idVendedor", "fecha", "recurrencia", "envio", "comentarios", "neto", "descuento", "subTotal", "impuestos", "total", "status", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, '0', '0', '0', NOW() , NOW() ) RETURNING *`,
+            [idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total]
         );
 
         res.json(result.json);
@@ -989,11 +989,11 @@ const cotizacionVencida = async (req, res, next) => {
 const updateCotizaciones = async (req, res, next) => {
     const { id } = req.params;
     const document = JSON.parse(req.body.document);
-    const { pedido, cliente, vendedor, recurrenciaa, origen, monto } = document;
+    const { idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total } = document;
 
     const result = await pool.query(
-        'UPDATE "cotizaciones" SET "pedido" = $1, "cliente" = $2, "vendedor" = $3, "recurrenciaa" = $4, "origen" = $5, "monto" = $6, "DateModification" = CURRENT_DATE WHERE id = $7 RETURNING *',
-        [pedido, cliente, vendedor, recurrenciaa, origen, monto, id]
+        'UPDATE "cotizaciones" SET "idCliente" = $1, "idVendedor" = $2, "fecha" = $3, "recurrencia" = $4, "envio" = $5, "comentarios" = $6, "neto" = $7, "descuento" = $8, "subTotal" = $9, "impuestos" = $10, "total" = $11, "DateModification" = CURRENT_DATE WHERE id = $7 RETURNING *',
+        [idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total, id]
     );
 
     if (result.rows.length === 0)
