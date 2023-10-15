@@ -25,3 +25,4 @@ node_modules
 src/database.js
 .env
 src/database.js
+src/database.js
