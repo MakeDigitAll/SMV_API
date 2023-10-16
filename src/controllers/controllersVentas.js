@@ -1379,7 +1379,6 @@ const updateReporteComision = async (req, res, next) => {
 const getAllListadoClientes = async (req, res, next) => {
     try {
         const allTasks = await pool.query(`SELECT * FROM public."clientes" WHERE "isDeleted" = '0'`);
-        console.log(allTasks.rows);
         res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
