@@ -154,11 +154,10 @@ async function verificarUsuarioExistente(email) {
   }
 }
 const createUser = async (req, res, next) => {
-  const imagen = req.file.buffer
-  const document = JSON.parse(req.body.document)
-  
-  const { nombre, apellido, email, password,perfilSeguridad, vendedor } = document;
- 
+  const imagen = req.file.buffer;
+  const document = JSON.parse(req.body.document);
+  const { nombre, apellido, email, password, perfilSeguridad, vendedor } =
+    document;
   var passwordhash = bcrypt.hashSync(password, 10);
   if (!!!nombre || !!!apellido || !!!email || !!!password || !!!imagen) {
     return res.status(400).json(
@@ -174,12 +173,61 @@ const createUser = async (req, res, next) => {
         .json(jsonResponse(500, { error: "El correo ya existe" }));
     } else {
       try {
-      const result=  await pool.query(
+        const result = await pool.query(
           `INSERT INTO public."usuarios" ("nombre","apellido","email","password","perfilSeguridad", "vendedor","imagen", "isUpdated", "isDeleted", "creationDate", "updatedDate") VALUES ($1, $2, $3, $4, $5, $6, $7,'false', 'false', NOW() , NOW() ) RETURNING *`,
-          [nombre, apellido, email, passwordhash,perfilSeguridad, vendedor, imagen]
+          [
+            nombre,
+            apellido,
+            email,
+            passwordhash,
+            perfilSeguridad,
+            vendedor,
+            imagen,
+          ]
         );
-        res.json(result.rows[0]);
+        if (result.rowCount > 0) {
+          const document2 = JSON.parse(req.body.document2);
+          const {
+            direccion,
+            colonia,
+            estado,
+            ciudad,
+            codigoPostal,
+            telefonoContacto,
+            telefonoCelular,
+          } = document2;
+          try {
+            const result2 = await pool.query(
+              `INSERT INTO public."datosUsuarios"( direccion, colonia, estado, ciudad, "codigoPostal", "telefonoContacto", "telefonoCelular", "idUsuario", status, "isDeleted", "isUpdated", "dateModification", "dateCreation") VALUES ($1, $2, $3, $4, $5, $6, $7,$8, '0','0', '0', NOW() , NOW() ) RETURNING *`,
+              [
+                direccion,
+                colonia,
+                estado,
+                ciudad,
+                codigoPostal,
+                telefonoContacto,
+                telefonoCelular,
+                result.rows[0].id,
+              ]
+            );
+            if (result2.rowCount > 0)
+              res.status(200).json(result.rows[0] + result2.rows[0]);
+            else
+              res
+                .status(500)
+                .json(
+                  jsonResponse(500, { error: "Error al crear la solicitud" })
+                );
+          } catch (error) {
+            next(error);
+          }
+        } else {
+          res
+            .status(500)
+            .json(jsonResponse(500, { error: "Error el crear la solicitud" }));
+        }
       } catch (error) {
+        res.status(501).json(jsonResponse(501, { error: error.message }));
         next(error);
       }
     }
@@ -207,11 +255,28 @@ const disableUser = async (req, res, next) => {
 //actualizar un usuario
 const updateUser = async (req, res, next) => {
   const { id } = req.params;
-  const { nombre, apellido, email, password,perfilSeguridad, vendedor, updatedDate } = req.body;
+  const {
+    nombre,
+    apellido,
+    email,
+    password,
+    perfilSeguridad,
+    vendedor,
+    updatedDate,
+  } = req.body;
 
   const result = await pool.query(
     'UPDATE "usuarios" SET "nombre" = $1, "apellido" = $2, "email" = $3, "password" = $4,"perfilSeguridad"=$5, "vendedor"=$6, "updatedDate" = CURRENT_DATE WHERE id = $7 RETURNING *',
-    [nombre, apellido, email, password,perfilSeguridad, vendedor, updatedDate, id]
+    [
+      nombre,
+      apellido,
+      email,
+      password,
+      perfilSeguridad,
+      vendedor,
+      updatedDate,
+      id,
+    ]
   );
 
   if (result.rows.length === 0)
@@ -297,79 +362,88 @@ const userLogout = async (req, res, next) => {
 
 //////////////////////API para datosUsuarios
 
-const getAlldatosUsuarios = async (req, res, next)=> {
-  try{
-  const allTasks = await pool.query(`SELECT * FROM public."datosUsuarios" WHERE "isDeleted" = '0'`);
-  res.json(allTasks.rows)
-  } catch (error) {
-      console.log(error.message); 
-  }
-}
-//mostrar un estatus
-const getdatosUsuarios = async (req, res, next) =>{
+const getAlldatosUsuarios = async (req, res, next) => {
   try {
-      const { id } = req.params;
-      const result = await pool.query(`SELECT * FROM "datosUsuarios" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+    const allTasks = await pool.query(
+      `SELECT * FROM public."datosUsuarios" WHERE "isDeleted" = '0'`
+    );
+    res.json(allTasks.rows);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+//mostrar un estatus
+const getdatosUsuarios = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(
+      `SELECT * FROM "datosUsuarios" WHERE id = $1 AND "isDeleted" = '0' `,
+      [id]
+    );
 
-      if (result.rows.length === 0 )
+    if (result.rows.length === 0)
       return res.status(404).json({
-          message: error.message
+        message: error.message,
       });
 
-      res.json(result.rows[0]);
+    res.json(result.rows[0]);
   } catch (error) {
-      console.log(error.message);
+    console.log(error.message);
   }
 };
 
-//crear un estatus 
+//crear un estatus
 
-const createdatosUsuarios = async (req, res, next) =>{
-  const document2 = JSON.parse(req.body.document2)
-  
-  const { direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular,idUsuario} = document2;
-  try {
-  const result = await pool.query(
-      `INSERT INTO public."datosUsuarios"( direccion, colonia, estado, ciudad, "codigoPostal", "telefonoContacto", "telefonoCelular", "idUsuario", status, "isDeleted", "isUpdated", "dateModification", "dateCreation") VALUES ($1, $2, $3, $4, $5, $6, $7,$8, '0','0', '0', NOW() , NOW() ) RETURNING *`,
-      [direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular,idUsuario]
-  );
-  res.json(result.json);
-  } catch (error) {
-      next(error)
-  }
-};
+const createdatosUsuarios = async (req, res, next) => {};
 
 //deshabilitar un estatus
-const disabledatosUsuarios = async (req, res, next) =>{
+const disabledatosUsuarios = async (req, res, next) => {
   const { id } = req.params;
 
   const result = await pool.query(
-      `UPDATE "datosUsuarios" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
-      [ id]
+    `UPDATE "datosUsuarios" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+    [id]
   );
 
   if (result.rows.length === 0)
-  return res.status(404).json({
-      message: "La tarea no se pudo actualizar"
-  });
+    return res.status(404).json({
+      message: "La tarea no se pudo actualizar",
+    });
 
   return res.json(result.rows[0]);
 };
 
 //actualizar un estatus
-const updatedatosUsuarios = async (req, res, next) =>{
+const updatedatosUsuarios = async (req, res, next) => {
   const { id } = req.params;
-  const {direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular} = req.body;
+  const {
+    direccion,
+    colonia,
+    estado,
+    ciudad,
+    codigoPostal,
+    telefonoContacto,
+    telefonoCelular,
+  } = req.body;
 
   const result = await pool.query(
-      'UPDATE "datosUsuarios" SET "direccion" = $1, colonia = $2, estado = $3, ciudad = $4, codigoPostal = $5,  telefonoContacto = $6, telefonoCelular = $7,  "dateCreation" = CURRENT_DATE WHERE id = $8 RETURNING *',
-      [direccion, colonia, estado, ciudad, codigoPostal,telefonoContacto,telefonoCelular, id]
+    'UPDATE "datosUsuarios" SET "direccion" = $1, colonia = $2, estado = $3, ciudad = $4, codigoPostal = $5,  telefonoContacto = $6, telefonoCelular = $7,  "dateCreation" = CURRENT_DATE WHERE id = $8 RETURNING *',
+    [
+      direccion,
+      colonia,
+      estado,
+      ciudad,
+      codigoPostal,
+      telefonoContacto,
+      telefonoCelular,
+      id,
+    ]
   );
 
   if (result.rows.length === 0)
-  return res.status(404).json({
-      message: "La tarea no se pudo actualizar"
-  });
+    return res.status(404).json({
+      message: "La tarea no se pudo actualizar",
+    });
 
   return res.json(result.rows[0]);
 };
@@ -390,5 +464,5 @@ module.exports = {
   createdatosUsuarios,
   disabledatosUsuarios,
   updatedatosUsuarios,
-  getLastestUsers
+  getLastestUsers,
 };
