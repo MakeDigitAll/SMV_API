@@ -857,7 +857,7 @@ const getAllCotizaciones = async (req, res, next) => {
 const getCotizaciones = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = await pool.query(`SELECT * FROM "cotizaciones" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+        const result = await pool.query(`SELECT * FROM "cotizaciones" WHERE folio = $1 AND "isDeleted" = '0' `, [id]);
 
         if (result.rows.length === 0)
             return res.status(404).json({
