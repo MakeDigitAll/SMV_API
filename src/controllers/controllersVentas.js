@@ -910,7 +910,7 @@ const cotizacionGanada = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query(
-            `UPDATE public."cotizaciones" SET "status" = '1' WHERE id = $1 RETURNING *`,
+            `UPDATE public."cotizaciones" SET "status" = '1' WHERE folio = $1 RETURNING *`,
             [id]
         );
         if (result.rows.length === 0)
@@ -930,7 +930,7 @@ const cotizacionPerdida = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query(
-            `UPDATE public."cotizaciones" SET "status" = '2' WHERE id = $1 RETURNING *`,
+            `UPDATE public."cotizaciones" SET "status" = '2' WHERE folio = $1 RETURNING *`,
             [id]
         );
         if (result.rows.length === 0)
