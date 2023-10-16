@@ -1655,13 +1655,11 @@ const getAllClientesDireccionEnvio = async (req, res, next) => {
 const getClientesDireccionEnvio = async (req, res, next) => {
     try {
         const { id, isDelete } = req.params;
-        const result = await pool.query(`SELECT * FROM "fichaClienteDireccionesEnvio" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
-
+        const result = await pool.query(`SELECT * FROM "fichaClienteDireccionesEnvio" WHERE "idCliente" = $1 AND "isDeleted" = '0' `, [id]);
         if (result.rows.length === 0)
             return res.status(404).json({
                 message: error.message
             });
-
         res.json(result.rows);
     } catch (error) {
         console.log(error.message);
