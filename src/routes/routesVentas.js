@@ -24,7 +24,7 @@ const {
     getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias, getSellerImage, 
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion, 
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto, 
-    getAllClientesDireccionEnvio, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
+    getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, 
 
@@ -341,6 +341,10 @@ router.put('/ClientesContactosEdit/:id', updateClientesContacto )
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES DIRECCION ENVIO
+
+//Para obtener la direccion de facturacion del cliente
+router.get('/DireccionFacturacionCliente/:id', getDirFacturacionCliente )
+
 router.get('/ClientesDireccionEnvio', getAllClientesDireccionEnvio )
 
 //ver un estatus

@@ -1641,6 +1641,21 @@ const updateClientesContacto = async (req, res, next) => {
 
 
 ///////////// CONTROLADORES PARA TABLA DE CLIENTE DIRECCION ENVIO
+
+//Obtener la direccion de facturacion de los clientes por su id
+const getDirFacturacionCliente = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "fichaClienteFacturacionGenerales" WHERE "idCliente" = $1 AND "isDeleted" = '0' `, [id]);
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: error.message
+            });
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 //Mostrar los estatus
 const getAllClientesDireccionEnvio = async (req, res, next) => {
     try {
@@ -2261,7 +2276,7 @@ module.exports = {
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, updateListadoVendedores, disableListadoVendedores, getSellerImage,
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
-    getAllClientesDireccionEnvio, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
+    getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb,
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta,
 
