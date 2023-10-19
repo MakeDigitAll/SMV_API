@@ -26,7 +26,7 @@ const {
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto, 
     getAllClientesDireccionEnvio, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
-    getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, 
+    getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados, 
 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
 
@@ -46,8 +46,11 @@ router.get('/Cotizaciones', getAllCotizaciones);
 //ver un estatus
 router.get('/Cotizaciones/:id', getCotizaciones );
 
-//crear estatus
-router.post('/Cotizaciones', createCotizaciones );
+//crear cotizacion 
+router.post('/Cotizaciones',upload.single("document"), createCotizaciones );
+
+//crear productos cotizados
+router.post('/ProductosCotizados',upload.single("document2"), createProductosCotizados );
 
 //deshabilita  estatus
 router.post('/CotizacionesDisable/:id', disableCotizaciones);
