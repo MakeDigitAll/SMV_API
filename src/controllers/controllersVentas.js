@@ -2063,6 +2063,25 @@ const updatePagos = async (req, res, next) => {
     return res.json(result.rows[0]);
 };
 
+
+//-------------------------------------------------------------------------------------
+//                       Controladores para la tabla de promociones 
+//-------------------------------------------------------------------------------------
+
+
+const getAllPromociones = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query(`SELECT * FROM  "promocionProducto"`);
+        res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
+
 /////////////////////////////////////////////////////////////// Tabla Listado Vendedores
 const getAllListadoVendedores = async (req, res, next) => {
     try {
@@ -2273,6 +2292,7 @@ module.exports = {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
+    getAllPromociones,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, updateListadoVendedores, disableListadoVendedores, getSellerImage,
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
