@@ -20,15 +20,16 @@ const {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, 
+    getAllPromociones,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores, 
     getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias, getSellerImage, 
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion, 
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto, 
-    getAllClientesDireccionEnvio, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
+    getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados, 
 
-    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
+    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS //////////////////////////////////////////// 
 
 
 }  = require('../controllers/controllersVentas');
@@ -344,6 +345,10 @@ router.put('/ClientesContactosEdit/:id', updateClientesContacto )
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES DIRECCION ENVIO
+
+//Para obtener la direccion de facturacion del cliente
+router.get('/DireccionFacturacionCliente/:id', getDirFacturacionCliente )
+
 router.get('/ClientesDireccionEnvio', getAllClientesDireccionEnvio )
 
 //ver un estatus
@@ -425,6 +430,9 @@ router.post('/PagosPendiente/:id', PagosPendiente1)
 router.put('/Pagos/:id', updatePagos);
 //////////////// FIN DE Pagos
 
+
+/////////////////////////////////////// RUTAS PARA TABLA DE ListadoPromociones
+router.get('/ListadoPromociones', getAllPromociones);
 
 /////////////////////////////////////////////Vendedores/////
 router.get('/ListadoVendedores', getAllListadoVendedores)

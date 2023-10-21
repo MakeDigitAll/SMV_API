@@ -859,7 +859,7 @@ const getAllCotizaciones = async (req, res, next) => {
 const getCotizaciones = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = await pool.query(`SELECT * FROM "cotizaciones" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+        const result = await pool.query(`SELECT * FROM "cotizaciones" WHERE folio = $1 AND "isDeleted" = '0' `, [id]);
 
         if (result.rows.length === 0)
             return res.status(404).json({
@@ -946,7 +946,7 @@ const cotizacionGanada = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query(
-            `UPDATE public."cotizaciones" SET "status" = '1' WHERE id = $1 RETURNING *`,
+            `UPDATE public."cotizaciones" SET "status" = '1' WHERE folio = $1 RETURNING *`,
             [id]
         );
         if (result.rows.length === 0)
@@ -966,7 +966,7 @@ const cotizacionPerdida = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query(
-            `UPDATE public."cotizaciones" SET "status" = '2' WHERE id = $1 RETURNING *`,
+            `UPDATE public."cotizaciones" SET "status" = '2' WHERE folio = $1 RETURNING *`,
             [id]
         );
         if (result.rows.length === 0)
@@ -1677,6 +1677,21 @@ const updateClientesContacto = async (req, res, next) => {
 
 
 ///////////// CONTROLADORES PARA TABLA DE CLIENTE DIRECCION ENVIO
+
+//Obtener la direccion de facturacion de los clientes por su id
+const getDirFacturacionCliente = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "fichaClienteFacturacionGenerales" WHERE "idCliente" = $1 AND "isDeleted" = '0' `, [id]);
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: error.message
+            });
+        res.json(result.rows);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 //Mostrar los estatus
 const getAllClientesDireccionEnvio = async (req, res, next) => {
     try {
@@ -1691,14 +1706,12 @@ const getAllClientesDireccionEnvio = async (req, res, next) => {
 const getClientesDireccionEnvio = async (req, res, next) => {
     try {
         const { id, isDelete } = req.params;
-        const result = await pool.query(`SELECT * FROM "fichaClienteDireccionesEnvio" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
-
+        const result = await pool.query(`SELECT * FROM "fichaClienteDireccionesEnvio" WHERE "idCliente" = $1 AND "isDeleted" = '0' `, [id]);
         if (result.rows.length === 0)
             return res.status(404).json({
                 message: error.message
             });
-
-        res.json(result.rows[0]);
+        res.json(result.rows);
     } catch (error) {
         console.log(error.message);
     }
@@ -2086,6 +2099,25 @@ const updatePagos = async (req, res, next) => {
     return res.json(result.rows[0]);
 };
 
+
+//-------------------------------------------------------------------------------------
+//                       Controladores para la tabla de promociones 
+//-------------------------------------------------------------------------------------
+
+
+const getAllPromociones = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query(`SELECT * FROM  "promocionProducto"`);
+        res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
+
 /////////////////////////////////////////////////////////////// Tabla Listado Vendedores
 const getAllListadoVendedores = async (req, res, next) => {
     try {
@@ -2296,10 +2328,11 @@ module.exports = {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
+    getAllPromociones,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, updateListadoVendedores, disableListadoVendedores, getSellerImage,
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
-    getAllClientesDireccionEnvio, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
+    getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb,
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta,
 
