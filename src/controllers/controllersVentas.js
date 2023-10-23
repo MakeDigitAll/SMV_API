@@ -2114,7 +2114,38 @@ const getAllPromociones = async (req, res, next) => {
     }
 }
 
+const setListadoPromociones = async (req, res, next) => {
+    //si el idProducto existe en la tabla promocionProducto, entonces se actualiza si no se crea
+    const { idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive } = req.body;
 
+    const result = await pool.query(
+        `SELECT * FROM "promocionProducto" WHERE "idProducto" = $1`,
+        [idProducto]
+    );
+
+    if (result.rows.length === 0) {
+        try {
+            const result = await pool.query(
+                `INSERT INTO "promocionProducto" ("idProducto", "desde", "hasta", "precioBase", "descuento", "precioDescuento", "isActive", "isUpdated", "isDeleted", "dateCreation", "dateModification" ) VALUES ($1, $2, $3, $4, $5, $6, $7, '0', '0', NOW() , NOW() ) RETURNING *`,
+                [idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive]
+            );
+            res.json(result.rows[0]);
+        } catch (error) {
+            console.log(error);
+            next(error);
+        }
+    } else {
+        try {
+            const result = await pool.query(
+                `UPDATE "promocionProducto" SET "desde" = $1, "hasta" = $2, "precioBase" = $3, "descuento" = $4, "precioDescuento" = $5, "isActive" = $6, "dateModification" = CURRENT_DATE WHERE "idProducto" = $7 RETURNING *`,
+                [desde, hasta, precioBase, descuento, precioDescuento, isActive, idProducto]
+            );
+            res.json(result.rows[0]);
+        } catch (error) {
+            next(error);
+        }
+    }
+}
 
 
 
@@ -2328,7 +2359,7 @@ module.exports = {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
-    getAllPromociones,
+    getAllPromociones,setListadoPromociones,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, updateListadoVendedores, disableListadoVendedores, getSellerImage,
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
