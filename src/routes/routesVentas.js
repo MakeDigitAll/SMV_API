@@ -27,7 +27,8 @@ const {
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto, 
     getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
-    getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados, 
+    getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados,
+    getAllListadoProductos, getListadoProductos, createListadoProductos, disableListadoProductos, updateListadoProductos, 
 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS //////////////////////////////////////////// 
 
@@ -306,6 +307,28 @@ router.put('/ListadoClientesEditing/:id', upload.single("image"), updateListadoC
 router.get("/api/clientImage/:id", getImageClient)
 
 /////////// FIN DE LISTADO CLIENTES
+
+
+
+//////////////////////////////////////// RUTAS PARA TABLA DE LISTADO PRODUCTOS 
+router.get('/Productos',  getAllListadoProductos)
+
+//ver un estatus
+router.get('/Productos/:id', getListadoProductos )
+
+//crear estatus
+router.post('/Productos', upload.single("image"), createListadoProductos )
+
+//deshabilita  estatus
+router.post('/ProductosDisable/:id', disableListadoProductos) 
+
+//actualizar estatus
+router.put('/ProductosEditing/:id', upload.single("image"), updateListadoProductos )
+
+//Imagen
+router.get("/api/clientImage/:id", getImageClient)
+///////////////////// FIN LISTADO DE PRODUCTOS
+
 
 
 

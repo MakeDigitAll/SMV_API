@@ -1439,6 +1439,7 @@ const getListadoClientes = async (req, res, next) => {
 };
 //mostrar un estatus
 const getImageClient = async (req, res, next) => {
+
     try {
         const { id } = req.params;
         const result = await pool.query(`SELECT * FROM "clientes" WHERE "isDeleted" = '0'`, [
@@ -2385,6 +2386,115 @@ const updateCategorias = async (req, res, next) => {
 /////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE REPORTE DE COMISION
 
 
+///////////////////////////// CONTROLADORES PARA LISTADO DE PRODUCTOS
+const getAllListadoProductos = async (req, res, next) => {
+    try {
+        const allTasks = await pool.query(`SELECT * FROM public."productos" WHERE "isDeleted" = '0'`);
+        res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+const getListadoProductos = async (req, res, next) => {
+    try {
+        const { id, isDelete } = req.params;
+        const result = await pool.query(`SELECT * FROM "productos" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
+
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: error.message
+            });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log("falle");
+    }
+};
+//mostrar un estatus
+const getImageProducto = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "productos" WHERE "isDeleted" = '0'`, [
+            id,
+        ]);
+        if (result.rows.length === 0)
+            return res.status(404).json({
+                message: error.message,
+            });
+        res.send(result.rows[0].imagen);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+//crear un estatus 
+const createListadoProductos = async (req, res, next) => {
+    console.log("entro la funcion de crear producto");
+    const imagen = req.file.buffer;
+
+    const document = JSON.parse(req.body.document);
+    console.log(document);
+    const { nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSAT, actualizado, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder } = document;
+
+    if (!!!nombreProducto || !!!codigoFab || !!!codigoEmp || !!!marcaProd || !!!categoriaProd || !!!codigoSAT || !!!actualizado || !!!precio || !!!existencia || !!!cantidad || !!!descuento || !!!total || !!!imagen) {
+        return res.status(400).json(
+            jsonResponse(400, {
+                error: "Faltan datos",
+            })
+        );
+    }
+    try {
+        const result = await pool.query(
+            `INSERT INTO "productos" ("nombre", "codigoFabricante", "codigoEmpresa", "marca", "categoria", "codigoSat", "actualizado", "precio", "existencia", "cantidad", "descuento", "total", "activo", "web", "pos", "venta", "backOrder", "imagen", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, '0', '0', NOW() , NOW() ) RETURNING *`,
+            [nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSAT, actualizado, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder, imagen]
+        );
+
+        res.json(result.json);
+    } catch (error) {
+        console.log(error.message)
+    }
+};
+
+//deshabilitar un estatus
+const disableListadoProductos = async (req, res, next) => {
+    const { id } = req.params;
+
+    const result = await pool.query(
+        `UPDATE "productos" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
+        [id]
+    );
+
+    if (result.rows.length === 0)
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
+
+    return res.json(result.rows[0]);
+};
+
+//actualizar un estatus
+const updateListadoProductos = async (req, res, next) => {
+    const { id } = req.params;
+    const document = JSON.parse(req.body.document);
+    const { nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible } = document;
+    console.log(document);
+
+    const result = await pool.query(
+        'UPDATE "productos" SET "nombreComercial" = $1, "giro" = $2, "telefono" = $3, "whatsApp" = $4, "email" = $5, "contacto" = $6, "condicionesPago" = $7, "cuenta" = $8, "vendedor" = $9, "listaPrecios" = $10, "diasCredito"= $11, "limiteCredito" = $12, "saldoPentiente" = $13, "creditoDisponible" = $14, "actualizacion" = CURRENT_DATE, "DateModification" = CURRENT_DATE WHERE id = $15 RETURNING *',
+        [nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible, id]
+    );
+
+    if (result.rows.length === 0)
+        return res.status(404).json({
+            message: "La tarea no se pudo actualizar"
+        });
+
+    return res.json(result.rows[0]);
+};
+
+
 
 
 ////////////////////////////////////////////// FIN DE MICROSERVICIO DE VENTAS  ///////////////////////////////////////////////////
@@ -2415,6 +2525,7 @@ module.exports = {
     getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb,
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta,
+    getAllListadoProductos, getListadoProductos, createListadoProductos, getImageProducto, disableListadoProductos, updateListadoProductos,
 
 
     getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias,
