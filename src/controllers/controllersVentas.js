@@ -2114,7 +2114,59 @@ const getAllPromociones = async (req, res, next) => {
     }
 }
 
+const setListadoPromociones = async (req, res, next) => {
+    const { idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive } = req.body;
 
+    try {
+        const checkPromotionResult = await pool.query(
+            `SELECT * FROM "promocionProducto" WHERE "idProducto" = $1`,
+            [idProducto]
+        );
+
+        if (checkPromotionResult.rows.length === 0) {
+            // No se encontró un registro, por lo que se crea uno nuevo
+            const createPromotionResult = await pool.query(
+                `INSERT INTO "promocionProducto" ("idProducto", "desde", "hasta", "precioBase", "descuento", "precioDescuento", "isActive", "isUpdated", "isDeleted", "dateCreation", "dateModification" ) VALUES ($1, $2, $3, $4, $5, $6, $7, '0', '0', NOW() , NOW() ) RETURNING *`,
+                [idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive]
+            );
+
+            // Actualiza el precio de la tabla productos
+            const updateProductResult = await pool.query(
+                `UPDATE "productos" SET "descuento" = $1 WHERE "idproducto" = $2 RETURNING *`,
+                [descuento, idProducto]
+            );
+
+            if (updateProductResult.rows.length === 0)
+                return res.status(404).json({
+                    message: "La tarea no se pudo actualizar"
+                });
+
+            res.json(createPromotionResult.rows[0]);
+        } else {
+            // Se encontró un registro, por lo que se actualiza
+            const updatePromotionResult = await pool.query(
+                `UPDATE "promocionProducto" SET "desde" = $1, "hasta" = $2, "precioBase" = $3, "descuento" = $4, "precioDescuento" = $5, "isActive" = $6, "dateModification" = NOW() WHERE "idProducto" = $7 RETURNING *`,
+                [desde, hasta, precioBase, descuento, precioDescuento, isActive, idProducto]
+            );
+
+            // Actualiza el precio de la tabla productos
+            const updateProductResult = await pool.query(
+                `UPDATE "productos" SET "descuento" = $1 WHERE "idproducto" = $2 RETURNING *`,
+                [descuento, idProducto]
+            );
+
+            if (updateProductResult.rows.length === 0)
+                return res.status(404).json({
+                    message: "La tarea no se pudo actualizar"
+                });
+
+            res.json(updatePromotionResult.rows[0]);
+        }
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
 
 
 
@@ -2328,7 +2380,7 @@ module.exports = {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
-    getAllPromociones,
+    getAllPromociones,setListadoPromociones,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, updateListadoVendedores, disableListadoVendedores, getSellerImage,
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
