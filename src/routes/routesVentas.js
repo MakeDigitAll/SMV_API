@@ -20,7 +20,7 @@ const {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, 
-    getAllPromociones,setListadoPromociones,
+    getAllPromociones,setListadoPromociones,deletePromocion,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores, 
     getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias, getSellerImage, 
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion, 
@@ -435,6 +435,9 @@ router.put('/Pagos/:id', updatePagos);
 router.get('/ListadoPromociones', getAllPromociones);
 
 router.post('/ListadoPromociones', setListadoPromociones);
+
+//eliminar promociones
+router.delete('/ListadoPromocionesDelete/:id', deletePromocion);
 
 
 /////////////////////////////////////////////Vendedores/////

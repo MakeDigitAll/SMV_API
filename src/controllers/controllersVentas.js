@@ -2168,6 +2168,34 @@ const setListadoPromociones = async (req, res, next) => {
     }
 }
 
+//eliminar la promocion y actualizar el descuento del producto a 0
+const deletePromocion = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        const deletePromotionResult = await pool.query(
+            `DELETE FROM "promocionProducto" WHERE "idPromocion" = $1 RETURNING *`,
+            [id]
+        );
+        const idProducto = deletePromotionResult.rows[0].idProducto;
+
+        // Actualiza el precio de la tabla productos
+        const updateProductResult = await pool.query(
+            `UPDATE "productos" SET "descuento" = '0' WHERE "idproducto" = $1 RETURNING *`,
+            [idProducto]
+        );
+
+        if (updateProductResult.rows.length === 0)
+            return res.status(404).json({
+                message: "La tarea no se pudo actualizar"
+            });
+
+        res.json(deletePromotionResult.rows[0]);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+}
+
 
 
 /////////////////////////////////////////////////////////////// Tabla Listado Vendedores
@@ -2380,7 +2408,7 @@ module.exports = {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
-    getAllPromociones,setListadoPromociones,
+    getAllPromociones,setListadoPromociones,deletePromocion,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, updateListadoVendedores, disableListadoVendedores, getSellerImage,
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
