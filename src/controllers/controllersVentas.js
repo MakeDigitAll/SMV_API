@@ -2115,35 +2115,56 @@ const getAllPromociones = async (req, res, next) => {
 }
 
 const setListadoPromociones = async (req, res, next) => {
-    //si el idProducto existe en la tabla promocionProducto, entonces se actualiza si no se crea
     const { idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive } = req.body;
 
-    const result = await pool.query(
-        `SELECT * FROM "promocionProducto" WHERE "idProducto" = $1`,
-        [idProducto]
-    );
+    try {
+        const checkPromotionResult = await pool.query(
+            `SELECT * FROM "promocionProducto" WHERE "idProducto" = $1`,
+            [idProducto]
+        );
 
-    if (result.rows.length === 0) {
-        try {
-            const result = await pool.query(
+        if (checkPromotionResult.rows.length === 0) {
+            // No se encontró un registro, por lo que se crea uno nuevo
+            const createPromotionResult = await pool.query(
                 `INSERT INTO "promocionProducto" ("idProducto", "desde", "hasta", "precioBase", "descuento", "precioDescuento", "isActive", "isUpdated", "isDeleted", "dateCreation", "dateModification" ) VALUES ($1, $2, $3, $4, $5, $6, $7, '0', '0', NOW() , NOW() ) RETURNING *`,
                 [idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive]
             );
-            res.json(result.rows[0]);
-        } catch (error) {
-            console.log(error);
-            next(error);
-        }
-    } else {
-        try {
-            const result = await pool.query(
-                `UPDATE "promocionProducto" SET "desde" = $1, "hasta" = $2, "precioBase" = $3, "descuento" = $4, "precioDescuento" = $5, "isActive" = $6, "dateModification" = CURRENT_DATE WHERE "idProducto" = $7 RETURNING *`,
+
+            // Actualiza el precio de la tabla productos
+            const updateProductResult = await pool.query(
+                `UPDATE "productos" SET "descuento" = $1 WHERE "idproducto" = $2 RETURNING *`,
+                [descuento, idProducto]
+            );
+
+            if (updateProductResult.rows.length === 0)
+                return res.status(404).json({
+                    message: "La tarea no se pudo actualizar"
+                });
+
+            res.json(createPromotionResult.rows[0]);
+        } else {
+            // Se encontró un registro, por lo que se actualiza
+            const updatePromotionResult = await pool.query(
+                `UPDATE "promocionProducto" SET "desde" = $1, "hasta" = $2, "precioBase" = $3, "descuento" = $4, "precioDescuento" = $5, "isActive" = $6, "dateModification" = NOW() WHERE "idProducto" = $7 RETURNING *`,
                 [desde, hasta, precioBase, descuento, precioDescuento, isActive, idProducto]
             );
-            res.json(result.rows[0]);
-        } catch (error) {
-            next(error);
+
+            // Actualiza el precio de la tabla productos
+            const updateProductResult = await pool.query(
+                `UPDATE "productos" SET "descuento" = $1 WHERE "idproducto" = $2 RETURNING *`,
+                [descuento, idProducto]
+            );
+
+            if (updateProductResult.rows.length === 0)
+                return res.status(404).json({
+                    message: "La tarea no se pudo actualizar"
+                });
+
+            res.json(updatePromotionResult.rows[0]);
         }
+    } catch (error) {
+        console.log(error);
+        next(error);
     }
 }
 

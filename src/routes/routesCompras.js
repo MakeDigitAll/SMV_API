@@ -35,6 +35,7 @@ const {
   embarqueOrdenListadoEntrada,
   surtidoOrdenListadoEntrada,
   getAllProductos,
+  getAllProductosSinDescuento,
   getProducto,
   createProducto,
   disableProducto,
@@ -326,6 +327,9 @@ router.put("/ListadoProductos/:id", updateListadoProduct);
 
 /////////////////////////////////////// RUTAS PARA TABLA DE PRODUCTOS
 router.get("/Productos", getAllProductos);
+
+//Para obtener los productos que no tienen descuento
+router.get("/ProductosSinDescuento", getAllProductosSinDescuento);
 
 //ver un estatus
 router.get("/Productos/:id", getProducto);

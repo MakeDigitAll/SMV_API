@@ -946,6 +946,19 @@ const getAllProductos = async (req, res, next) => {
   }
 };
 
+const getAllProductosSinDescuento = async (req, res, next) => {
+  try {
+    const allTasks = await pool.query(
+      `SELECT * FROM "productos" WHERE "isDeleted" = '0' AND descuento = '0'`
+    );
+    res.json(allTasks.rows);
+  }
+  catch (error) {
+    console.log("Error: ", error.message);
+    console.log("Error en la linea: ", error.stack.split("\n")[1]);
+  }
+}
+
 //mostrar un estatus
 const getProducto = async (req, res, next) => {
   try {
@@ -3638,6 +3651,7 @@ module.exports = {
   disableListadoProduct,
   updateListadoProduct,
   getAllProductos,
+  getAllProductosSinDescuento,
   getProducto,
   createProducto,
   disableProducto,
