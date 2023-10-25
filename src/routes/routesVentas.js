@@ -20,14 +20,15 @@ const {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision, 
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, 
-    getAllPromociones,setListadoPromociones,
+    getAllPromociones,setListadoPromociones,deletePromocion,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores, 
     getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias, getSellerImage, 
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion, 
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto, 
     getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
-    getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados, 
+    getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados,
+    getAllListadoProductos, getListadoProductos, createListadoProductos, disableListadoProductos, updateListadoProductos, 
 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS //////////////////////////////////////////// 
 
@@ -309,6 +310,28 @@ router.get("/api/clientImage/:id", getImageClient)
 
 
 
+//////////////////////////////////////// RUTAS PARA TABLA DE LISTADO PRODUCTOS 
+router.get('/Productos',  getAllListadoProductos)
+
+//ver un estatus
+router.get('/Productos/:id', getListadoProductos )
+
+//crear estatus
+router.post('/Productos', upload.single("image"), createListadoProductos )
+
+//deshabilita  estatus
+router.post('/ProductosDisable/:id', disableListadoProductos) 
+
+//actualizar estatus
+router.put('/ProductosEditing/:id', upload.single("image"), updateListadoProductos )
+
+//Imagen
+router.get("/api/clientImage/:id", getImageClient)
+///////////////////// FIN LISTADO DE PRODUCTOS
+
+
+
+
 /////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES FACTURACION
 router.get('/ClientesFacturacion', getAllClientesFacturacion )
 
@@ -435,6 +458,9 @@ router.put('/Pagos/:id', updatePagos);
 router.get('/ListadoPromociones', getAllPromociones);
 
 router.post('/ListadoPromociones', setListadoPromociones);
+
+//eliminar promociones
+router.delete('/ListadoPromocionesDelete/:id', deletePromocion);
 
 
 /////////////////////////////////////////////Vendedores/////
