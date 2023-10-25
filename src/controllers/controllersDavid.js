@@ -1,6 +1,6 @@
 const pool = require('../database')
-
-
+const express = require('express');
+const app = express();
 
 
 
@@ -86,6 +86,19 @@ const updateAlmacenes = async (req, res, next) =>{
 
     return res.json(result.rows[0]);
 };
+
+const getPointSale = async (req, res, next)=> {
+    try{
+    const allTasks = await pool.query(`SELECT *
+    FROM public."inventarioAlmacenReporteInventarioBodega"
+    INNER JOIN public."almacenSucursal" as as_alias
+    ON public."inventarioAlmacenReporteInventarioBodega"."nombre" = as_alias."nombre"
+    WHERE public."inventarioAlmacenReporteInventarioBodega"."isDeleted" = CAST(0 AS bit)`);
+    res.json(allTasks.rows)
+    } catch (error) {
+        console.log(error.message); 
+    }
+}
 /////////////////////////////////////// FIN DE CONTROLADORES PARA TABLA DE ALMACENES
 
 
@@ -860,7 +873,7 @@ const getAllListadoTransferencia = async (req, res, next)=> {
 
 module.exports = {
     
-    getAllAlmacen, getAlmacenes, createAlmacenes, disableAlmacenes, updateAlmacenes,
+    getAllAlmacen, getAlmacenes, createAlmacenes, disableAlmacenes, updateAlmacenes,getPointSale,
     getAllGastosEnvio, getGastosEnvios, createGastosEnvios, disableGastosEnvios, updateGastosEnvios,
     getAllCostoEnvio, getCostosEnvios, createCostosEnvios, disableCostosEnvios, updateCostosEnvios,
     getAllContenedores, getContenedores, createContenedores, disableContenedores, updateContenedores,
