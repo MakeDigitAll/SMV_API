@@ -2116,7 +2116,7 @@ const getAllPromociones = async (req, res, next) => {
 }
 
 const setListadoPromociones = async (req, res, next) => {
-    const { idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive } = req.body;
+    const { idProducto, desde, hasta, precioBase, descuento, precioDescuento, isActive, idPromocion } = req.body;
 
     try {
         const checkPromotionResult = await pool.query(
