@@ -2319,14 +2319,21 @@ const getImageProducto = async (req, res, next) => {
 };
 //crear un estatus 
 const createListadoProductos = async (req, res, next) => {
-    console.log("entro la funcion de crear producto");
-    const imagen = req.file.buffer;
+    console.log("entro la funcion");
+    // const imagen = req.file.buffer;
+    const imagen = req.files.imagen[0].buffer;
+    const imagen2 = req.files.imagen2[0].buffer;
+    const imagen3 = req.files.imagen3[0].buffer;
+    const imagen4 = req.files.imagen4[0].buffer;
+
 
     const document = JSON.parse(req.body.document);
     console.log(document);
-    const { nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSAT, actualizado, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder } = document;
+    const { nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSatProduct, actualizado, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder, codigoSatUnidad, unidadMedida, comportamiento, impuesto, impuestoRetenido, margenGanancia, precioAnterior } = document;
 
-    if (!!!nombreProducto || !!!codigoFab || !!!codigoEmp || !!!marcaProd || !!!categoriaProd || !!!codigoSAT || !!!actualizado || !!!precio || !!!existencia || !!!cantidad || !!!descuento || !!!total || !!!imagen) {
+    if (!!!nombreProducto || !!!codigoFab || !!!codigoEmp || !!!marcaProd || !!!categoriaProd || !!!codigoSatProduct || !!!actualizado ||
+        !!!precio || !!!existencia || !!!cantidad || !!!descuento || !!!total || !!!codigoSatUnidad || !!!unidadMedida || !!!comportamiento ||
+        !!!impuesto || !!!impuestoRetenido || !!!margenGanancia || !!!precioAnterior || !!!imagen || !!!imagen2 || !!!imagen3 || !!!imagen4) {
         return res.status(400).json(
             jsonResponse(400, {
                 error: "Faltan datos",
@@ -2335,10 +2342,9 @@ const createListadoProductos = async (req, res, next) => {
     }
     try {
         const result = await pool.query(
-            `INSERT INTO "productos" ("nombre", "codigoFabricante", "codigoEmpresa", "marca", "categoria", "codigoSat", "actualizado", "precio", "existencia", "cantidad", "descuento", "total", "activo", "web", "pos", "venta", "backOrder", "imagen", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, '0', '0', NOW() , NOW() ) RETURNING *`,
-            [nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSAT, actualizado, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder, imagen]
+            `INSERT INTO "productos" ("nombre", "codigoFabricante", "codigoEmpresa", "marca", "categoria", "codigoSat", "actualizado", "precio", "existencia", "cantidad", "descuento", "total", "activo", "web", "pos", "venta", "backOrder", "codigoSatUnidad", "unidadMedida", "comportamiento", "impuesto", "impuestoRetenido", "margenGanancia", "precioAnterior", "imagen", "imagen2", "imagen3", "imagen4", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, '0', '0', NOW() , NOW() ) RETURNING *`,
+            [nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSatProduct, actualizado, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder, codigoSatUnidad, unidadMedida, comportamiento, impuesto, impuestoRetenido, margenGanancia, precioAnterior, imagen, imagen2, imagen3, imagen4]
         );
-
         res.json(result.json);
     } catch (error) {
         console.log(error.message)
