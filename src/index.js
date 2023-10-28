@@ -9,7 +9,7 @@ const davidRoutes = require("./routes/routesDavid");
 const microservCompras = require("./routes/routesCompras");
 const microserVentas = require("./routes/routesVentas");
 const user = require("./routes/login/login");
-
+const postRoutes= require("./routes/routesPOS");
 const keyPath = path.join(__dirname, "controllers", "Security", "key.pem");
 const certPath = path.join(__dirname, "controllers", "Security", "cert.pem");
 
@@ -29,6 +29,7 @@ app.use(microserVentas);
 app.use(microservCompras);
 app.use(user);
 app.use(chat);
+app.use(postRoutes);
 
 app.use((err, req, res, next) => {
   return res.json({
