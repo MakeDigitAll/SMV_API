@@ -4,7 +4,7 @@ const pool = require('../database')
 const { 
     
     
-    getAllAlmacen, getAlmacenes, createAlmacenes, disableAlmacenes, updateAlmacenes,
+    getAllAlmacen, getAlmacenes, createAlmacenes, disableAlmacenes, updateAlmacenes, getPointSale,
     getAllContenedores,getContenedores,createContenedores,disableContenedores,updateContenedores,
     getAllCostoEnvio, getCostosEnvios, createCostosEnvios, disableCostosEnvios, updateCostosEnvios, 
     getAllGastosEnvio, getGastosEnvios, createGastosEnvios, disableGastosEnvios, updateGastosEnvios, 
@@ -44,7 +44,7 @@ router.post('/AlmacenesDisable/:id', disableAlmacenes )
 //actualizar estatus
 router.put('/Almacenes/:id', updateAlmacenes )
 /////////// FIN DE ALMACEN
-
+router.get('/AlmacenesPointSale', getPointSale)
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE CONTENEDORES  

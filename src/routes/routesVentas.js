@@ -20,17 +20,18 @@ const {
     getAllCotizaciones, getCotizaciones, createCotizaciones, disableCotizaciones, cotizacionGanada, cotizacionCancelada, updateCotizaciones, cotizacionVencida, cotizacionPerdida,
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
-    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
-    getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores,
-    getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias, getSellerImage,
-    getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
-    getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
-    getAllClientesDireccionEnvio, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
-    getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb,
+    updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos, 
+    getAllPromociones,setListadoPromociones,deletePromocion,
+    getAllListadoVendedores, getListadoVendedores, createListadoVendedores, disableListadoVendedores, updateListadoVendedores, 
+    getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias, getSellerImage, 
+    getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion, 
+    getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto, 
+    getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
+    getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados,
     getAllListadoProductos, getListadoProductos, createListadoProductos, disableListadoProductos, updateListadoProductos,
 
-    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS ////////////////////////////////////////////
+    ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS //////////////////////////////////////////// 
 
 
 } = require('../controllers/controllersVentas');
@@ -373,7 +374,11 @@ router.put('/ClientesContactosEdit/:id', updateClientesContacto)
 
 
 /////////////////////////////////////// RUTAS PARA TABLA DE CLIENTES DIRECCION ENVIO
-router.get('/ClientesDireccionEnvio', getAllClientesDireccionEnvio)
+
+//Para obtener la direccion de facturacion del cliente
+router.get('/DireccionFacturacionCliente/:id', getDirFacturacionCliente )
+
+router.get('/ClientesDireccionEnvio', getAllClientesDireccionEnvio )
 
 //ver un estatus
 router.get('/ClientesDireccionEnvio/:id', getClientesDireccionEnvio)
@@ -453,6 +458,15 @@ router.post('/PagosPendiente/:id', PagosPendiente1)
 //actualizar estatus
 router.put('/Pagos/:id', updatePagos);
 //////////////// FIN DE Pagos
+
+
+/////////////////////////////////////// RUTAS PARA TABLA DE ListadoPromociones
+router.get('/ListadoPromociones', getAllPromociones);
+
+router.post('/ListadoPromociones', setListadoPromociones);
+
+//eliminar promociones
+router.delete('/ListadoPromocionesDelete/:id', deletePromocion);
 
 
 /////////////////////////////////////////////Vendedores/////

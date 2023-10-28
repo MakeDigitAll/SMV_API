@@ -946,15 +946,27 @@ const getAllProductos = async (req, res, next) => {
   }
 };
 
+const getAllProductosSinDescuento = async (req, res, next) => {
+  try {
+    const allTasks = await pool.query(
+      `SELECT * FROM "productos" WHERE "isDeleted" = '0' AND descuento = '0'`
+    );
+    res.json(allTasks.rows);
+  }
+  catch (error) {
+    console.log("Error: ", error.message);
+    console.log("Error en la linea: ", error.stack.split("\n")[1]);
+  }
+}
+
 //mostrar un estatus
 const getProducto = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      `SELECT * FROM "productos" WHERE id = $1 AND "isDeleted" = '0' `,
+      `SELECT * FROM "productos" WHERE "idproducto" = $1 AND "isDeleted" = '0' `,
       [id]
     );
-
     if (result.rows.length === 0)
       return res.status(404).json({
         message:
@@ -2387,7 +2399,7 @@ const getProductoscotizados = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await pool.query(
-      `SELECT * FROM "productosCotizados" WHERE id = $1 AND "isDeleted"='0'`,
+      `SELECT * FROM "productosCotizados" WHERE "idCotizacion" = $1 AND "isDeleted"='0'`,
       [id]
     );
 
@@ -2396,7 +2408,7 @@ const getProductoscotizados = async (req, res, next) => {
         message: "La tarea no funciona Productos Cotizados",
       });
 
-    res.json(result.rows[0]);
+    res.json(result.rows);
   } catch (error) {
     console.log("Error", error.message);
     console.log("Linea de error: ", error.stack.split("\n")[1]);
@@ -3639,6 +3651,7 @@ module.exports = {
   disableListadoProduct,
   updateListadoProduct,
   getAllProductos,
+  getAllProductosSinDescuento,
   getProducto,
   createProducto,
   disableProducto,
