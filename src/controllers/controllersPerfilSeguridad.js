@@ -36,7 +36,7 @@ const createPerfilSeguridad = async (req, res, next) => {
 
 
 const getPermisos_PerfilSeguridad = async (req, res, next) => {
-    const { idPerfilSeguridad } = req.body;
+    const { idPerfilSeguridad } = req.params;
 
     try {
         const getPerfil = await pool.query(`SELECT * FROM "permisos_Accesso" WHERE "permission_id" = $1`, [idPerfilSeguridad]);
@@ -57,14 +57,14 @@ const createPermisos_PerfilSeguridad = async (req, res, next) => {
     }
     )
 
-    const permisosExist = await pool.query(`SELECT * FROM "permisos_Accesso" WHERE "permission_id" = $1`, [idPerfilSeguridad]);
+    const permisosExist = await pool.query(`SELECT * FROM "permisos_Accesso" WHERE "security_profile_id" = $1`, [idPerfilSeguridad]);
 
     if (permisosExist.rows.length > 0) {
 
         try {
 
             for (let i = 0; i < permisosAlteradosArray.length; i++) {
-                const newPerfil = await pool.query(`UPDATE "permisos_Accesso" SET ${permisosAlteradosArray[i].permiso} = ${permisosAlteradosArray[i].value} WHERE "permission_id" = $1`, [idPerfilSeguridad]);
+                const newPerfil = await pool.query(`UPDATE "permisos_Accesso" SET ${permisosAlteradosArray[i].permiso} = ${permisosAlteradosArray[i].value} WHERE "security_profile_id" = $1`, [idPerfilSeguridad]);
                 res.json(newPerfil.rows[0]);
             }
         }
@@ -76,10 +76,10 @@ const createPermisos_PerfilSeguridad = async (req, res, next) => {
 
         try {
 
-            const newPermiso = await pool.query(`INSERT INTO "permisos_Accesso" ("permission_id") VALUES ($1) RETURNING *`, [idPerfilSeguridad]);
+            await pool.query(`INSERT INTO "permisos_Accesso" ("security_profile_id") VALUES ($1) RETURNING *`, [idPerfilSeguridad]);
 
             for (let i = 0; i < permisosAlteradosArray.length; i++) {
-                const newPerfil = await pool.query(`UPDATE "permisos_Accesso" SET ${permisosAlteradosArray[i].permiso} = ${permisosAlteradosArray[i].value} WHERE "permission_id" = $1`, [idPerfilSeguridad]);
+                const newPerfil = await pool.query(`UPDATE "permisos_Accesso" SET ${permisosAlteradosArray[i].permiso} = ${permisosAlteradosArray[i].value} WHERE "security_profile_id" = $1`, [idPerfilSeguridad]);
                 res.json(newPerfil.rows[0]);
             }
         }
@@ -93,8 +93,8 @@ const deshabilitarPerfilSeguridad = async (req, res, next) => {
     const { idPerfilSeguridad } = req.params;
 
     try {
-        await pool.query(`UPDATE "perfilesSeguridad" SET "isDeleted" = '1' WHERE "idPerfilSeguridad" = $1`, [idPerfilSeguridad]);
-        await pool.query(`UPDATE "permisos_Accesso" SET "isDeleted" = '1' WHERE "permission_id" = $1`, [idPerfilSeguridad]);
+        await pool.query(`UPDATE "perfilesSeguridad" SET isDeleted = '1' WHERE "security_profile_id" = $1`, [idPerfilSeguridad]);
+        await pool.query(`UPDATE "permisos_Accesso" SET isDeleted = '1' WHERE "permission_id" = $1`, [idPerfilSeguridad]);
         res.status(200).json(`El perfil de seguridad con el id ${idPerfilSeguridad} ha sido deshabilitado`);
     }
     catch (error) {
