@@ -848,7 +848,7 @@ const updateProveedoresProducto = async (req, res, next) => {
 
 const getAllCotizaciones = async (req, res, next) => {
     try {
-        const allTasks = await pool.query(`SELECT * FROM  "cotizaciones" WHERE "isDeleted" = '0'`);
+        const allTasks = await pool.query(`SELECT co."folio",co."fecha",co."pedido",clie."nombreComercial",ven."nombre",co."recurrencia",co."total",co."status" FROM  "cotizaciones" as co INNER JOIN "clientes" as clie ON co."idCliente" = clie."id" INNER JOIN "listadoVendedores" as ven ON co."idVendedor" = ven.id WHERE co."isDeleted" = '0'`);
         res.json(allTasks.rows)
     } catch (error) {
         console.log(error.message);
