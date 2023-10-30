@@ -874,26 +874,21 @@ const getCotizaciones = async (req, res, next) => {
 
 //crear un estatus 
 const createCotizaciones = async (req, res, next) => {
-    console.log("entro la funcion para la cotizacion")
     const document = JSON.parse(req.body.document);
-    console.log(document);
-
     const { idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total } = document
-
-    if (!!!idCliente || !!!idVendedor || !!!fecha || !!!recurrencia || !!!envio || !!!comentarios || !!!neto || !!!descuento || !!!subTotal || !!!impuestos || !!!total) {
-        return res.status(400).json(
-            jsonResponse(400, {
-                error: "Faltan datos",
-            })
-        );
-    }
+    console.log(idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total);
+    // if (!!!idCliente || !!!idVendedor || !!!fecha || !!!recurrencia || !!!envio || !!!comentarios || !!!neto || !!!descuento || !!!subTotal || !!!impuestos || !!!total) {
+    //     return res.status(400).json(
+    //         jsonResponse(400, {
+    //             error: "Faltan datos",
+    //         })
+    //     );
+    // }
     try {
         const result = await pool.query(
             `INSERT INTO "cotizaciones" ( "idCliente", "idVendedor", "fecha", "recurrencia", "envio", "comentarios", "neto", "descuento", "subTotal", "impuestos", "total", "status", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, '0', '0', '0', NOW() , NOW() ) RETURNING *`,
             [idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total]
         );
-        const idCotizacion = result.rows[0].folio
-        console.log("id cotizacion", idCotizacion);
         res.json(result.rows[0].folio);
     } catch (error) {
         next(error)
@@ -901,19 +896,19 @@ const createCotizaciones = async (req, res, next) => {
 };
 
 const createProductosCotizados = async (req, res, next) => {
-    console.log("entro la funcion para los productos cotizados")
+    console.log("entro")
     const document2 = JSON.parse(req.body.document2);
     console.log(document2);
 
     const { idCotizacion, idproducto, cantidadProducto } = document2
 
-    if (!!!idCotizacion || !!!idproducto || !!!cantidadProducto) {
-        return res.status(400).json(
-            jsonResponse(400, {
-                error: "Faltan datos",
-            })
-        );
-    }
+    // if (!!!idCotizacion || !!!idproducto || !!!cantidadProducto) {
+    //     return res.status(400).json(
+    //         jsonResponse(400, {
+    //             error: "Faltan datos",
+    //         })
+    //     );
+    // }
     try {
         const result = await pool.query(
             `INSERT INTO "productosCotizados" ( "idCotizacion", "idProducto", "cantidad", "active", "isUpdated", "isDeleted", "DateCreation", "DateModification") VALUES ($1, $2, $3, '1', '0', '0', NOW() , NOW() ) RETURNING *`,
