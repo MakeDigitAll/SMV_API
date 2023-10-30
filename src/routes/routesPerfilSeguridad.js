@@ -5,7 +5,10 @@ const upload = multer(); // Crear una instancia de multer
 const {
   ///////////////////////////////////////////// RUTAS DE MICROSERVICIO PERFILES DE SEGURIDAD ////////////////////////////////////////////
   createPerfilSeguridad,
-  getPerfilSeguridad
+  getPerfilSeguridad,
+  getPermisos_PerfilSeguridad,
+  createPermisos_PerfilSeguridad,
+  deshabilitarPerfilSeguridad,
 
   ///////////////////////////////////////////// FIN DE RUTAS DE PERFILES DE SEGURIDAD ////////////////////////////////////////////
 } = require("../controllers/controllersPerfilSeguridad");
@@ -18,8 +21,16 @@ const router = Router();
 //ver estatus
 router.get("/PerfilesSeguridad", getPerfilSeguridad);
 
+//ver estatus
+router.get("/PerfilesSeguridad/:idPerfilSeguridad", getPermisos_PerfilSeguridad);
+
 
 // //crear estatus
 router.post("/PerfilesSeguridad", createPerfilSeguridad);
 
+// //crear estatus
+router.post("/PerfilesSeguridad/:idPerfilSeguridad", createPermisos_PerfilSeguridad);
+
+// //crear estatus
+router.delete("/PerfilesSeguridad/:idPerfilSeguridad", deshabilitarPerfilSeguridad);
 module.exports = router;
