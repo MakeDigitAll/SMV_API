@@ -3,6 +3,7 @@ function generarRefreshToken(email) {
  const payload = {
     id: email.id,
     nombre: email.nombre,
+    idPerfilSeguridad: email.perfilSeguridad,
     apellido: email.apellido,
     email: email.email,
  };

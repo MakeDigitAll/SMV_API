@@ -43,7 +43,7 @@ const autenticarUser = async (req, res) => {
       );
       if (result.rows.length === 0) {
         return res.status(500).json(
-          jsonResponse(500, {
+          jsonResponse(500, { 
             error: "Correo no encontrado",
           })
         );
