@@ -63,6 +63,7 @@ const autenticarUser = async (req, res) => {
         const userInfo = {
           id: user.id,
           nombre: user.nombre,
+          idPerfilSeguridad: user.perfilSeguridad,
           apellido: user.apellido,
           email: user.email,
         };
@@ -88,6 +89,7 @@ function generarAccessToken(email) {
   const payload = {
     id: email.id,
     nombre: email.nombre,
+    idPerfilSeguridad: email.perfilSeguridad,
     apellido: email.apellido,
     email: email.email,
   };

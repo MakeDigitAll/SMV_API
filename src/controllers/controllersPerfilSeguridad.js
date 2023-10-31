@@ -102,11 +102,11 @@ const deshabilitarPerfilSeguridad = async (req, res, next) => {
 
   try {
     await pool.query(
-      `UPDATE "perfilesSeguridad" SET isDeleted = '1' WHERE "security_profile_id" = $1`,
+      `UPDATE "perfilesSeguridad" SET "isDeleted" = '1' WHERE "security_profile_id" = $1`,
       [idPerfilSeguridad]
     );
     await pool.query(
-      `UPDATE "permisos_Accesso" SET isDeleted = '1' WHERE "permission_id" = $1`,
+      `UPDATE "permisos_Accesso" SET "isDeleted" = '1' WHERE "permission_id" = $1`,
       [idPerfilSeguridad]
     );
     res
