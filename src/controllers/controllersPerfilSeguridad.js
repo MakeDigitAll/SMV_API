@@ -3,7 +3,10 @@ const pool = require("../database");
 //obtener todos los perfiles de seguridad
 const getPerfilSeguridad = async (req, res, next) => {
   try {
-    const allTasks = await pool.query(`SELECT * FROM "perfilesSeguridad"`);
+    //donde no sean eliminados
+    const allTasks = await pool.query(
+      `SELECT * FROM "perfilesSeguridad" WHERE "isDeleted" = '0'`
+    );
     res.json(allTasks.rows);
   } catch (error) {
     console.log(error.message);
@@ -99,14 +102,15 @@ const createPermisos_PerfilSeguridad = async (req, res, next) => {
 
 const deshabilitarPerfilSeguridad = async (req, res, next) => {
   const { idPerfilSeguridad } = req.params;
+  console.log(idPerfilSeguridad);
 
   try {
     await pool.query(
-      `UPDATE "perfilesSeguridad" SET isDeleted = '1' WHERE "security_profile_id" = $1`,
+      `UPDATE "perfilesSeguridad" SET "isDeleted" = '1' WHERE "id" = $1`,
       [idPerfilSeguridad]
     );
     await pool.query(
-      `UPDATE "permisos_Accesso" SET isDeleted = '1' WHERE "permission_id" = $1`,
+      `UPDATE "permisos_Accesso" SET isdeleted = '1' WHERE "permission_id" = $1`,
       [idPerfilSeguridad]
     );
     res
