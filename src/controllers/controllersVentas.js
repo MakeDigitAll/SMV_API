@@ -880,7 +880,7 @@ const createCotizaciones = async (req, res, next) => {
 
     const { idCliente, idVendedor, fecha, recurrencia, envio, comentarios, neto, descuento, subTotal, impuestos, total } = document
 
-    if (!!!idCliente || !!!idVendedor || !!!fecha || !!!recurrencia || !!!envio || !!!comentarios || !!!neto || !!!descuento || !!!subTotal || !!!impuestos || !!!total) {
+    if (!!!idCliente || !!!idVendedor || !!!fecha || !!!recurrencia || !!!comentarios || !!!neto || !!!descuento || !!!subTotal || !!!impuestos || !!!total) {
         return res.status(400).json(
             jsonResponse(400, {
                 error: "Faltan datos",
@@ -2397,29 +2397,29 @@ const getAllListadoProductos = async (req, res, next) => {
 }
 
 
-
 const getListadoProductos = async (req, res, next) => {
     try {
-        const { id, isDelete } = req.params;
+        const { id } = req.params;
+        console.log(req.id);
         const result = await pool.query(`SELECT * FROM "productos" WHERE id = $1 AND "isDeleted" = '0' `, [id]);
 
         if (result.rows.length === 0)
             return res.status(404).json({
                 message: error.message
             });
-
         res.json(result.rows[0]);
     } catch (error) {
-        console.log("falle");
+        console.log("falla al cargar datos");
     }
 };
 //mostrar un estatus
 const getImageProducto = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = await pool.query(`SELECT * FROM "productos" WHERE "isDeleted" = '0'`, [
+        const result = await pool.query(`SELECT * FROM "productos" WHERE "id" = $1 `, [
             id,
         ]);
+        //console.log(result);
         if (result.rows.length === 0)
             return res.status(404).json({
                 message: error.message,
@@ -2429,9 +2429,36 @@ const getImageProducto = async (req, res, next) => {
         console.log(error.message);
     }
 };
+
+const getAllImagesProducto = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "productos" WHERE "id" = $1`, [id]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                message: "Producto no encontrado",
+            });
+        }
+        const { imagen2, imagen3, imagen4 } = result.rows[0];
+        const imagesToSend = {
+            imagen2,
+            imagen3,
+            imagen4,
+        };
+        console.log("entro funcion imagesToSend",imagesToSend);
+        res.json(imagesToSend);
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({
+            message: "Error interno del servidor",
+        });
+    }
+};
+
+
 //crear un estatus 
+
 const createListadoProductos = async (req, res, next) => {
-    console.log("entro la funcion");
     // const imagen = req.file.buffer;
     const imagen = req.files.imagen[0].buffer;
     const imagen2 = req.files.imagen2[0].buffer;
@@ -2440,7 +2467,6 @@ const createListadoProductos = async (req, res, next) => {
 
 
     const document = JSON.parse(req.body.document);
-    console.log(document);
     const { nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSatProduct, actualizado, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder, codigoSatUnidad, unidadMedida, comportamiento, impuesto, impuestoRetenido, margenGanancia, precioAnterior } = document;
 
     if (!!!nombreProducto || !!!codigoFab || !!!codigoEmp || !!!marcaProd || !!!categoriaProd || !!!codigoSatProduct || !!!actualizado ||
@@ -2465,38 +2491,47 @@ const createListadoProductos = async (req, res, next) => {
 
 //deshabilitar un estatus
 const disableListadoProductos = async (req, res, next) => {
+    console.log("entro la funcion de deshabilitar");
     const { id } = req.params;
-
+    console.log("id: ", id)
     const result = await pool.query(
         `UPDATE "productos" SET "isDeleted" = '1' WHERE id = $1 RETURNING *`,
         [id]
     );
-
     if (result.rows.length === 0)
         return res.status(404).json({
             message: "La tarea no se pudo actualizar"
         });
-
     return res.json(result.rows[0]);
 };
 
 //actualizar un estatus
 const updateListadoProductos = async (req, res, next) => {
     const { id } = req.params;
+    const imagen = req.files.imagen[0].buffer;
+    const imagen2 = req.files.imagen2[0].buffer;
+    const imagen3 = req.files.imagen3[0].buffer;
+    const imagen4 = req.files.imagen4[0].buffer;
+
     const document = JSON.parse(req.body.document);
-    const { nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible } = document;
-    console.log(document);
-
+    const { nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSatProduct, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder, codigoSatUnidad, unidadMedida, comportamiento, impuesto, impuestoRetenido, margenGanancia, precioAnterior } = document;
+    if (!!!nombreProducto || !!!codigoFab || !!!codigoEmp || !!!marcaProd || !!!categoriaProd || !!!codigoSatProduct ||
+        !!!precio || !!!existencia || !!!cantidad || !!!descuento || !!!total || !!!codigoSatUnidad || !!!unidadMedida || !!!comportamiento ||
+        !!!impuesto || !!!impuestoRetenido || !!!margenGanancia || !!!precioAnterior || !!!imagen) {
+        return res.status(400).json(
+            jsonResponse(400, {
+                error: "Faltan datos por agregar",
+            })
+        );
+    }
     const result = await pool.query(
-        'UPDATE "productos" SET "nombreComercial" = $1, "giro" = $2, "telefono" = $3, "whatsApp" = $4, "email" = $5, "contacto" = $6, "condicionesPago" = $7, "cuenta" = $8, "vendedor" = $9, "listaPrecios" = $10, "diasCredito"= $11, "limiteCredito" = $12, "saldoPentiente" = $13, "creditoDisponible" = $14, "actualizacion" = CURRENT_DATE, "DateModification" = CURRENT_DATE WHERE id = $15 RETURNING *',
-        [nombreComercial, giro, telefono, whatsApp, correo, contactoPrincipal, condicionesPago, cuenta, vendedorAsignado, listaPrecios, diasCredito, limiteCredito, saldoPendiente, creditoDisponible, id]
+        'UPDATE "productos" SET "nombre" = $1, "codigoFabricante" = $2, "codigoEmpresa" = $3, "marca" = $4, "categoria" = $5, "codigoSat" = $6, "actualizado" = CURRENT_DATE, "precio" = $7, "existencia" = $8, "cantidad" = $9, "descuento"= $10, "total" = $11, "activo" = $12, "web" = $13, "pos" = $14, "venta" = $15, "backOrder" = $16, "codigoSatUnidad" = $17, "unidadMedida" = $18, "comportamiento" = $19, "impuesto" = $20, "impuestoRetenido" = $21, "margenGanancia" = $22, "precioAnterior" = $23, "imagen" = $24, "imagen2" = $25, "imagen3" = $26, "imagen4" = $27, "DateModification" = CURRENT_DATE WHERE id = $28 RETURNING *',
+        [nombreProducto, codigoFab, codigoEmp, marcaProd, categoriaProd, codigoSatProduct, precio, existencia, cantidad, descuento, total, activo, web, pos, venta, backOrder, codigoSatUnidad, unidadMedida, comportamiento, impuesto, impuestoRetenido, margenGanancia, precioAnterior, imagen, imagen2, imagen3, imagen4, id]
     );
-
     if (result.rows.length === 0)
         return res.status(404).json({
             message: "La tarea no se pudo actualizar"
         });
-
     return res.json(result.rows[0]);
 };
 
@@ -2524,14 +2559,14 @@ module.exports = {
     getAllReporteComision, getReporteComision, createReporteComision, disableReporteComision, updateReporteComision,
     getAllListadoClientes, getListadoClientes, createListadoClientes, disableListadoClientes, updateListadoClientes, getImageClient,
     updatePagos, PagosPendiente2, PagosPendiente1, PagosFacturado, PagosCredito, PagosParcial, createPagos, getPagos, getAllPagos,
-    getAllPromociones,setListadoPromociones,deletePromocion,
+    getAllPromociones, setListadoPromociones, deletePromocion,
     getAllListadoVendedores, getListadoVendedores, createListadoVendedores, updateListadoVendedores, disableListadoVendedores, getSellerImage,
     getAllClientesFacturacion, getClientesFacturacion, createClientesFacturacion, disableClientesFacturacion, updateClientesFacturacion,
     getAllClientesContacto, getClientesContacto, createClientesContacto, disableClientesContacto, updateClientesContacto,
-    getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
+    getAllClientesDireccionEnvio, getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio,
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb,
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta,
-    getAllListadoProductos, getListadoProductos, createListadoProductos, getImageProducto, disableListadoProductos, updateListadoProductos,
+    getAllListadoProductos, getListadoProductos, createListadoProductos, getImageProducto, disableListadoProductos, updateListadoProductos, getAllImagesProducto,
 
 
     getAllCategorias, getCategorias, createCategorias, disableCategorias, updateCategorias,

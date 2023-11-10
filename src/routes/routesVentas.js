@@ -29,7 +29,7 @@ const {
     getAllClientesDireccionEnvio,getDirFacturacionCliente, getClientesDireccionEnvio, createClientesDireccionEnvio, disableClientesDireccionEnvio, updateClientesDireccionEnvio, 
     getAllClientesAccesoWeb, getClientesAccesoWeb, createClientesAccesoWeb, disableClientesAccesoWeb, updateClientesAccesoWeb, 
     getAllClientesEstadoCuenta, getClientesEstadoCuenta, createClientesEstadoCuenta, disableClientesEstadoCuenta, updateClientesEstadoCuenta, createProductosCotizados,
-    getAllListadoProductos, getListadoProductos, createListadoProductos, disableListadoProductos, updateListadoProductos,
+    getAllListadoProductos, getListadoProductos, createListadoProductos, disableListadoProductos, updateListadoProductos, getImageProducto, getAllImagesProducto,
 
     ///////////////////////////////////////////// FIN DE RUTAS DE MICROSERVICIO VENTAS //////////////////////////////////////////// 
 
@@ -317,6 +317,12 @@ router.get('/Productos', getAllListadoProductos)
 //ver un estatus
 router.get('/Productos/:id', getListadoProductos)
 
+router.get('/api/ProductImage/:id', getImageProducto)
+
+router.get('/api/ImagesProduct/:id', getAllImagesProducto)
+
+
+
 //crear estatus
 router.post('/Productos', upload.fields([
     { name: 'imagen', maxCount: 1 },
@@ -329,7 +335,13 @@ router.post('/Productos', upload.fields([
 router.post('/ProductosDisable/:id', disableListadoProductos)
 
 //actualizar estatus
-router.put('/ProductosEditing/:id', upload.single("image", "image2", "image3", "image4"), updateListadoProductos)
+router.put('/ProductosEditing/:id', upload.fields([
+    { name: "imagen", maxCount: 1 },
+    { name: "imagen2", maxCount: 1 },
+    { name: "imagen3", maxCount: 1 },
+    { name: "imagen4", maxCount: 1 },
+  ]), updateListadoProductos);
+  
 
 //Imagen
 router.get("/api/clientImage/:id", getImageClient)
