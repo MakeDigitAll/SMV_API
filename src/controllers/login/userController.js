@@ -111,10 +111,11 @@ function createRefreshToken(email) {
 }
 //mostrar un usuarios
 const getUser = async (req, res, next) => {
+  console.log("entro la funcion de buscar usuario");
   try {
     const { id } = req.params;
     const result = await pool.query(
-      `SELECT "nombre","apellido","id","perfilSeguridadId","vendedorId","email" FROM "usuarios" WHERE id = $1 AND "isDeleted" = 'false' `,
+      `SELECT "nombre","apellido","id","perfilSeguridad","vendedorId","email" FROM "usuarios" WHERE id = $1 AND "isDeleted" = 'false' `,
       [id]
     );
 

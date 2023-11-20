@@ -41,12 +41,12 @@ const createPerfilSeguridad = async (req, res, next) => {
 };
 
 const getPermisos_PerfilSeguridad = async (req, res, next) => {
-  const { idPerfilSeguridad } = req.params;
+  const { PerfilSeguridad } = req.params;
 
   try {
     const getPerfil = await pool.query(
-      `SELECT * FROM "permisos_Accesso" WHERE "permission_id" = $1`,
-      [idPerfilSeguridad]
+      `SELECT * FROM "permisos_Accesso" WHERE "security_profile_id" = $1`,
+      [PerfilSeguridad]
     );
     res.json(getPerfil.rows[0]);
   } catch (error) {

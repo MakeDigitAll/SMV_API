@@ -22,7 +22,7 @@ const router = Router();
 router.get("/PerfilesSeguridad", getPerfilSeguridad);
 
 //ver estatus
-router.get("/PerfilesSeguridad/:idPerfilSeguridad", getPermisos_PerfilSeguridad);
+router.get("/PerfilesSeguridad/Permisos/:id", getPermisos_PerfilSeguridad);
 
 
 // //crear estatus
