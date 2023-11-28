@@ -1,5 +1,7 @@
 const pool = require('../database')
 
+//Productos Orden Compra esta en Controllers compras
+//Ventas
 const getAllVentasRealizadas = async (req, res, next)=> {
     try{
     const allTasks = await pool.query(`SELECT * FROM public."ventasRealizadas" WHERE "isDeleted" = '0'`);
@@ -8,6 +10,86 @@ const getAllVentasRealizadas = async (req, res, next)=> {
         console.log(error.message); 
     }
 }
+
+const getVentaRealizada = async (req, res, next) =>{
+    try {
+        const { id } = req.params;
+        const result = await pool.query(`SELECT * FROM "ventasRealizadas" WHERE id = $1 AND "isDelete" = '0' `, [id]);
+
+        if (result.rows.length === 0 )
+        return res.status(404).json({
+            message: error.message
+        });
+
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const createVentasRealizadas = async (req, res, next) => {
+    const { cliente, factura, monto, productosEnVenta } = req.body;
+  
+    try {
+        const result = await pool.query(
+            `INSERT INTO public."ventasRealizadas"(cliente, factura, monto, "productosEnVenta") VALUES ($1, $2, $3, $4) RETURNING *`,
+            [cliente, factura, monto, productosEnVenta]
+        );
+  
+        res.json(result.rows[0]); // Accede a la primera fila del resultado
+    } catch (error) {
+        console.log("Error", error.message);
+        console.log("linea de error:", error.stack.split("\n")[1]);
+        next(error);
+    }
+};
+
+const disableVentaRealizada = async (req, res, next) =>{
+    const { id } = req.params;
+
+    const result = await pool.query(
+        `UPDATE "ventasRealizadas" SET "isDelete" = '1' WHERE id = $1 RETURNING *`,
+        [ id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+
+const pagadoVentaRealizada = async (req, res, next) =>{
+    const { id } = req.params;
+
+    const result = await pool.query(
+        `UPDATE "ventasRealizadas" SET "estatus" = 'Pagado' WHERE id = $1 RETURNING *`,
+        [ id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
+const pagarVentasRealizadas = async (req, res, next) =>{
+    const { id } = req.params;
+
+    const result = await pool.query(
+        `UPDATE "ventasRealizadas" SET "monto"=$1 WHERE id = $2 RETURNING *`,
+        [ id]
+    );
+
+    if (result.rows.length === 0)
+    return res.status(404).json({
+        message: "La tarea no se pudo actualizar"
+    });
+
+    return res.json(result.rows[0]);
+};
 
 ///Clientes
 const getAllClientesPos = async (req, res, next)=> {
@@ -95,6 +177,7 @@ const getAllCortesdeCaja = async (req, res, next)=> {
 }
 
 module.exports = {
-    getAllVentasRealizadas, getAllClientesPos, getClientesPos, createClientesPos, updateClientePos, disableClientesPos,
+    getAllVentasRealizadas,disableVentaRealizada, getVentaRealizada, createVentasRealizadas, pagadoVentaRealizada,pagarVentasRealizadas,
+    getAllClientesPos, getClientesPos, createClientesPos, updateClientePos, disableClientesPos,
     getAllCortesdeCaja
 }

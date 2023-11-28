@@ -3,16 +3,19 @@ const pool = require('../database')
 const multer = require("multer"); // Importar multer
 const upload = multer();
 
-const { getAllVentasRealizadas, getAllClientesPos, getAllCortesdeCaja, createClientesPos, getClientesPos, updateClientePos, disableClientesPos }= require('../controllers/controllersPOS');
+const { getAllVentasRealizadas, getAllClientesPos, getAllCortesdeCaja, createClientesPos, getClientesPos, updateClientePos, disableClientesPos,
+    disableVentaRealizada, getVentaRealizada, createVentasRealizadas, pagadoVentaRealizada,pagarVentasRealizadas}= require('../controllers/controllersPOS');
 
 const router =  Router();
 
 //ver ventas
 router.get('/VentasRealizadas', getAllVentasRealizadas);
-
-
-
-/////Clientes
+router.get('/VentaRealizada/:id', getVentaRealizada);
+router.post('/NuevaVentaRealizada',createVentasRealizadas);
+router.post('/VentaRealizadaDisable/:id',disableVentaRealizada);
+router.post('/VentaRealizadaPagada/:id',pagadoVentaRealizada);
+router.put('/VentaRealizadaPagando/:id',pagarVentasRealizadas);
+//Clientes
 router.get('/ClientesPos', getAllClientesPos);
 router.get('/ClientesPos/:id', getClientesPos);
 router.post('/NuevoClientesPos',createClientesPos);
